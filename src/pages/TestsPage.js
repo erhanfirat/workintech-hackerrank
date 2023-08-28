@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
-import { useAxios } from "../api/useAxios";
+import { useEffect } from "react";
 import PageDefault from "./PageDefault";
-import { endpoints } from "../api/endpoints";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllTestsAction } from "../store/reducers/testsReducer";
 
 const TestsPage = () => {
-  const [tests, getTests, testsLoading, testsErr] = useAxios(endpoints.tests());
-  const [page, setPage] = useState(0);
-  const [total, setTotal] = useState(0);
-
+  const dispatch = useDispatch();
+  const { total, allTests, workintechTests } = useSelector(
+    (state) => state.tests
+  );
   useEffect(() => {
-    getTests({ instantConfig: { params: { limit: 100, offset: page } } }).then(
-      (resData) => {
-        setTotal(resData.total);
-      }
-    );
+    dispatch(getAllTestsAction());
   }, []);
 
   return (
     <PageDefault pageTitle="Testler">
       <h3>Toplam test sayısı: {total}</h3>
-      {tests?.data?.length}
+      <h3>All tests: {allTests.length}</h3>
+      <h3>Workintech tests: {workintechTests.length}</h3>
     </PageDefault>
   );
 };

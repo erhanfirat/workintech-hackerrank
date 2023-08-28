@@ -10,3 +10,12 @@ export let API = axios.create({
   },
 });
 
+export const doRequest = ({ reqType, endpoint, payload, config }) => {
+  return API[reqType](endpoint, payload || config, payload && config)
+    .then((res) => {
+      return res.data;
+    })
+    .catch((err) => {
+      throw err;
+    });
+};

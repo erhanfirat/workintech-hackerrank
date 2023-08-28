@@ -1,19 +1,18 @@
 import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+
 import Main from "./layout/Main";
+import { store } from "./store/store";
 
 import "./App.css";
-import { useEffect } from "react";
-import { useAxios } from "./api/useAxios";
-import { endpoints } from "./api/endpoints";
 
 function App() {
-
- 
-
   return (
-    <BrowserRouter>
-      <Main />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Main />
+      </BrowserRouter>
+    </Provider>
   );
 }
 

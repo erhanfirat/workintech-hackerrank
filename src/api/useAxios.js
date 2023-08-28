@@ -14,14 +14,18 @@ export const useAxios = ({
 
   const doRequest = ({ instantePayload, instantConfig }) => {
     setLoading(true);
-    API[reqType](
+    return API[reqType](
       endpoint,
       instantePayload || payload || instantConfig || config,
       (payload || instantePayload) && (instantConfig || config)
     )
-      .then((res) => setData(res.data))
+      .then((res) => {
+        setData(res.data);
+        return res.data;
+      })
       .catch((err) => {
         setErr(err);
+        throw err;
       })
       .finally(() => setLoading(false));
   };

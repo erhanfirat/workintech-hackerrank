@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+import { Nav, NavItem } from "reactstrap";
 
 const activeNavLink = {
   backgroundColor: "#fffff !important",
@@ -7,32 +8,27 @@ const activeNavLink = {
 
 const SideBar = () => {
   return (
-    <div className="side-bar p-3 bg-primary color-white">
-      <nav className="side-bar-nav">
-        <ul className="p-0">
-          <li>
-            <NavLink
-              to={"/"}
-              className={(isActive) =>
-                isActive ? "btn nav-btn-active" : "btn btn-primary"
-              }
-              exact
-            >
-              Ana Sayfa
-            </NavLink>
-          </li>
-          <li>
-            <NavLink
-              to={"/tests"}
-              className={(isActive) =>
-                isActive ? "btn nav-btn-active" : "btn btn-primary"
-              }
-            >
-              Tests
-            </NavLink>
-          </li>
-        </ul>
-      </nav>
+    <div className="side-bar p-3 ">
+      <Nav vertical>
+        <NavItem>
+          <NavLink
+            to={"/"}
+            className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
+            exact
+          >
+            Ana Sayfa
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            to={"/tests"}
+            className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
+            exact
+          >
+            Tests
+          </NavLink>
+        </NavItem>
+      </Nav>
     </div>
   );
 };
