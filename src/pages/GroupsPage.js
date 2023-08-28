@@ -8,7 +8,7 @@ import {
 import { Badge, Button, Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
-const TestsPage = () => {
+const GroupsPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -45,7 +45,7 @@ const TestsPage = () => {
           </Col>
         </Row>
         {workintechTests.map((test) => (
-          <Row key={test.id} className="border-top p-1 grid-row">
+          <Row className="border-top p-1 grid-row">
             <Col sm="10">{test.name}</Col>
             <Col sm="1">{test.duration}</Col>
             <Col sm="1">
@@ -60,4 +60,4 @@ const TestsPage = () => {
   );
 };
 
-export default TestsPage;
+export default GroupsPage;

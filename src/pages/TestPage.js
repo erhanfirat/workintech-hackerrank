@@ -5,6 +5,13 @@ import { Link, useParams, useRouteMatch } from "react-router-dom";
 import { Button, Col, Container, Row } from "reactstrap";
 import { FETCH_STATES } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
+import { downloadFile } from "../utils/utils";
+
+const fields = {
+  name: "full_name",
+  email: "email",
+  score: "percentage_score",
+};
 
 const TestPage = () => {
   const { workintechTests } = useSelector((state) => state.tests);
@@ -22,10 +29,17 @@ const TestPage = () => {
 
   const downloadPDF = (candidate) => {
     // download PDF of candidate
+    downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
   };
 
   const downloadAllPDF = () => {
     // download PDF of candidate
+    console.log("download all ");
+
+    testCandidates.forEach((candidate) => {
+      console.log("download for ", candidate);
+      downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
+    });
   };
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
@@ -46,7 +60,7 @@ const TestPage = () => {
   }, [candidates]);
 
   useEffect(() => {
-    setSortByState(sortBy || "full_name");
+    setSortByState(sortBy || "name");
     setAscState(asc || "asc");
   }, [sortBy, asc]);
 
@@ -56,15 +70,15 @@ const TestPage = () => {
         <Row>
           <Col sm="4">
             <Link
-              to={`/tests/${testId}/full_name/${
-                sortByState === "full_name" ? inverseOrder(ascState) : ascState
+              to={`/tests/${testId}/name/${
+                sortByState === "name" ? inverseOrder(ascState) : ascState
               }`}
             >
               <h5>
                 Name
-                {sortByState === "full_name" && (
+                {sortByState === "name" && (
                   <i
-                    class={`ps-1 fa-solid fa-chevron-${
+                    className={`ps-1 fa-solid fa-chevron-${
                       ascState === "asc" ? "down" : "up"
                     }`}
                   ></i>
@@ -82,7 +96,7 @@ const TestPage = () => {
                 Email
                 {sortByState === "email" && (
                   <i
-                    class={`ps-1 fa-solid fa-chevron-${
+                    className={`ps-1 fa-solid fa-chevron-${
                       ascState === "asc" ? "down" : "up"
                     }`}
                   ></i>
@@ -100,7 +114,7 @@ const TestPage = () => {
                 Score
                 {sortByState === "score" && (
                   <i
-                    class={`ps-1 fa-solid fa-chevron-${
+                    className={`ps-1 fa-solid fa-chevron-${
                       ascState === "asc" ? "down" : "up"
                     }`}
                   ></i>
@@ -109,22 +123,22 @@ const TestPage = () => {
             </Link>
           </Col>
           <Col sm="2">
-            <Button size="sm" onClick={() => downloadAllPDF()}>
+            <Button size="sm" onClick={downloadAllPDF}>
               All PDFs
             </Button>
           </Col>
         </Row>
         {testCandidates
           ?.sort((tc1, tc2) =>
-            tc1[sortBy] > tc2[sortBy]
+            tc1[fields[sortBy]] > tc2[fields[sortBy]]
               ? numberOrder(ascState) * 1
               : numberOrder(ascState) * -1
           )
           .map((testCandidate) => (
-            <Row className="border-top p-1 grid-row">
+            <Row key={testCandidate.id} className="border-top p-1 grid-row">
               <Col sm="4">{testCandidate.full_name}</Col>
               <Col sm="4">{testCandidate.email}</Col>
-              <Col sm="2">{testCandidate.score}</Col>
+              <Col sm="2">{testCandidate.percentage_score}</Col>
               <Col sm="2">
                 <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
                   PDF
