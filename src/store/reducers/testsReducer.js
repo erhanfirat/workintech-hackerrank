@@ -72,7 +72,7 @@ export const getAllTestsAction = () => (dispatch) => {
     dispatch({ type: testActions.setTotal, payload: resData.total });
 
     const pageCount = Math.ceil(resData.total / 100);
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i < pageCount; i++) {
       doRequest(endpoints.tests({ limit: 100, offset: i * 100 })).then(
         (innerResData) => {
           dispatch({

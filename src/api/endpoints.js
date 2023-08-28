@@ -19,4 +19,11 @@ export const endpoints = {
     endpoint: "tests",
     config: { params },
   }),
+
+  candidates: (testId, params = { limit: 100, offset: 0 }) => ({
+    initialData: [],
+    reqType: REQ_TYPES.GET,
+    endpoint: `tests/${testId}/candidates`,
+    config: { params },
+  }),
 };

@@ -13,7 +13,7 @@ const PageBody = () => {
         <Route path="/tests" exact>
           <TestsPage />
         </Route>
-        <Route path="/tests/:testId" exact>
+        <Route path="/tests/:testId/:sortBy?/:asc?" exact>
           <TestPage />
         </Route>
         <Route path="*">

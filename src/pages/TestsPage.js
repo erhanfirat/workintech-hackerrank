@@ -45,7 +45,7 @@ const TestsPage = () => {
           </Col>
         </Row>
         {workintechTests.map((test) => (
-          <Row className="border p-1 grid-row">
+          <Row className="border-top p-1 grid-row">
             <Col sm="10">{test.name}</Col>
             <Col sm="1">{test.duration}</Col>
             <Col sm="1">

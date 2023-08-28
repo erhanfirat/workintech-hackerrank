@@ -15,12 +15,12 @@ const PageDefault = ({ pageTitle, children }) => {
 
   return (
     <div className="page-container">
-      <h2>
+      <h3>
         <Button color="link" onClick={goBack}>
           <i className="fa-solid fa-chevron-left"></i>
         </Button>
         {pageTitle}
-      </h2>
+      </h3>
       <hr />
       {/* PAGE BODY HERE */}
       {children}
