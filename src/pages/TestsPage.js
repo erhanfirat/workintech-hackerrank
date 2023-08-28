@@ -1,22 +1,61 @@
 import { useEffect } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllTestsAction } from "../store/reducers/testsReducer";
+import {
+  FETCH_STATES,
+  getAllTestsAction,
+} from "../store/reducers/testsReducer";
+import { Badge, Button, Col, Container, Row } from "reactstrap";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const TestsPage = () => {
   const dispatch = useDispatch();
-  const { total, allTests, workintechTests } = useSelector(
+  const history = useHistory();
+
+  const { total, allTests, workintechTests, fetchState } = useSelector(
     (state) => state.tests
   );
+
+  const navigateToTest = (test) => {
+    history.push(`/tests/${test.id}`);
+  };
+
   useEffect(() => {
-    dispatch(getAllTestsAction());
+    if (fetchState === FETCH_STATES.NOT_STARTED) {
+      dispatch(getAllTestsAction());
+    }
   }, []);
 
   return (
     <PageDefault pageTitle="Testler">
-      <h3>Toplam test sayısı: {total}</h3>
-      <h3>All tests: {allTests.length}</h3>
-      <h3>Workintech tests: {workintechTests.length}</h3>
+      <div className="text-end fs-6 fw-bold pb-2">
+        [Total: {total} | Loaded: {allTests.length} | Workintech:
+        {workintechTests.length}]
+      </div>
+      <Container>
+        <Row>
+          <Col sm="10">
+            <h5>Name</h5>
+          </Col>
+          <Col sm="1">
+            <h5>Duration</h5>
+          </Col>
+          <Col sm="1">
+            <h5>Actions</h5>
+          </Col>
+        </Row>
+        {workintechTests.map((test) => (
+          <Row className="border p-1 grid-row">
+            <Col sm="10">{test.name}</Col>
+            <Col sm="1">{test.duration}</Col>
+            <Col sm="1">
+              <Button size="sm" onClick={() => navigateToTest(test)}>
+                Open
+              </Button>
+            </Col>
+          </Row>
+        ))}
+      </Container>
     </PageDefault>
   );
 };

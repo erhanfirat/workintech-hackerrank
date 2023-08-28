@@ -1,6 +1,7 @@
 import { Switch, Route } from "react-router-dom";
 import MainPage from "../pages/MainPage";
 import TestsPage from "../pages/TestsPage";
+import TestPage from "../pages/TestPage";
 
 const PageBody = () => {
   return (
@@ -11,6 +12,9 @@ const PageBody = () => {
         </Route>
         <Route path="/tests" exact>
           <TestsPage />
+        </Route>
+        <Route path="/tests/:testId" exact>
+          <TestPage />
         </Route>
         <Route path="*">
           <div style={{ color: "red" }}>

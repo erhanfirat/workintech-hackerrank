@@ -4,8 +4,8 @@ import logo from "../logo-dark.svg";
 
 const Header = () => {
   return (
-    <Navbar className="my-2" color="dark" dark>
-      <NavbarBrand href="/">
+    <Navbar color="dark" dark className="px-3">
+      <NavbarBrand href="/" className="d-flex align-items-center">
         <img
           alt="logo"
           src={logo}
