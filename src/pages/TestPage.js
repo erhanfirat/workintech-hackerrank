@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Col, Container, Row } from "reactstrap";
+import { Button, Col, Container, Input, Row } from "reactstrap";
 import { FETCH_STATES } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { downloadFile } from "../utils/utils";
+import { studentGroups, students } from "../data/studentGroups";
 
 const fields = {
   name: "full_name",
@@ -21,6 +22,9 @@ const TestPage = () => {
   const [test, setTest] = useState();
   const [sortByState, setSortByState] = useState("full_name");
   const [ascState, setAscState] = useState("asc");
+  const [average, setAverage] = useState();
+  const [selectedGroup, setSelectedGroup] = useState("all");
+  const [filterText, setFilterText] = useState("");
 
   const dispatch = useDispatch();
 
@@ -59,13 +63,48 @@ const TestPage = () => {
 
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
 
-  const calculateAverages = () => {
-    const avr =
-      testCandidates.reduce(
-        (total, student) => total + student.percentage_score,
-        0
-      ) / testCandidates.length;
-  };
+  const candidatesToList = useCallback(() => {
+    return testCandidates
+      ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
+      ?.filter((candidate) =>
+        candidate.full_name
+          .toLocaleLowerCase()
+          .includes(filterText.toLocaleLowerCase())
+      )
+      ?.sort((tc1, tc2) =>
+        (
+          sortByState === "score"
+            ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
+            : tc1[fields[sortByState]].toLocaleLowerCase() >
+              tc2[fields[sortByState]].toLocaleLowerCase()
+        )
+          ? numberOrder(ascState) * 1
+          : numberOrder(ascState) * -1
+      );
+  });
+
+  const calculateAverages = useCallback(() => {
+    setAverage(
+      () =>
+        candidatesToList()?.length &&
+        candidatesToList()?.reduce(
+          (total, student) => total + student.percentage_score,
+          0
+        ) / candidatesToList().length
+    );
+  });
+
+  const sortIcon = useCallback((fieldName, sortByVal, ascVal) => {
+    return (
+      sortByVal === fieldName && (
+        <i
+          className={`ps-1 fa-solid fa-chevron-${
+            ascVal === "asc" ? "down" : "up"
+          }`}
+        ></i>
+      )
+    );
+  });
 
   useEffect(() => {
     if (testId) {
@@ -82,7 +121,7 @@ const TestPage = () => {
 
   useEffect(() => {
     calculateAverages();
-  }, [testCandidates]);
+  }, [candidatesToList()]);
 
   useEffect(() => {
     setSortByState(sortBy || "name");
@@ -93,6 +132,30 @@ const TestPage = () => {
     <PageDefault pageTitle={test?.name}>
       <Container>
         <Row>
+          <Col>
+            <Input
+              type="text"
+              placeholder="Type to filter"
+              onChange={(e) => setFilterText(e.target.value)}
+            ></Input>
+          </Col>
+          <Col>
+            <Input
+              type="select"
+              defaultValue={"all"}
+              onChange={(e) => setSelectedGroup(e.target.value)}
+            >
+              {studentGroups.map((group) => (
+                <option value={group.value} key={group.value}>
+                  {group.name}
+                </option>
+              ))}
+            </Input>
+          </Col>
+        </Row>
+      </Container>
+      <Container className="mt-3">
+        <Row>
           <Col sm="4">
             <Link
               to={`/tests/${testId}/name/${
@@ -101,13 +164,7 @@ const TestPage = () => {
             >
               <h5>
                 Name
-                {sortByState === "name" && (
-                  <i
-                    className={`ps-1 fa-solid fa-chevron-${
-                      ascState === "asc" ? "down" : "up"
-                    }`}
-                  ></i>
-                )}
+                {sortIcon("name", sortByState, ascState)}
               </h5>
             </Link>
           </Col>
@@ -119,13 +176,7 @@ const TestPage = () => {
             >
               <h5>
                 Email
-                {sortByState === "email" && (
-                  <i
-                    className={`ps-1 fa-solid fa-chevron-${
-                      ascState === "asc" ? "down" : "up"
-                    }`}
-                  ></i>
-                )}
+                {sortIcon("email", sortByState, ascState)}
               </h5>
             </Link>
           </Col>
@@ -137,13 +188,7 @@ const TestPage = () => {
             >
               <h5>
                 Score
-                {sortByState === "score" && (
-                  <i
-                    className={`ps-1 fa-solid fa-chevron-${
-                      ascState === "asc" ? "down" : "up"
-                    }`}
-                  ></i>
-                )}
+                {sortIcon("score", sortByState, ascState)}
               </h5>
             </Link>
           </Col>
@@ -153,33 +198,31 @@ const TestPage = () => {
             </Button>
           </Col>
         </Row>
-        {testCandidates
-          ?.sort((tc1, tc2) =>
-            (
-              sortByState === "score"
-                ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
-                : tc1[fields[sortByState]].toLocaleLowerCase() >
-                  tc2[fields[sortByState]].toLocaleLowerCase()
-            )
-              ? numberOrder(ascState) * 1
-              : numberOrder(ascState) * -1
-          )
-          .map((testCandidate) => (
-            <Row key={testCandidate.id} className="border-top p-1 grid-row">
-              <Col sm="4">{testCandidate.full_name}</Col>
-              <Col sm="4">{testCandidate.email}</Col>
-              <Col sm="2">{testCandidate.percentage_score}</Col>
-              <Col sm="2">
-                <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
-                  PDF
-                </Button>
-              </Col>
-            </Row>
-          ))}
+        {candidatesToList()?.map((testCandidate) => (
+          <Row key={testCandidate.id} className="border-top p-1 grid-row">
+            <Col sm="4">{testCandidate.full_name}</Col>
+            <Col sm="4">{testCandidate.email}</Col>
+            <Col sm="2">{testCandidate.percentage_score}</Col>
+            <Col sm="2">
+              <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
+                PDF
+              </Button>
+            </Col>
+          </Row>
+        ))}
       </Container>
-      <Container>
+      <Container className="mt-3">
+        <Row>
+          <Col>
+            <h4>Genel Değerlendirme</h4>
+          </Col>
+        </Row>
         <Row>
           <Col>Ortalama</Col>
+          <Col>{average?.toFixed(2)}</Col>
+        </Row>
+        <Row>
+          <Col></Col>
         </Row>
       </Container>
     </PageDefault>
