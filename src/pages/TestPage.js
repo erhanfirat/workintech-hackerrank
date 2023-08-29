@@ -25,7 +25,6 @@ const TestPage = () => {
   const dispatch = useDispatch();
 
   const { testId, sortBy, asc } = useParams();
-  const { path, url } = useRouteMatch();
 
   const downloadPDF = (candidate) => {
     // download PDF of candidate
@@ -38,13 +37,35 @@ const TestPage = () => {
 
     testCandidates.forEach((candidate) => {
       console.log("download for ", candidate);
-      downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
+      // downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
+      // window.open(candidate.pdf_url, "_blank");
+      let iframe = document.createElement("iframe");
+      iframe.style.visibility = "collapse";
+      document.body.append(iframe);
+
+      iframe.contentDocument.write(
+        `<form action="${candidate.pdf_url.replace(
+          /\"/g,
+          '"'
+        )}" method="GET"></form>`
+      );
+      iframe.contentDocument.forms[0].submit();
+
+      setTimeout(() => iframe.remove(), 2000);
     });
   };
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
 
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
+
+  const calculateAverages = () => {
+    const avr =
+      testCandidates.reduce(
+        (total, student) => total + student.percentage_score,
+        0
+      ) / testCandidates.length;
+  };
 
   useEffect(() => {
     if (testId) {
@@ -58,6 +79,10 @@ const TestPage = () => {
   useEffect(() => {
     setTestCandidates(candidates[testId]);
   }, [candidates]);
+
+  useEffect(() => {
+    calculateAverages();
+  }, [testCandidates]);
 
   useEffect(() => {
     setSortByState(sortBy || "name");
@@ -130,7 +155,12 @@ const TestPage = () => {
         </Row>
         {testCandidates
           ?.sort((tc1, tc2) =>
-            tc1[fields[sortBy]] > tc2[fields[sortBy]]
+            (
+              sortByState === "score"
+                ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
+                : tc1[fields[sortByState]].toLocaleLowerCase() >
+                  tc2[fields[sortByState]].toLocaleLowerCase()
+            )
               ? numberOrder(ascState) * 1
               : numberOrder(ascState) * -1
           )
@@ -146,6 +176,11 @@ const TestPage = () => {
               </Col>
             </Row>
           ))}
+      </Container>
+      <Container>
+        <Row>
+          <Col>Ortalama</Col>
+        </Row>
       </Container>
     </PageDefault>
   );
