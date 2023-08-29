@@ -24,3 +24,16 @@ a {
 .grid-row:hover {
   background-color: #eee;
 }
+
+.page-footer {
+  background-color: #505050;
+  color: #eee;
+}
+
+.page-footer a {
+  color: #ddd;
+  transition: 0.25s;
+}
+.page-footer a:hover {
+  color: #fff;
+}
