@@ -26,4 +26,13 @@ export const endpoints = {
     endpoint: `tests/${testId}/candidates`,
     config: { params },
   }),
+  /** Returns parameters to fetch question object
+   * @param {String} questionId: id of question
+   * @returns axios get request parameters for the question
+   */
+  question: (questionId) => ({
+    initialData: null,
+    reqType: REQ_TYPES.GET,
+    endpoint: `questions/${questionId}`,
+  }),
 };

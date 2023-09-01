@@ -2,11 +2,24 @@ import { useCallback, useEffect, useState } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Col, Container, Input, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Input,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+} from "reactstrap";
 import { FETCH_STATES } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { downloadFile } from "../utils/utils";
 import { studentGroups, students } from "../data/studentGroups";
+import { TestCandidateResults } from "../components/TestCandidateResults";
+import TestCandidatesTotal from "../components/TestCandidatesTotal";
 
 const fields = {
   name: "full_name",
@@ -25,39 +38,11 @@ const TestPage = () => {
   const [average, setAverage] = useState();
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
+  const [activeTab, setActiveTab] = useState("1");
 
   const dispatch = useDispatch();
 
   const { testId, sortBy, asc } = useParams();
-
-  const downloadPDF = (candidate) => {
-    // download PDF of candidate
-    downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
-  };
-
-  const downloadAllPDF = () => {
-    // download PDF of candidate
-    console.log("download all ");
-
-    testCandidates.forEach((candidate) => {
-      console.log("download for ", candidate);
-      // downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
-      // window.open(candidate.pdf_url, "_blank");
-      let iframe = document.createElement("iframe");
-      iframe.style.visibility = "collapse";
-      document.body.append(iframe);
-
-      iframe.contentDocument.write(
-        `<form action="${candidate.pdf_url.replace(
-          /\"/g,
-          '"'
-        )}" method="GET"></form>`
-      );
-      iframe.contentDocument.forms[0].submit();
-
-      setTimeout(() => iframe.remove(), 2000);
-    });
-  };
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
 
@@ -66,10 +51,14 @@ const TestPage = () => {
   const candidatesToList = useCallback(() => {
     return testCandidates
       ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
-      ?.filter((candidate) =>
-        candidate.full_name
-          .toLocaleLowerCase()
-          .includes(filterText.toLocaleLowerCase())
+      ?.filter(
+        (candidate) =>
+          candidate.full_name
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase()) ||
+          candidate.email
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase())
       )
       ?.sort((tc1, tc2) =>
         (
@@ -106,6 +95,10 @@ const TestPage = () => {
     );
   });
 
+  const toggleTab = (tabId) => {
+    setActiveTab(tabId);
+  };
+
   useEffect(() => {
     if (testId) {
       setTest(workintechTests.find((t) => t.id === testId));
@@ -130,101 +123,84 @@ const TestPage = () => {
 
   return (
     <PageDefault pageTitle={test?.name}>
-      <Container>
-        <Row>
-          <Col>
-            <Input
-              type="text"
-              placeholder="Type to filter"
-              onChange={(e) => setFilterText(e.target.value)}
-            ></Input>
-          </Col>
-          <Col>
-            <Input
-              type="select"
-              defaultValue={"all"}
-              onChange={(e) => setSelectedGroup(e.target.value)}
-            >
-              {studentGroups.map((group) => (
-                <option value={group.value} key={group.value}>
-                  {group.name}
-                </option>
-              ))}
-            </Input>
-          </Col>
-        </Row>
-      </Container>
-      <Container className="mt-3">
-        <Row>
-          <Col sm="4">
-            <Link
-              to={`/tests/${testId}/name/${
-                sortByState === "name" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Name
-                {sortIcon("name", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="4">
-            <Link
-              to={`/tests/${testId}/email/${
-                sortByState === "email" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Email
-                {sortIcon("email", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="2">
-            <Link
-              to={`/tests/${testId}/score/${
-                sortByState === "score" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Score
-                {sortIcon("score", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="2">
-            <Button size="sm" onClick={downloadAllPDF}>
-              All PDFs
-            </Button>
-          </Col>
-        </Row>
-        {candidatesToList()?.map((testCandidate) => (
-          <Row key={testCandidate.id} className="border-top p-1 grid-row">
-            <Col sm="4">{testCandidate.full_name}</Col>
-            <Col sm="4">{testCandidate.email}</Col>
-            <Col sm="2">{testCandidate.percentage_score}</Col>
-            <Col sm="2">
-              <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
-                PDF
-              </Button>
-            </Col>
-          </Row>
-        ))}
-      </Container>
-      <Container className="mt-3">
-        <Row>
-          <Col>
-            <h4>Genel Değerlendirme</h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col>Ortalama</Col>
-          <Col>{average?.toFixed(2)}</Col>
-        </Row>
-        <Row>
-          <Col></Col>
-        </Row>
-      </Container>
+      <div className="pt-3 pb-2">
+        <div className="d-flex">
+          <Input
+            type="text"
+            className="me-2"
+            placeholder="Type to filter"
+            onChange={(e) => setFilterText(e.target.value)}
+          ></Input>
+          <Input
+            type="select"
+            defaultValue={"all"}
+            onChange={(e) => setSelectedGroup(e.target.value)}
+          >
+            {studentGroups.map((group) => (
+              <option value={group.value} key={group.value}>
+                {group.name}
+              </option>
+            ))}
+          </Input>
+        </div>
+      </div>
+
+      <Nav tabs className="mt-2">
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "1" ? "active" : ""}`}
+            onClick={() => toggleTab("1")}
+          >
+            Test Result
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "2" ? "active" : ""}`}
+            onClick={() => toggleTab("2")}
+          >
+            Candidates In Detail
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "3" ? "active" : ""}`}
+            onClick={() => toggleTab("3")}
+          >
+            General
+          </NavLink>
+        </NavItem>
+      </Nav>
+
+      <TabContent
+        activeTab={activeTab}
+        className="px-2 py-3 border-start border-bottom border-end"
+      >
+        <TabPane tabId="1">
+          <TestCandidatesTotal
+            candidates={candidatesToList()}
+            inverseOrder={inverseOrder}
+            sortIcon={sortIcon}
+            sortByState={sortByState}
+            ascState={ascState}
+            testId={testId}
+          />
+        </TabPane>
+        <TabPane tabId="2">
+          <TestCandidateResults test={test} candidates={candidatesToList()} />
+        </TabPane>
+        <TabPane tabId="3">
+          <Container fluid>
+            <Row>
+              <Col>Ortalama</Col>
+              <Col>{average?.toFixed(2)}</Col>
+            </Row>
+            <Row>
+              <Col></Col>
+            </Row>
+          </Container>
+        </TabPane>
+      </TabContent>
     </PageDefault>
   );
 };

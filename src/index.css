@@ -18,6 +18,53 @@ a {
   text-decoration: none;
 }
 
+.page-body {
+  max-width: calc(100vw - 2rem);
+}
+.side-bar:hover + .page-body {
+  max-width: calc(100vw - 10rem);
+}
+
+.side-bar {
+  min-width: 2rem;
+  width: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 0;
+  padding-right: 0;
+  transition: 0.4s;
+  overflow: hidden;
+  background-color: #eee;
+}
+.side-bar:hover {
+  min-width: 10rem;
+  width: 10rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.side-bar * {
+  white-space: nowrap;
+}
+.side-bar .hide-on-mouseout {
+  opacity: 0;
+  transition: 0.4s;
+}
+.side-bar:hover .hide-on-mouseout {
+  opacity: 1;
+}
+.side-bar .nav-link {
+  padding: 0.5rem;
+  color: #505050;
+  font-weight: bold;
+}
+.side-bar:hover .nav-link {
+  border-radius: 0.5rem;
+}
+.side-bar .nav-link.active {
+  background-color: #505050;
+  color: #eee;
+}
+
 .grid-row {
   transition: 0.25s;
 }
@@ -36,4 +83,20 @@ a {
 }
 .page-footer a:hover {
   color: #fff;
+}
+
+.test-candidate-results {
+  overflow-x: scroll;
+}
+.test-candidate-results .row > div {
+  padding-bottom: 0.125rem;
+  padding-top: 0.125rem;
+}
+
+.test-candidate-results > .row:hover {
+  background-color: #eee;
+}
+
+.nav-tabs .nav-link {
+  cursor: pointer;
 }

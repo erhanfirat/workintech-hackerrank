@@ -5,7 +5,7 @@ import TestPage from "../pages/TestPage";
 
 const PageBody = () => {
   return (
-    <div className="p-3 flex-grow-1">
+    <div className="p-3 flex-grow-1 page-body">
       <Switch>
         <Route path="/" exact>
           <MainPage />
