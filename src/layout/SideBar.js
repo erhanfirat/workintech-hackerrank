@@ -11,20 +11,12 @@ const SideBar = () => {
     <div className="side-bar">
       <Nav vertical>
         <NavItem>
-          <NavLink
-            to={"/"}
-            className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
-            exact
-          >
+          <NavLink to={"/"} className={`nav-link`} exact>
             A<span className="hide-on-mouseout">na Sayfa</span>
           </NavLink>
         </NavItem>
         <NavItem>
-          <NavLink
-            to={"/tests"}
-            className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
-            exact
-          >
+          <NavLink to={"/tests"} className={`nav-link`} exact>
             T<span className="hide-on-mouseout">ests</span>
           </NavLink>
         </NavItem>

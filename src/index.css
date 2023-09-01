@@ -22,8 +22,8 @@ a {
   width: 2rem;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
+  padding-left: 0;
+  padding-right: 0;
   transition: 0.4s;
   overflow: hidden;
   background-color: #eee;
@@ -37,13 +37,23 @@ a {
   white-space: nowrap;
 }
 .side-bar .hide-on-mouseout {
-  display: none;
+  opacity: 0;
+  transition: 0.4s;
 }
 .side-bar:hover .hide-on-mouseout {
-  display: inline;
+  opacity: 1;
 }
 .side-bar .nav-link {
-  padding: 0.25rem;
+  padding: 0.5rem;
+  color: #505050;
+  font-weight: bold;
+}
+.side-bar:hover .nav-link {
+  border-radius: 0.5rem;
+}
+.side-bar .nav-link.active {
+  background-color: #505050;
+  color: #eee;
 }
 
 .grid-row {
