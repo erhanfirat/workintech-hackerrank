@@ -1,5 +1,6 @@
 import { doRequest } from "../../api/api";
 import { endpoints } from "../../api/endpoints";
+import { store } from "../store";
 import { FETCH_STATES } from "./testsReducer";
 
 export const questionActions = Object.freeze({
@@ -11,7 +12,8 @@ export const questionActions = Object.freeze({
 // REDUCER ********************************
 
 const initialQuestions = {
-  questions: {},
+  testQuestions: {},
+  allQeustions: {},
   fetchStates: {},
 };
 
@@ -85,3 +87,12 @@ export const getAllQuestionsOfTestAction = (testId) => (dispatch) => {
     }
   });
 };
+
+
+const getQuestionByIdAction = (questionId) => (dispatch) => {
+  if (!store.getState().allQeustions[questionId]) {
+    doRequest(
+      endpoints.questions(testId, { limit: 100, offset: i * 100 })
+    )
+  }
+}
