@@ -7,6 +7,7 @@ import { FETCH_STATES } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { downloadFile } from "../utils/utils";
 import { studentGroups, students } from "../data/studentGroups";
+import { TestCandidateResults } from "../components/TestCandidateResults";
 
 const fields = {
   name: "full_name",
@@ -225,6 +226,7 @@ const TestPage = () => {
           <Col></Col>
         </Row>
       </Container>
+      <TestCandidateResults test={test} candidates={candidatesToList()} />
     </PageDefault>
   );
 };
