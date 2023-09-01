@@ -37,3 +37,12 @@ a {
 .page-footer a:hover {
   color: #fff;
 }
+
+.test-candidate-results .row > div {
+  padding-bottom: 0.125rem;
+  padding-top: 0.125rem;
+}
+
+.test-candidate-results > .row:hover {
+  background-color: #eee;
+}
