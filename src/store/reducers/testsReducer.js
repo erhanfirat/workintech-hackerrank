@@ -41,7 +41,7 @@ export const testsReducer = (state = initialTests, action) => {
         ...state,
         allTests: all,
         workintechTests: all
-          .filter((test) => test.name.toLowerCase().includes("workintech"))
+          .filter((test) => test.name.toLowerCase().includes("[workintech]"))
           .sort((t1, t2) => (t1.name > t2.name ? 1 : -1)),
       };
 

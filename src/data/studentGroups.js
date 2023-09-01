@@ -1,5 +1,6 @@
 export const studentGroups = [
   { value: "all", name: "All Students" },
+  { value: "fsweb0423", name: "Fsweb 0423 - Nisan" },
   { value: "fsweb0423Part", name: "Fsweb 0423 Part Time - Nisan" },
   { value: "fsweb0523", name: "Fsweb 0523 - Mayıs" },
   { value: "fsweb0523Part", name: "Fsweb 0523 Part Time - Mayıs" },
@@ -140,6 +141,21 @@ export const students = {
     "ozkanubeyde@yaani.com",
   ],
   fsweb0423Part: [
+    "enis@workintech.com.tr",
+    "deniz@workintech.com.tr",
+    "ismailcehreli@gmail.com",
+    "as8993@icloud.com",
+    "atillagunduz3@hotmail.com",
+    "bahuelkin@gmail.com",
+    "denizdemir955@outlook.com",
+    "farukdemir90@outlook.com",
+    "m.fatih.cakir@hotmail.com.tr",
+    "rumeysaltin97@icloud.com",
+    "safaguler2744@gmail.com",
+    "tunahnbayir@gmail.com",
+    "busra.bayram001@gmail.com",
+  ],
+  fsweb0423: [
     "enis@workintech.com.tr",
     "deniz@workintech.com.tr",
     "ismailcehreli@gmail.com",
