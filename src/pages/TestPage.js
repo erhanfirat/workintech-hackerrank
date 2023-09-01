@@ -192,11 +192,6 @@ const TestPage = () => {
         <TabPane tabId="3">
           <Container fluid>
             <Row>
-              <Col>
-                <h4>Genel Değerlendirme</h4>
-              </Col>
-            </Row>
-            <Row>
               <Col>Ortalama</Col>
               <Col>{average?.toFixed(2)}</Col>
             </Row>

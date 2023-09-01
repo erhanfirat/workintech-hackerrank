@@ -9,9 +9,11 @@ export const TestCandidateResults = ({ test, candidates }) => {
           className="text-truncate border-right border-end"
           title={test?.name}
         >
-          {test?.name}
+          {test?.name.replace("[Workintech] - ", "")}
         </Col>
-        <Col sm="1">T %</Col>
+        <Col sm="1" title="Score in percentage">
+          S %
+        </Col>
         {test?.questions.map((question, i) => (
           <Col key={`Q${i}`} sm="1">{`Q${i + 1}`}</Col>
         ))}
@@ -20,7 +22,7 @@ export const TestCandidateResults = ({ test, candidates }) => {
         <Row key={`Candidate${j}`} className="border-bottom flex-nowrap">
           <Col
             sm="3"
-            className="text-truncate border-end fw-bold"
+            className="text-truncate border-end"
             title={candidate.email}
           >
             {candidate.email}

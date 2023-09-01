@@ -49,7 +49,7 @@ const TestCandidatesTotal = ({
             }`}
           >
             <h5>
-              Score
+              Score %
               {sortIcon("score", sortByState, ascState)}
             </h5>
           </Link>
@@ -60,8 +60,12 @@ const TestCandidatesTotal = ({
       </Row>
       {candidates?.map((testCandidate) => (
         <Row key={testCandidate.id} className="border-top p-1 grid-row">
-          <Col sm="4">{testCandidate.full_name}</Col>
-          <Col sm="4">{testCandidate.email}</Col>
+          <Col sm="4" className="text-truncate" title={testCandidate.full_name}>
+            {testCandidate.full_name}
+          </Col>
+          <Col sm="4" className="text-truncate" title={testCandidate.email}>
+            {testCandidate.email}
+          </Col>
           <Col sm="2">{testCandidate.percentage_score}</Col>
           <Col sm="2">
             <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
