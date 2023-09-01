@@ -39,10 +39,14 @@ const TestPage = () => {
   const candidatesToList = useCallback(() => {
     return testCandidates
       ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
-      ?.filter((candidate) =>
-        candidate.full_name
-          .toLocaleLowerCase()
-          .includes(filterText.toLocaleLowerCase())
+      ?.filter(
+        (candidate) =>
+          candidate.full_name
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase()) ||
+          candidate.email
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase())
       )
       ?.sort((tc1, tc2) =>
         (
