@@ -16,7 +16,7 @@ const TestCandidatesTotal = ({
   };
 
   return (
-    <Container className="mt-3">
+    <Container fluid>
       <Row>
         <Col sm="4">
           <Link

@@ -190,7 +190,7 @@ const TestPage = () => {
           <TestCandidateResults test={test} candidates={candidatesToList()} />
         </TabPane>
         <TabPane tabId="3">
-          <Container className="mt-3">
+          <Container fluid>
             <Row>
               <Col>
                 <h4>Genel Değerlendirme</h4>

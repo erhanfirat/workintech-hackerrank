@@ -18,7 +18,15 @@ a {
   text-decoration: none;
 }
 
+.page-body {
+  max-width: calc(100vw - 2rem);
+}
+.side-bar:hover + .page-body {
+  max-width: calc(100vw - 10rem);
+}
+
 .side-bar {
+  min-width: 2rem;
   width: 2rem;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
@@ -29,6 +37,7 @@ a {
   background-color: #eee;
 }
 .side-bar:hover {
+  min-width: 10rem;
   width: 10rem;
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -76,6 +85,9 @@ a {
   color: #fff;
 }
 
+.test-candidate-results {
+  overflow-x: scroll;
+}
 .test-candidate-results .row > div {
   padding-bottom: 0.125rem;
   padding-top: 0.125rem;
