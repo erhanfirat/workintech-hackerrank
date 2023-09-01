@@ -88,11 +88,8 @@ export const getAllQuestionsOfTestAction = (testId) => (dispatch) => {
   });
 };
 
-
 const getQuestionByIdAction = (questionId) => (dispatch) => {
   if (!store.getState().allQeustions[questionId]) {
-    doRequest(
-      endpoints.questions(testId, { limit: 100, offset: i * 100 })
-    )
+    doRequest(endpoints.question(questionId));
   }
-}
+};
