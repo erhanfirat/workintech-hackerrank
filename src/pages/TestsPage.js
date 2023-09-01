@@ -32,7 +32,7 @@ const TestsPage = () => {
         [Total: {total} | Loaded: {allTests.length} | Workintech:
         {workintechTests.length}]
       </div>
-      <Container>
+      <Container fluid>
         <Row>
           <Col sm="10">
             <h5>Name</h5>

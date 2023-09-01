@@ -84,3 +84,7 @@ a {
 .test-candidate-results > .row:hover {
   background-color: #eee;
 }
+
+.nav-tabs .nav-link {
+  cursor: pointer;
+}

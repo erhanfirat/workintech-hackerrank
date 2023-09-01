@@ -2,7 +2,18 @@ import { useCallback, useEffect, useState } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
-import { Button, Col, Container, Input, Row } from "reactstrap";
+import {
+  Button,
+  Col,
+  Container,
+  Input,
+  Nav,
+  NavItem,
+  NavLink,
+  Row,
+  TabContent,
+  TabPane,
+} from "reactstrap";
 import { FETCH_STATES } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { downloadFile } from "../utils/utils";
@@ -27,6 +38,7 @@ const TestPage = () => {
   const [average, setAverage] = useState();
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
+  const [activeTab, setActiveTab] = useState("1");
 
   const dispatch = useDispatch();
 
@@ -83,6 +95,10 @@ const TestPage = () => {
     );
   });
 
+  const toggleTab = (tabId) => {
+    setActiveTab(tabId);
+  };
+
   useEffect(() => {
     if (testId) {
       setTest(workintechTests.find((t) => t.id === testId));
@@ -107,53 +123,89 @@ const TestPage = () => {
 
   return (
     <PageDefault pageTitle={test?.name}>
-      <Container>
-        <Row>
-          <Col>
-            <Input
-              type="text"
-              placeholder="Type to filter"
-              onChange={(e) => setFilterText(e.target.value)}
-            ></Input>
-          </Col>
-          <Col>
-            <Input
-              type="select"
-              defaultValue={"all"}
-              onChange={(e) => setSelectedGroup(e.target.value)}
-            >
-              {studentGroups.map((group) => (
-                <option value={group.value} key={group.value}>
-                  {group.name}
-                </option>
-              ))}
-            </Input>
-          </Col>
-        </Row>
-      </Container>
-      <TestCandidatesTotal
-        candidates={candidatesToList()}
-        inverseOrder={inverseOrder}
-        sortIcon={sortIcon}
-        sortByState={sortByState}
-        ascState={ascState}
-        testId={testId}
-      />
-      <Container className="mt-3">
-        <Row>
-          <Col>
-            <h4>Genel Değerlendirme</h4>
-          </Col>
-        </Row>
-        <Row>
-          <Col>Ortalama</Col>
-          <Col>{average?.toFixed(2)}</Col>
-        </Row>
-        <Row>
-          <Col></Col>
-        </Row>
-      </Container>
-      <TestCandidateResults test={test} candidates={candidatesToList()} />
+      <div className="pt-3 pb-2">
+        <div className="d-flex">
+          <Input
+            type="text"
+            className="me-2"
+            placeholder="Type to filter"
+            onChange={(e) => setFilterText(e.target.value)}
+          ></Input>
+          <Input
+            type="select"
+            defaultValue={"all"}
+            onChange={(e) => setSelectedGroup(e.target.value)}
+          >
+            {studentGroups.map((group) => (
+              <option value={group.value} key={group.value}>
+                {group.name}
+              </option>
+            ))}
+          </Input>
+        </div>
+      </div>
+
+      <Nav tabs className="mt-2">
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "1" ? "active" : ""}`}
+            onClick={() => toggleTab("1")}
+          >
+            Test Result
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "2" ? "active" : ""}`}
+            onClick={() => toggleTab("2")}
+          >
+            Candidates In Detail
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "3" ? "active" : ""}`}
+            onClick={() => toggleTab("3")}
+          >
+            General
+          </NavLink>
+        </NavItem>
+      </Nav>
+
+      <TabContent
+        activeTab={activeTab}
+        className="px-2 py-3 border-start border-bottom border-end"
+      >
+        <TabPane tabId="1">
+          <TestCandidatesTotal
+            candidates={candidatesToList()}
+            inverseOrder={inverseOrder}
+            sortIcon={sortIcon}
+            sortByState={sortByState}
+            ascState={ascState}
+            testId={testId}
+          />
+        </TabPane>
+        <TabPane tabId="2">
+          <TestCandidateResults test={test} candidates={candidatesToList()} />
+        </TabPane>
+        <TabPane tabId="3">
+          <Container className="mt-3">
+            <Row>
+              <Col>
+                <h4>Genel Değerlendirme</h4>
+              </Col>
+            </Row>
+            <Row>
+              <Col>Ortalama</Col>
+              <Col>{average?.toFixed(2)}</Col>
+            </Row>
+            <Row>
+              <Col></Col>
+            </Row>
+          </Container>
+        </TabPane>
+      </TabContent>
     </PageDefault>
   );
 };
