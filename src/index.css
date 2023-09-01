@@ -18,6 +18,34 @@ a {
   text-decoration: none;
 }
 
+.side-bar {
+  width: 2rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+  transition: 0.4s;
+  overflow: hidden;
+  background-color: #eee;
+}
+.side-bar:hover {
+  width: 10rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.side-bar * {
+  white-space: nowrap;
+}
+.side-bar .hide-on-mouseout {
+  display: none;
+}
+.side-bar:hover .hide-on-mouseout {
+  display: inline;
+}
+.side-bar .nav-link {
+  padding: 0.25rem;
+}
+
 .grid-row {
   transition: 0.25s;
 }

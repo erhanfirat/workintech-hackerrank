@@ -8,7 +8,7 @@ const activeNavLink = {
 
 const SideBar = () => {
   return (
-    <div className="side-bar p-3 ">
+    <div className="side-bar">
       <Nav vertical>
         <NavItem>
           <NavLink
@@ -16,7 +16,7 @@ const SideBar = () => {
             className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
             exact
           >
-            Ana Sayfa
+            A<span className="hide-on-mouseout">na Sayfa</span>
           </NavLink>
         </NavItem>
         <NavItem>
@@ -25,7 +25,7 @@ const SideBar = () => {
             className={(isActive) => `nav-link ${isActive ? "active" : ""}`}
             exact
           >
-            Tests
+            T<span className="hide-on-mouseout">ests</span>
           </NavLink>
         </NavItem>
       </Nav>

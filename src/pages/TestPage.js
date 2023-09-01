@@ -8,6 +8,7 @@ import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReduce
 import { downloadFile } from "../utils/utils";
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
+import TestCandidatesTotal from "../components/TestCandidatesTotal";
 
 const fields = {
   name: "full_name",
@@ -30,35 +31,6 @@ const TestPage = () => {
   const dispatch = useDispatch();
 
   const { testId, sortBy, asc } = useParams();
-
-  const downloadPDF = (candidate) => {
-    // download PDF of candidate
-    downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
-  };
-
-  const downloadAllPDF = () => {
-    // download PDF of candidate
-    console.log("download all ");
-
-    testCandidates.forEach((candidate) => {
-      console.log("download for ", candidate);
-      // downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
-      // window.open(candidate.pdf_url, "_blank");
-      let iframe = document.createElement("iframe");
-      iframe.style.visibility = "collapse";
-      document.body.append(iframe);
-
-      iframe.contentDocument.write(
-        `<form action="${candidate.pdf_url.replace(
-          /\"/g,
-          '"'
-        )}" method="GET"></form>`
-      );
-      iframe.contentDocument.forms[0].submit();
-
-      setTimeout(() => iframe.remove(), 2000);
-    });
-  };
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
 
@@ -155,63 +127,14 @@ const TestPage = () => {
           </Col>
         </Row>
       </Container>
-      <Container className="mt-3">
-        <Row>
-          <Col sm="4">
-            <Link
-              to={`/tests/${testId}/name/${
-                sortByState === "name" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Name
-                {sortIcon("name", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="4">
-            <Link
-              to={`/tests/${testId}/email/${
-                sortByState === "email" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Email
-                {sortIcon("email", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="2">
-            <Link
-              to={`/tests/${testId}/score/${
-                sortByState === "score" ? inverseOrder(ascState) : ascState
-              }`}
-            >
-              <h5>
-                Score
-                {sortIcon("score", sortByState, ascState)}
-              </h5>
-            </Link>
-          </Col>
-          <Col sm="2">
-            <Button size="sm" onClick={downloadAllPDF}>
-              All PDFs
-            </Button>
-          </Col>
-        </Row>
-        {candidatesToList()?.map((testCandidate) => (
-          <Row key={testCandidate.id} className="border-top p-1 grid-row">
-            <Col sm="4">{testCandidate.full_name}</Col>
-            <Col sm="4">{testCandidate.email}</Col>
-            <Col sm="2">{testCandidate.percentage_score}</Col>
-            <Col sm="2">
-              <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
-                PDF
-              </Button>
-            </Col>
-          </Row>
-        ))}
-      </Container>
+      <TestCandidatesTotal
+        candidates={candidatesToList()}
+        inverseOrder={inverseOrder}
+        sortIcon={sortIcon}
+        sortByState={sortByState}
+        ascState={ascState}
+        testId={testId}
+      />
       <Container className="mt-3">
         <Row>
           <Col>
