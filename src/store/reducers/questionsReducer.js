@@ -1,42 +1,51 @@
-import { doRequest } from "../../api/api";
-import { endpoints } from "../../api/endpoints";
-import { store } from "../store";
-import { FETCH_STATES } from "./testsReducer";
+// CONSTANT DEFINITIONS *********************
 
 export const questionActions = Object.freeze({
   setQuestionsOfTestFetchState: "SET_TEST_QUESTIONS_FETCH_STATE",
-  setQuestionsOfTest: "SET_TEST_QUESTIONS",
-  addQuestionsOfTest: "ADD_TEST_QUESTIONS",
+  addQuestionToTest: "ADD_QUESTION_TO_TEST",
+  addQuestionToAll: "ADD_QUESTION_TO_ALL_QUESTIONS_LIST",
 });
 
-// REDUCER ********************************
-
 const initialQuestions = {
-  testQuestions: {},
-  allQeustions: {},
+  testQuestions: {
+    // "1231543": {     testId
+    //   "6545475": {   questionId
+    //     ...          question Object
+    //   },
+    //   ...
+    // }
+  },
+  allQuestions: {
+    // "4366463": {     questionId
+    //    ...           question Object
+    // },
+    // ...
+  },
   fetchStates: {},
 };
 
+// REDUCER ********************************
+
 export const questionsReducer = (state = initialQuestions, action) => {
   switch (action.type) {
-    case questionActions.setQuestionsOfTest:
+    case questionActions.addQuestionToAll:
       return {
         ...state,
-        questions: {
-          ...state.questions,
-          [action.payload.testId]: action.payload.questions,
+        allQuestions: {
+          ...state.allQuestions,
+          [action.payload.id]: action.payload,
         },
       };
 
-    case questionActions.addQuestionsOfTest:
+    case questionActions.addQuestionToTest:
       return {
         ...state,
-        questions: {
-          ...state.questions,
-          [action.payload.testId]: [
-            ...state.questions[action.payload.testId],
-            ...action.payload.questions,
-          ],
+        testQuestions: {
+          ...state.testQuestions,
+          [action.payload.testId]: {
+            ...state.testQuestions[action.payload.testId],
+            [action.payload.question.id]: action.payload.question,
+          },
         },
       };
 
@@ -51,45 +60,5 @@ export const questionsReducer = (state = initialQuestions, action) => {
 
     default:
       return state;
-  }
-};
-
-// ACTIONS ********************************
-
-export const getAllQuestionsOfTestAction = (testId) => (dispatch) => {
-  dispatch({
-    type: questionActions.setQuestionsOfTestFetchState,
-    payload: { testId, fetchState: FETCH_STATES.FETCHING },
-  });
-
-  doRequest(endpoints.questions(testId)).then((resData) => {
-    dispatch({
-      type: questionActions.setQuestionsOfTest,
-      payload: { testId, questions: resData.data },
-    });
-
-    const pageCount = Math.ceil(resData.total / 100);
-    for (let i = 1; i < pageCount; i++) {
-      doRequest(
-        endpoints.questions(testId, { limit: 100, offset: i * 100 })
-      ).then((innerResData) => {
-        dispatch({
-          type: questionActions.addAllQuestions,
-          payload: { testId, questions: innerResData.data },
-        });
-        if (i === pageCount) {
-          dispatch({
-            type: questionActions.setFetchState,
-            payload: { testId, fetchState: FETCH_STATES.FETHCED },
-          });
-        }
-      });
-    }
-  });
-};
-
-const getQuestionByIdAction = (questionId) => (dispatch) => {
-  if (!store.getState().allQeustions[questionId]) {
-    doRequest(endpoints.question(questionId));
   }
 };

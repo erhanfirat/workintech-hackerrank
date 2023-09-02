@@ -37,6 +37,12 @@ export const testsReducer = (state = initialTests, action) => {
 
     case testActions.addAllTests:
       const all = [...state.allTests, ...action.payload];
+      console.log(
+        "tests > ",
+        all
+          .filter((test) => test.name.toLowerCase().includes("[workintech]"))
+          .sort((t1, t2) => (t1.name > t2.name ? 1 : -1))
+      );
       return {
         ...state,
         allTests: all,

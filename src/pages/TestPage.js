@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams, useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import {
-  Button,
   Col,
   Container,
   Input,
@@ -14,12 +13,16 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import { FETCH_STATES } from "../store/reducers/testsReducer";
+import {
+  FETCH_STATES,
+  getAllTestsAction,
+} from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { downloadFile } from "../utils/utils";
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
+import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
 
 const fields = {
   name: "full_name",
@@ -28,7 +31,9 @@ const fields = {
 };
 
 const TestPage = () => {
-  const { workintechTests } = useSelector((state) => state.tests);
+  const { workintechTests, fetchState: testsFetchState } = useSelector(
+    (state) => state.tests
+  );
   const { candidates, fetchStates } = useSelector((state) => state.candidates);
 
   const [testCandidates, setTestCandidates] = useState([]);
@@ -38,7 +43,7 @@ const TestPage = () => {
   const [average, setAverage] = useState();
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
-  const [activeTab, setActiveTab] = useState("1");
+  const [activeTab, setActiveTab] = useState("results");
 
   const dispatch = useDispatch();
 
@@ -101,9 +106,18 @@ const TestPage = () => {
 
   useEffect(() => {
     if (testId) {
-      setTest(workintechTests.find((t) => t.id === testId));
-      if (fetchStates[testId] !== FETCH_STATES.FETHCED) {
-        dispatch(getAllCandidatesOfTestAction(testId));
+      const testInStore = workintechTests.find((t) => t.id === testId);
+      if (testInStore) {
+        setTest(workintechTests.find((t) => t.id === testId));
+        if (fetchStates[testId] !== FETCH_STATES.FETHCED) {
+          dispatch(getAllCandidatesOfTestAction(testId));
+        }
+        dispatch(getAllQuestionsOfTestAction(testId));
+      } else {
+        // fetch all tests here for opening test page for the first
+        if (testsFetchState === FETCH_STATES.NOT_STARTED) {
+          dispatch(getAllTestsAction());
+        }
       }
     }
   }, [workintechTests, testId]);
@@ -148,24 +162,32 @@ const TestPage = () => {
       <Nav tabs className="mt-2">
         <NavItem>
           <NavLink
-            className={`${activeTab === "1" ? "active" : ""}`}
-            onClick={() => toggleTab("1")}
+            className={`${activeTab === "results" ? "active" : ""}`}
+            onClick={() => toggleTab("results")}
           >
             Test Result
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink
-            className={`${activeTab === "2" ? "active" : ""}`}
-            onClick={() => toggleTab("2")}
+            className={`${activeTab === "resultsInDetail" ? "active" : ""}`}
+            onClick={() => toggleTab("resultsInDetail")}
           >
             Candidates In Detail
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink
-            className={`${activeTab === "3" ? "active" : ""}`}
-            onClick={() => toggleTab("3")}
+            className={`${activeTab === "questions" ? "active" : ""}`}
+            onClick={() => toggleTab("questions")}
+          >
+            Questions
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "reports" ? "active" : ""}`}
+            onClick={() => toggleTab("reports")}
           >
             General
           </NavLink>
@@ -176,7 +198,7 @@ const TestPage = () => {
         activeTab={activeTab}
         className="px-2 py-3 border-start border-bottom border-end"
       >
-        <TabPane tabId="1">
+        <TabPane tabId="results">
           <TestCandidatesTotal
             candidates={candidatesToList()}
             inverseOrder={inverseOrder}
@@ -186,10 +208,11 @@ const TestPage = () => {
             testId={testId}
           />
         </TabPane>
-        <TabPane tabId="2">
+        <TabPane tabId="resultsInDetail">
           <TestCandidateResults test={test} candidates={candidatesToList()} />
         </TabPane>
-        <TabPane tabId="3">
+        <TabPane tabId="questions"></TabPane>
+        <TabPane tabId="reports">
           <Container fluid>
             <Row>
               <Col>Ortalama</Col>
