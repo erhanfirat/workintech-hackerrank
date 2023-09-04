@@ -14,7 +14,7 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
         </Col>
       </Row>
       {testQuestions?.map((questionId, i) => {
-        const question = questions[questionId];
+        const question = questions && questions[questionId];
         if (question)
           return (
             <Row key={question.id} className="border-top p-1 grid-row">
