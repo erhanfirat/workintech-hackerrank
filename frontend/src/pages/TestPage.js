@@ -135,6 +135,7 @@ const TestPage = () => {
       const stuResult = {
         Name: stu.full_name,
         Email: stu.email,
+        Date: stu.attempt_starttime,
         "Score (%)": stu.percentage_score,
       };
 
@@ -150,8 +151,8 @@ const TestPage = () => {
     const questionsSheetJson = test.questions.map((qId, i) => {
       return {
         No: i + 1,
-        Name: questions[qId].name,
-        Statement: questions[qId].problem_statement,
+        Name: questions[qId]?.name,
+        Statement: questions[qId]?.problem_statement,
       };
     });
     const wsQuestions = utils.json_to_sheet(questionsSheetJson);

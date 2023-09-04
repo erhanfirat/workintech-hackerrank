@@ -14,8 +14,9 @@ export const doRequest = ({ reqType, endpoint, payload, config }) => {
       return res.data;
     })
     .catch((err) => {
-      toast.err(`${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı.
-${err.message}`);
+      toast.error(
+        `${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+      );
       throw err;
     });
 };
