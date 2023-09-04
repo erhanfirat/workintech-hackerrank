@@ -218,9 +218,6 @@ const TestPage = () => {
               <Col>Ortalama</Col>
               <Col>{average?.toFixed(2)}</Col>
             </Row>
-            <Row>
-              <Col></Col>
-            </Row>
           </Container>
         </TabPane>
       </TabContent>

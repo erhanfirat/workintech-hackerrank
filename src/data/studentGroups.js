@@ -6,7 +6,7 @@ export const studentGroups = [
   { value: "fsweb0523Part", name: "Fsweb 0523 Part Time - Mayıs" },
   { value: "fsweb0623", name: "Fsweb 0623 - Haziran" },
   { value: "fsweb0723", name: "Fsweb 0723 - Temmuz" },
-  { value: "fsweb0723Part", name: "Fsweb 0723 PartTime- Temmuz" },
+  { value: "fsweb0723Part", name: "Fsweb 0723 Part Time - Temmuz" },
   { value: "fsweb0823", name: "Fsweb 0823 - Ağustos" },
 ];
 
