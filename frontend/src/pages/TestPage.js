@@ -23,6 +23,7 @@ import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
+import TestQuestions from "../components/TestQuestions";
 
 const fields = {
   name: "full_name",
@@ -31,6 +32,8 @@ const fields = {
 };
 
 const TestPage = () => {
+  const { testId, sortBy, asc } = useParams();
+
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
   );
@@ -46,8 +49,6 @@ const TestPage = () => {
   const [activeTab, setActiveTab] = useState("results");
 
   const dispatch = useDispatch();
-
-  const { testId, sortBy, asc } = useParams();
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
 
@@ -109,10 +110,13 @@ const TestPage = () => {
       const testInStore = workintechTests.find((t) => t.id === testId);
       if (testInStore) {
         setTest(workintechTests.find((t) => t.id === testId));
-        if (fetchStates[testId] !== FETCH_STATES.FETHCED) {
+        if (
+          fetchStates[testId] !== FETCH_STATES.FETHCED &&
+          fetchStates[testId] !== FETCH_STATES.FETCHING
+        ) {
           dispatch(getAllCandidatesOfTestAction(testId));
+          dispatch(getAllQuestionsOfTestAction(testId));
         }
-        dispatch(getAllQuestionsOfTestAction(testId));
       } else {
         // fetch all tests here for opening test page for the first
         if (testsFetchState === FETCH_STATES.NOT_STARTED) {
@@ -211,7 +215,12 @@ const TestPage = () => {
         <TabPane tabId="resultsInDetail">
           <TestCandidateResults test={test} candidates={candidatesToList()} />
         </TabPane>
-        <TabPane tabId="questions"></TabPane>
+        <TabPane tabId="questions">
+          <TestQuestions
+            testId={testId}
+            testQuestions={test?.questions || []}
+          />
+        </TabPane>
         <TabPane tabId="reports">
           <Container fluid>
             <Row>

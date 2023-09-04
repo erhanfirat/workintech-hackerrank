@@ -1,60 +1,40 @@
-const TestQuestions = ({questions}) => {
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom/cjs/react-router-dom.min";
+import { Button, Col, Container, Row } from "reactstrap";
+
+const TestQuestions = ({ testId, testQuestions = [] }) => {
+  const questions = useSelector(
+    (state) => state.questions.testQuestions[testId]
+  );
+  console.log("questions in questions> ", questions);
   return (
     <Container fluid>
       <Row>
         <Col sm="4">
-          <Link
-            to={`/tests/${testId}/name/${
-              sortByState === "name" ? inverseOrder(ascState) : ascState
-            }`}
-          >
-            <h5>
-              Name
-              {sortIcon("name", sortByState, ascState)}
-            </h5>
-          </Link>
-        </Col>
-        <Col sm="4">
-          <Link
-            to={`/tests/${testId}/email/${
-              sortByState === "email" ? inverseOrder(ascState) : ascState
-            }`}
-          >
-            <h5>
-              Email
-              {sortIcon("email", sortByState, ascState)}
-            </h5>
-          </Link>
-        </Col>
-        <Col sm="2">
-          <Link
-            to={`/tests/${testId}/score/${
-              sortByState === "score" ? inverseOrder(ascState) : ascState
-            }`}
-          >
-            <h5>Score %{sortIcon("score", sortByState, ascState)}</h5>
-          </Link>
-        </Col>
-        <Col sm="2">
-          <Button size="sm">All PDFs</Button>
+          <h5>Name</h5>
         </Col>
       </Row>
-      {questions?.map((question) => (
-        <Row key={question.id} className="border-top p-1 grid-row">
-          <Col sm="4" className="text-truncate" title={question.full_name}>
-            {testCandidate.full_name}
-          </Col>
-          <Col sm="4" className="text-truncate" title={testCandidate.email}>
-            {testCandidate.email}
-          </Col>
-          <Col sm="2">{testCandidate.percentage_score}</Col>
-          <Col sm="2">
-            <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
-              PDF
-            </Button>
-          </Col>
-        </Row>
-      ))}
+      {testQuestions?.map((questionId, i) => {
+        const question = questions[questionId];
+        if (question)
+          return (
+            <Row key={question.id} className="border-top p-1 grid-row">
+              <Col sm="1">Q {i + 1}</Col>
+              <Col sm="2" className="text-truncate" title={question.name}>
+                {question.name}
+              </Col>
+              <Col sm="9">
+                <div
+                  className="content"
+                  dangerouslySetInnerHTML={{
+                    __html: question.problem_statement,
+                  }}
+                ></div>
+              </Col>
+            </Row>
+          );
+        else return "";
+      })}
     </Container>
   );
 };
