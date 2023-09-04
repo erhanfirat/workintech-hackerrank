@@ -90,7 +90,9 @@ const TestPage = () => {
     return {
       test: test?.name,
       group: studentGroups.find((g) => g.value === selectedGroup).name,
-      count: candidatesToList()?.length,
+      candidateCount: candidatesToList()?.length,
+      candidateRate:
+        (candidatesToList()?.length / students[selectedGroup].length) * 100,
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].attempt_starttime,
       lastAttemptDate:
@@ -271,7 +273,11 @@ const TestPage = () => {
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılımcı Sayısı:</Col>
-              <Col sm="8">{getGeneralInfo()?.count}</Col>
+              <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
+            </Row>
+            <Row className="border-bottom pb-1 mb-2">
+              <Col sm="4">Katılım Oranı (%):</Col>
+              <Col sm="8">{getGeneralInfo()?.candidateRate.toFixed(0)} %</Col>
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Tarih Aralığı:</Col>

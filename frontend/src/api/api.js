@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export let API = axios.create({
   baseURL: "https://www.hackerrank.com/x/api/v3/",
@@ -13,6 +14,8 @@ export const doRequest = ({ reqType, endpoint, payload, config }) => {
       return res.data;
     })
     .catch((err) => {
+      toast.err(`${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı.
+${err.message}`);
       throw err;
     });
 };
