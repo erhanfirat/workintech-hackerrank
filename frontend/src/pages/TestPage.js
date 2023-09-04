@@ -3,6 +3,7 @@ import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  Button,
   Col,
   Container,
   Input,
@@ -24,6 +25,7 @@ import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
 import TestQuestions from "../components/TestQuestions";
+import { utils, writeFile } from "xlsx";
 
 const fields = {
   name: "full_name",
@@ -47,6 +49,9 @@ const TestPage = () => {
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("results");
+  const questions = useSelector(
+    (state) => state.questions.testQuestions[testId]
+  );
 
   const dispatch = useDispatch();
 
@@ -105,6 +110,52 @@ const TestPage = () => {
     setActiveTab(tabId);
   };
 
+  const downloadCSV = () => {
+    // CREATE WORKBOOK
+    const wb = utils.book_new();
+
+    // CREATE GENERAL SHEET
+    const generalSheetJson = candidatesToList().map((stu) => ({
+      Name: stu.full_name,
+      Email: stu.email,
+      Score: stu.percentage_score,
+    }));
+    const wsGeneral = utils.json_to_sheet(generalSheetJson);
+
+    // CREATE DETAIL SHEET
+    const detailSheetJson = candidatesToList().map((stu) => {
+      const stuResult = {
+        Name: stu.full_name,
+        Email: stu.email,
+        "Score (%)": stu.percentage_score,
+      };
+
+      test.questions.forEach((question, i) => {
+        stuResult[`q${i + 1}`] = stu.questions[question];
+      });
+
+      return stuResult;
+    });
+    const wsDetail = utils.json_to_sheet(detailSheetJson);
+
+    // CREATE DETAIL SHEET
+    const questionsSheetJson = test.questions.map((qId, i) => {
+      return {
+        No: i + 1,
+        Name: questions[qId].name,
+        Statement: questions[qId].problem_statement,
+      };
+    });
+    const wsQuestions = utils.json_to_sheet(questionsSheetJson);
+
+    // ADD SHEETS TO WORKBOOK
+    utils.book_append_sheet(wb, wsGeneral, "General");
+    utils.book_append_sheet(wb, wsDetail, "Detail");
+    utils.book_append_sheet(wb, wsQuestions, "Questions");
+
+    writeFile(wb, `${test.name}_${selectedGroup}.xlsx`);
+  };
+
   useEffect(() => {
     if (testId) {
       const testInStore = workintechTests.find((t) => t.id === testId);
@@ -151,6 +202,7 @@ const TestPage = () => {
           ></Input>
           <Input
             type="select"
+            className="me-2"
             defaultValue={"all"}
             onChange={(e) => setSelectedGroup(e.target.value)}
           >
@@ -160,6 +212,9 @@ const TestPage = () => {
               </option>
             ))}
           </Input>
+          <Button className="text-nowrap" onClick={downloadCSV}>
+            Download CSV
+          </Button>
         </div>
       </div>
 
