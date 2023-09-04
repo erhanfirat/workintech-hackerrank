@@ -1,4 +1,5 @@
 import { Col, Container, Row } from "reactstrap";
+import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
 
 export const TestCandidateResults = ({ test, candidates }) => {
   return (
@@ -9,7 +10,10 @@ export const TestCandidateResults = ({ test, candidates }) => {
           className="text-truncate border-right border-end"
           title={test?.name}
         >
-          {test?.name.replace("[Workintech] - ", "")}
+          {getCleanTestName(test?.name)}
+        </Col>
+        <Col sm="2" className="text-truncate border-right border-end">
+          Tarih
         </Col>
         <Col sm="1" title="Score in percentage">
           S %
@@ -26,6 +30,9 @@ export const TestCandidateResults = ({ test, candidates }) => {
             title={candidate.email}
           >
             {candidate.email}
+          </Col>
+          <Col sm="2" className="text-truncate border-right border-end">
+            {getDateStringFromISO(candidate.attempt_starttime)}
           </Col>
           <Col sm="1">{parseInt(candidate.percentage_score)}</Col>
           {test.questions.map((question, i) => (

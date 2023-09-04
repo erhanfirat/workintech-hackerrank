@@ -6,3 +6,9 @@ export function downloadFile(fileURL, fileName) {
   link.click();
   document.body.removeChild(link);
 }
+
+export const getCleanTestName = (name) => name?.replace("[Workintech] - ", "");
+
+export const getDateStringFromISO = (ISOStr) => {
+  return (ISOStr || "").substring(0, (ISOStr || "").indexOf("T"));
+};

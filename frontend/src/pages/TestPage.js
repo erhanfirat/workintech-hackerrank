@@ -25,6 +25,7 @@ import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
+import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
 
 const fields = {
   name: "full_name",
@@ -51,11 +52,9 @@ const TestPage = () => {
   const questions = useSelector(
     (state) => state.questions.testQuestions[testId]
   );
-
   const dispatch = useDispatch();
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
-
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
 
   const candidatesToList = useCallback(() => {
@@ -83,16 +82,26 @@ const TestPage = () => {
   });
 
   const getGeneralInfo = useCallback(() => {
+    const dateOrderList = candidatesToList()?.sort(
+      (c1, c2) =>
+        new Date(c1.attempt_starttime) - new Date(c2.attempt_starttime)
+    );
+
     return {
+      test: test?.name,
+      group: studentGroups.find((g) => g.value === selectedGroup).name,
+      count: candidatesToList()?.length,
+      firstAttemptDate:
+        dateOrderList?.length > 0 && dateOrderList[0].attempt_starttime,
+      lastAttemptDate:
+        dateOrderList?.length > 0 &&
+        dateOrderList[dateOrderList.length - 1].attempt_starttime,
       average:
         candidatesToList()?.length &&
         candidatesToList()?.reduce(
           (total, student) => total + student.percentage_score,
           0
         ) / candidatesToList().length,
-      count: candidatesToList()?.length,
-      test: test?.name,
-      group: studentGroups.find((g) => g.value === selectedGroup).name,
     };
   });
 
@@ -117,12 +126,7 @@ const TestPage = () => {
     const wb = utils.book_new();
 
     // CREATE GENERAL SHEET
-    const generalSheetJson = candidatesToList().map((stu) => ({
-      Name: stu.full_name,
-      Email: stu.email,
-      Score: stu.percentage_score,
-    }));
-    const wsGeneral = utils.json_to_sheet(generalSheetJson);
+    const wsGeneral = utils.json_to_sheet([getGeneralInfo()]);
 
     // CREATE DETAIL SHEET
     const detailSheetJson = candidatesToList().map((stu) => {
@@ -189,7 +193,7 @@ const TestPage = () => {
   }, [sortBy, asc]);
 
   return (
-    <PageDefault pageTitle={test?.name}>
+    <PageDefault pageTitle={getCleanTestName(test?.name)}>
       <div className="pt-3 pb-2">
         <div className="d-flex">
           <Input
@@ -257,21 +261,29 @@ const TestPage = () => {
       >
         <TabPane tabId="reports">
           <Container fluid>
-            <Row>
-              <Col>Test:</Col>
-              <Col>{getGeneralInfo()?.test}</Col>
+            <Row className="border-bottom pb-1 mb-2">
+              <Col sm="4">Test:</Col>
+              <Col sm="8">{getGeneralInfo()?.test}</Col>
             </Row>
-            <Row>
-              <Col>Grup:</Col>
-              <Col>{getGeneralInfo()?.group}</Col>
+            <Row className="border-bottom pb-1 mb-2">
+              <Col sm="4">Grup:</Col>
+              <Col sm="8">{getGeneralInfo()?.group}</Col>
             </Row>
-            <Row>
-              <Col>Katılımcı Sayısı:</Col>
-              <Col>{getGeneralInfo()?.count}</Col>
+            <Row className="border-bottom pb-1 mb-2">
+              <Col sm="4">Katılımcı Sayısı:</Col>
+              <Col sm="8">{getGeneralInfo()?.count}</Col>
             </Row>
-            <Row>
-              <Col>Ortalama</Col>
-              <Col>{getGeneralInfo()?.average?.toFixed(2)}</Col>
+            <Row className="border-bottom pb-1 mb-2">
+              <Col sm="4">Tarih Aralığı:</Col>
+              <Col sm="8">
+                {getDateStringFromISO(getGeneralInfo()?.firstAttemptDate)}
+                {" - "}
+                {getDateStringFromISO(getGeneralInfo()?.lastAttemptDate)}
+              </Col>
+            </Row>
+            <Row className="pb-1 mb-2">
+              <Col sm="4">Ortalama (%):</Col>
+              <Col sm="8">{getGeneralInfo()?.average?.toFixed(2)}</Col>
             </Row>
           </Container>
         </TabPane>
