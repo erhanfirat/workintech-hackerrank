@@ -6,7 +6,6 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
   const questions = useSelector(
     (state) => state.questions.testQuestions[testId]
   );
-  console.log("questions in questions> ", questions);
   return (
     <Container fluid>
       <Row>
