@@ -19,7 +19,6 @@ import {
   getAllTestsAction,
 } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
-import { downloadFile } from "../utils/utils";
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
@@ -83,15 +82,18 @@ const TestPage = () => {
       );
   });
 
-  const calculateAverages = useCallback(() => {
-    setAverage(
-      () =>
+  const getGeneralInfo = useCallback(() => {
+    return {
+      average:
         candidatesToList()?.length &&
         candidatesToList()?.reduce(
           (total, student) => total + student.percentage_score,
           0
-        ) / candidatesToList().length
-    );
+        ) / candidatesToList().length,
+      count: candidatesToList()?.length,
+      test: test?.name,
+      group: studentGroups.find((g) => g.value === selectedGroup).name,
+    };
   });
 
   const sortIcon = useCallback((fieldName, sortByVal, ascVal) => {
@@ -182,10 +184,6 @@ const TestPage = () => {
   }, [candidates]);
 
   useEffect(() => {
-    calculateAverages();
-  }, [candidatesToList()]);
-
-  useEffect(() => {
     setSortByState(sortBy || "name");
     setAscState(asc || "asc");
   }, [sortBy, asc]);
@@ -221,10 +219,18 @@ const TestPage = () => {
       <Nav tabs className="mt-2">
         <NavItem>
           <NavLink
+            className={`${activeTab === "reports" ? "active" : ""}`}
+            onClick={() => toggleTab("reports")}
+          >
+            Genel Değerlendirme
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink
             className={`${activeTab === "results" ? "active" : ""}`}
             onClick={() => toggleTab("results")}
           >
-            Test Result
+            Sonuçlar
           </NavLink>
         </NavItem>
         <NavItem>
@@ -232,7 +238,7 @@ const TestPage = () => {
             className={`${activeTab === "resultsInDetail" ? "active" : ""}`}
             onClick={() => toggleTab("resultsInDetail")}
           >
-            Candidates In Detail
+            Detaylı Sonuç
           </NavLink>
         </NavItem>
         <NavItem>
@@ -240,15 +246,7 @@ const TestPage = () => {
             className={`${activeTab === "questions" ? "active" : ""}`}
             onClick={() => toggleTab("questions")}
           >
-            Questions
-          </NavLink>
-        </NavItem>
-        <NavItem>
-          <NavLink
-            className={`${activeTab === "reports" ? "active" : ""}`}
-            onClick={() => toggleTab("reports")}
-          >
-            General
+            Sorular
           </NavLink>
         </NavItem>
       </Nav>
@@ -257,6 +255,26 @@ const TestPage = () => {
         activeTab={activeTab}
         className="px-2 py-3 border-start border-bottom border-end"
       >
+        <TabPane tabId="reports">
+          <Container fluid>
+            <Row>
+              <Col>Test:</Col>
+              <Col>{getGeneralInfo()?.test}</Col>
+            </Row>
+            <Row>
+              <Col>Grup:</Col>
+              <Col>{getGeneralInfo()?.group}</Col>
+            </Row>
+            <Row>
+              <Col>Katılımcı Sayısı:</Col>
+              <Col>{getGeneralInfo()?.count}</Col>
+            </Row>
+            <Row>
+              <Col>Ortalama</Col>
+              <Col>{getGeneralInfo()?.average?.toFixed(2)}</Col>
+            </Row>
+          </Container>
+        </TabPane>
         <TabPane tabId="results">
           <TestCandidatesTotal
             candidates={candidatesToList()}
@@ -275,14 +293,6 @@ const TestPage = () => {
             testId={testId}
             testQuestions={test?.questions || []}
           />
-        </TabPane>
-        <TabPane tabId="reports">
-          <Container fluid>
-            <Row>
-              <Col>Ortalama</Col>
-              <Col>{average?.toFixed(2)}</Col>
-            </Row>
-          </Container>
         </TabPane>
       </TabContent>
     </PageDefault>

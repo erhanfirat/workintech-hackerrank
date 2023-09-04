@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom/cjs/react-router-dom.min";
-import { Button, Col, Container, Row } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 
 const TestQuestions = ({ testId, testQuestions = [] }) => {
   const questions = useSelector(
