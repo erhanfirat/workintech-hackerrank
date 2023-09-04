@@ -1,12 +1,12 @@
 export const studentGroups = [
   { value: "all", name: "All Students" },
   { value: "fsweb0423", name: "Fsweb 0423 - Nisan" },
-  { value: "fsweb0423Part", name: "Fsweb 0423 Part Time - Nisan" },
+  { value: "fsweb0423Part", name: "Fsweb 0423 - Nisan (Part Time)" },
   { value: "fsweb0523", name: "Fsweb 0523 - Mayıs" },
-  { value: "fsweb0523Part", name: "Fsweb 0523 Part Time - Mayıs" },
+  { value: "fsweb0523Part", name: "Fsweb 0523 - Mayıs (Part Time)" },
   { value: "fsweb0623", name: "Fsweb 0623 - Haziran" },
   { value: "fsweb0723", name: "Fsweb 0723 - Temmuz" },
-  { value: "fsweb0723Part", name: "Fsweb 0723 Part Time - Temmuz" },
+  { value: "fsweb0723Part", name: "Fsweb 0723 - Temmuz (Part Time)" },
   { value: "fsweb0823", name: "Fsweb 0823 - Ağustos" },
 ];
 
