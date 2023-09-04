@@ -3,7 +3,7 @@ import axios from "axios";
 export let API = axios.create({
   baseURL: "https://www.hackerrank.com/x/api/v3/",
   headers: {
-    Authorization: `Bearer ${process.env.REACT_APP_HACKERRANK_KEY}`,
+    Authorization: `Bearer ${process.env.REACT_APP_HACKERRANK_API_KEY}`,
   },
 });
 
