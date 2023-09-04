@@ -90,7 +90,9 @@ const TestPage = () => {
     return {
       test: test?.name,
       group: studentGroups.find((g) => g.value === selectedGroup).name,
-      candidateCount: candidatesToList()?.length,
+      candidateCount: `${candidatesToList()?.length} / ${
+        students[selectedGroup].length
+      }`,
       candidateRate:
         (candidatesToList()?.length / students[selectedGroup].length) * 100,
       firstAttemptDate:
