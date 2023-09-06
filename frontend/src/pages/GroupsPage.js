@@ -34,7 +34,7 @@ const GroupsPage = () => {
       </div>
       <Container fluid>
         <Row>
-          <Col sm="4">
+          <Col sm="5">
             <h5>Name</h5>
           </Col>
           <Col sm="2">
@@ -46,17 +46,17 @@ const GroupsPage = () => {
           <Col sm="2">
             <h5>Students Count</h5>
           </Col>
-          <Col sm="2">
+          <Col sm="1">
             <h5>Actions</h5>
           </Col>
         </Row>
         {studentGroups.map((group) => (
           <Row className="border-top p-1 grid-row">
-            <Col sm="4">{group.name}</Col>
+            <Col sm="5">{group.name}</Col>
             <Col sm="2">{group.value}</Col>
             <Col sm="2"></Col>
             <Col sm="2">{students[group.value]?.length}</Col>
-            <Col sm="2">
+            <Col sm="1">
               <Button size="sm" onClick={() => navigateToGroup(group)}>
                 Open
               </Button>

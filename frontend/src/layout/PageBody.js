@@ -14,10 +14,13 @@ const PageBody = () => {
         <Route path="/tests" exact>
           <TestsPage />
         </Route>
+        <Route path="/tests/:testId/:sortBy?/:asc?/:groupCode?" exact>
+          <TestPage />
+        </Route>
         <Route path="/groups" exact>
           <GroupsPage />
         </Route>
-        <Route path="/tests/:testId/:sortBy?/:asc?" exact>
+        <Route path="/groups/:groupCode/:sortBy?/:asc?" exact>
           <TestPage />
         </Route>
         <Route path="*">
