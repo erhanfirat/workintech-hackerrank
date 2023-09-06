@@ -2,6 +2,7 @@ import { Switch, Route } from "react-router-dom";
 import MainPage from "../pages/MainPage";
 import TestsPage from "../pages/TestsPage";
 import TestPage from "../pages/TestPage";
+import GroupsPage from "../pages/GroupsPage";
 
 const PageBody = () => {
   return (
@@ -12,6 +13,9 @@ const PageBody = () => {
         </Route>
         <Route path="/tests" exact>
           <TestsPage />
+        </Route>
+        <Route path="/groups" exact>
+          <GroupsPage />
         </Route>
         <Route path="/tests/:testId/:sortBy?/:asc?" exact>
           <TestPage />
