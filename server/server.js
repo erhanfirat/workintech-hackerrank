@@ -3,7 +3,7 @@ const app = express();
 
 app.get("/", (req, res, next) => {
   console.log("inside the request handler");
-  res.statusCode(200);
+  res.statusCode = 200;
   res.send({ pi: Math.PI });
 });
 
