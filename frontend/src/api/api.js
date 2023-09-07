@@ -1,6 +1,13 @@
 import axios from "axios";
 import { toast } from "react-toastify";
 
+export const REQ_TYPES = {
+  GET: "get",
+  POST: "post",
+  PUT: "put",
+  DELETE: "delete",
+};
+
 export let hrAPI = axios.create({
   baseURL: "https://www.hackerrank.com/x/api/v3/",
   headers: {
@@ -21,15 +28,15 @@ export const doHRRequest = ({ reqType, endpoint, payload, config }) => {
     });
 };
 
-export let serverAPI = axios.create({
+export let srAPI = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
   headers: {
     Authorization: `Bearer ${process.env.REACT_APP_SERVER_API_KEY}`,
   },
 });
 
-export const doServerRequest = ({ reqType, endpoint, payload, config }) => {
-  return serverAPI[reqType](endpoint, payload || config, payload && config)
+export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
+  return srAPI[reqType](endpoint, payload || config, payload && config)
     .then((res) => {
       return res.data;
     })

@@ -1,5 +1,5 @@
 import { doHRRequest } from "../../api/api";
-import { endpoints } from "../../api/endpoints";
+import { hrEndpoints } from "../../api/hrEndpoints";
 import { FETCH_STATES } from "./testsReducer";
 
 export const candidateActions = Object.freeze({
@@ -60,7 +60,7 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
     payload: { testId, fetchState: FETCH_STATES.FETCHING },
   });
 
-  doHRRequest(endpoints.candidates(testId)).then((resData) => {
+  doHRRequest(hrEndpoints.candidates(testId)).then((resData) => {
     dispatch({
       type: candidateActions.setCandidatesOfTest,
       payload: { testId, candidates: resData.data },
@@ -69,7 +69,7 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
     const pageCount = Math.ceil(resData.total / 100);
     for (let i = 1; i < pageCount; i++) {
       doHRRequest(
-        endpoints.candidates(testId, { limit: 100, offset: i * 100 })
+        hrEndpoints.candidates(testId, { limit: 100, offset: i * 100 })
       ).then((innerResData) => {
         dispatch({
           type: candidateActions.addAllCandidates,

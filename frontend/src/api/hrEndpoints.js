@@ -1,11 +1,6 @@
-const REQ_TYPES = {
-  GET: "get",
-  POST: "post",
-  PUT: "put",
-  DELETE: "delete",
-};
+import { REQ_TYPES } from "./api";
 
-export const endpoints = {
+export const hrEndpoints = {
   /** Gets all tests
    *
    * @param {Number} params.limit   tests count for a page

@@ -1,5 +1,5 @@
 import { doHRRequest } from "../../api/api";
-import { endpoints } from "../../api/endpoints";
+import { hrEndpoints } from "../../api/hrEndpoints";
 import { questionActions } from "../reducers/questionsReducer";
 import { store } from "../store";
 
@@ -31,7 +31,7 @@ ${err.message}`);
 };
 
 const getQuestionById = (questionId) => {
-  return doHRRequest(endpoints.question(questionId)).catch((err) => {
+  return doHRRequest(hrEndpoints.question(questionId)).catch((err) => {
     console.error(`HATA: ${questionId} id'li soru datası çekilirken bir hata ile karşılaşıldı.
 ${err.message}`);
     throw err;

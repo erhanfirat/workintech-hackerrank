@@ -1,5 +1,5 @@
-import { doHRRequest } from "../../api/api";
-import { endpoints } from "../../api/endpoints";
+import { doHRRequest, doServerRequest } from "../../api/api";
+import { hrEndpoints } from "../../api/hrEndpoints";
 
 export const FETCH_STATES = Object.freeze({
   NOT_STARTED: "NotStarted",
@@ -67,13 +67,15 @@ export const testsReducer = (state = initialTests, action) => {
 export const getAllTestsAction = () => (dispatch) => {
   dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
 
-  doHRRequest(endpoints.tests()).then((resData) => {
+  // doServerRequest()
+
+  doHRRequest(hrEndpoints.tests()).then((resData) => {
     dispatch({ type: testActions.setAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });
 
     const pageCount = Math.ceil(resData.total / 100);
     for (let i = 1; i < pageCount; i++) {
-      doHRRequest(endpoints.tests({ limit: 100, offset: i * 100 })).then(
+      doHRRequest(hrEndpoints.tests({ limit: 100, offset: i * 100 })).then(
         (innerResData) => {
           dispatch({
             type: testActions.addAllTests,
