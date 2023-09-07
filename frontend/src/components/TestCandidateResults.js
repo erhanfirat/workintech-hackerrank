@@ -37,7 +37,7 @@ export const TestCandidateResults = ({ test, candidates }) => {
           <Col sm="1">{parseInt(candidate.percentage_score)}</Col>
           {test.questions.map((question, i) => (
             <Col sm="1" key={`QA${i}`}>
-              {candidate.questions[question]}
+              {candidate.questions[question]?.toFixed(1)}
             </Col>
           ))}
         </Row>
