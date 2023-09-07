@@ -15,27 +15,27 @@ export const doHRRequest = ({ reqType, endpoint, payload, config }) => {
     })
     .catch((err) => {
       toast.error(
-        `${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+        `Hackerrank/${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
       );
       throw err;
     });
 };
 
 export let serverAPI = axios.create({
-  baseURL: "http://localhost:3001/",
+  baseURL: process.env.REACT_APP_SERVER_URL,
   headers: {
     Authorization: `Bearer ${process.env.REACT_APP_SERVER_API_KEY}`,
   },
 });
 
 export const doServerRequest = ({ reqType, endpoint, payload, config }) => {
-  return hrAPI[reqType](endpoint, payload || config, payload && config)
+  return serverAPI[reqType](endpoint, payload || config, payload && config)
     .then((res) => {
       return res.data;
     })
     .catch((err) => {
       toast.error(
-        `${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+        `SERVER/${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
       );
       throw err;
     });
