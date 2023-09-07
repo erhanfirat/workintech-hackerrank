@@ -33,8 +33,8 @@ const fields = {
   score: "percentage_score",
 };
 
-const TestPage = () => {
-  const { testId, sortBy, asc } = useParams();
+const GroupPage = () => {
+  const { groupCode, sortBy, asc } = useParams();
 
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
@@ -90,9 +90,7 @@ const TestPage = () => {
     return {
       test: test?.name,
       group: studentGroups.find((g) => g.value === selectedGroup).name,
-      candidateCount: `${candidatesToList()?.length} / ${
-        students[selectedGroup].length
-      }`,
+      candidateCount: candidatesToList()?.length,
       candidateRate:
         (candidatesToList()?.length / students[selectedGroup].length) * 100,
       firstAttemptDate:
@@ -276,10 +274,7 @@ const TestPage = () => {
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılımcı Sayısı:</Col>
-              <Col sm="8">
-                {getGeneralInfo()?.candidateCount} /{" "}
-                {students[selectedGroup].length}
-              </Col>
+              <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılım Oranı (%):</Col>
@@ -323,4 +318,4 @@ const TestPage = () => {
   );
 };
 
-export default TestPage;
+export default GroupPage;

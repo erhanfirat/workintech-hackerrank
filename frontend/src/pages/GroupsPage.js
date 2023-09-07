@@ -7,6 +7,7 @@ import {
 } from "../store/reducers/testsReducer";
 import { Badge, Button, Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { studentGroups, students } from "../data/studentGroups";
 
 const GroupsPage = () => {
   const dispatch = useDispatch();
@@ -16,8 +17,8 @@ const GroupsPage = () => {
     (state) => state.tests
   );
 
-  const navigateToTest = (test) => {
-    history.push(`/tests/${test.id}`);
+  const navigateToGroup = (group) => {
+    history.push(`/groups/${group.value}`);
   };
 
   useEffect(() => {
@@ -27,29 +28,36 @@ const GroupsPage = () => {
   }, []);
 
   return (
-    <PageDefault pageTitle="Testler">
+    <PageDefault pageTitle="Gruplar">
       <div className="text-end fs-6 fw-bold pb-2">
-        [Total: {total} | Loaded: {allTests.length} | Workintech:
-        {workintechTests.length}]
+        [Total: {studentGroups.length}]
       </div>
-      <Container>
+      <Container fluid>
         <Row>
-          <Col sm="10">
+          <Col sm="5">
             <h5>Name</h5>
           </Col>
-          <Col sm="1">
-            <h5>Duration</h5>
+          <Col sm="2">
+            <h5>Code</h5>
+          </Col>
+          <Col sm="2">
+            <h5>Active Sprint</h5>
+          </Col>
+          <Col sm="2">
+            <h5>Students Count</h5>
           </Col>
           <Col sm="1">
             <h5>Actions</h5>
           </Col>
         </Row>
-        {workintechTests.map((test) => (
+        {studentGroups.map((group) => (
           <Row className="border-top p-1 grid-row">
-            <Col sm="10">{test.name}</Col>
-            <Col sm="1">{test.duration}</Col>
+            <Col sm="5">{group.name}</Col>
+            <Col sm="2">{group.value}</Col>
+            <Col sm="2"></Col>
+            <Col sm="2">{students[group.value]?.length}</Col>
             <Col sm="1">
-              <Button size="sm" onClick={() => navigateToTest(test)}>
+              <Button size="sm" onClick={() => navigateToGroup(group)}>
                 Open
               </Button>
             </Col>
