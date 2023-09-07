@@ -1,5 +1,6 @@
-import { doHRRequest, doServerRequest } from "../../api/api";
+import { doHRRequest, doSRRequest, doServerRequest } from "../../api/api";
 import { hrEndpoints } from "../../api/hrEndpoints";
+import { srEndpoints } from "../../api/srEndpoints";
 
 export const FETCH_STATES = Object.freeze({
   NOT_STARTED: "NotStarted",
@@ -26,15 +27,6 @@ const initialTests = {
 
 export const testsReducer = (state = initialTests, action) => {
   switch (action.type) {
-    case testActions.setAllTests:
-      return {
-        ...state,
-        allTests: action.payload,
-        workintechTests: action.payload.filter((test) =>
-          test.name.toLowerCase().includes("workintech")
-        ),
-      };
-
     case testActions.addAllTests:
       const all = [...state.allTests, ...action.payload];
       return {
@@ -64,13 +56,17 @@ export const testsReducer = (state = initialTests, action) => {
 
 // ACTIONS ********************************
 
-export const getAllTestsAction = () => (dispatch) => {
+export const getAllSRTestsAction = () => (dispatch) => {
+  doSRRequest(srEndpoints.getTests()).then((srRes) => {
+    console.log("server tests > ", srRes.data);
+  });
+};
+
+export const getAllTestsAction = () => (dispatch, getState) => {
   dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
 
-  // doServerRequest()
-
   doHRRequest(hrEndpoints.tests()).then((resData) => {
-    dispatch({ type: testActions.setAllTests, payload: resData.data });
+    dispatch({ type: testActions.addAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });
 
     const pageCount = Math.ceil(resData.total / 100);
@@ -81,11 +77,16 @@ export const getAllTestsAction = () => (dispatch) => {
             type: testActions.addAllTests,
             payload: innerResData.data,
           });
-          if (i === pageCount) {
+          if (getState().tests.allTests.length === resData.total) {
+            // fetching all tests completed
             dispatch({
               type: testActions.setFetchState,
               payload: FETCH_STATES.FETHCED,
             });
+            // set workintech tests to server DB
+            doSRRequest(
+              srEndpoints.setAllTests(getState().tests.workintechTests)
+            );
           }
         }
       );
