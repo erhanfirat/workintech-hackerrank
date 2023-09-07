@@ -275,10 +275,7 @@ const TestPage = () => {
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılımcı Sayısı:</Col>
-              <Col sm="8">
-                {getGeneralInfo()?.candidateCount} /{" "}
-                {students[selectedGroup].length}
-              </Col>
+              <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılım Oranı (%):</Col>
