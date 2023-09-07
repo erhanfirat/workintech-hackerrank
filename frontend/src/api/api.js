@@ -30,9 +30,9 @@ export const doHRRequest = ({ reqType, endpoint, payload, config }) => {
 
 export let srAPI = axios.create({
   baseURL: process.env.REACT_APP_SERVER_URL,
-  headers: {
-    Authorization: `Bearer ${process.env.REACT_APP_SERVER_API_KEY}`,
-  },
+  // headers: {
+  //   Authorization: `Bearer ${process.env.REACT_APP_SERVER_API_KEY}`,
+  // },
 });
 
 export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
