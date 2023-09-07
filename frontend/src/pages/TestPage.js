@@ -45,7 +45,6 @@ const TestPage = () => {
   const [test, setTest] = useState();
   const [sortByState, setSortByState] = useState("full_name");
   const [ascState, setAscState] = useState("asc");
-  const [average, setAverage] = useState();
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("results");

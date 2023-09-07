@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Button, Col, Container, Row } from "reactstrap";
 import { downloadFile } from "../utils/utils";
+import { useSelector } from "react-redux";
 
 const TestCandidatesTotal = ({
   candidates,
@@ -10,6 +11,10 @@ const TestCandidatesTotal = ({
   ascState,
   testId,
 }) => {
+  const test = useSelector((state) =>
+    state.tests.workintechTests.find((t) => t.id === testId)
+  );
+
   const downloadPDF = (candidate) => {
     // download PDF of candidate
     downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
@@ -48,10 +53,7 @@ const TestCandidatesTotal = ({
               sortByState === "score" ? inverseOrder(ascState) : ascState
             }`}
           >
-            <h5>
-              Score %
-              {sortIcon("score", sortByState, ascState)}
-            </h5>
+            <h5>Score %{sortIcon("score", sortByState, ascState)}</h5>
           </Link>
         </Col>
         <Col sm="2">
