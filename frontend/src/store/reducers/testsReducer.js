@@ -1,4 +1,4 @@
-import { doRequest } from "../../api/api";
+import { doHRRequest } from "../../api/api";
 import { endpoints } from "../../api/endpoints";
 
 export const FETCH_STATES = Object.freeze({
@@ -67,13 +67,13 @@ export const testsReducer = (state = initialTests, action) => {
 export const getAllTestsAction = () => (dispatch) => {
   dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
 
-  doRequest(endpoints.tests()).then((resData) => {
+  doHRRequest(endpoints.tests()).then((resData) => {
     dispatch({ type: testActions.setAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });
 
     const pageCount = Math.ceil(resData.total / 100);
     for (let i = 1; i < pageCount; i++) {
-      doRequest(endpoints.tests({ limit: 100, offset: i * 100 })).then(
+      doHRRequest(endpoints.tests({ limit: 100, offset: i * 100 })).then(
         (innerResData) => {
           dispatch({
             type: testActions.addAllTests,
