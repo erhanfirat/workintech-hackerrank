@@ -67,15 +67,12 @@ const TestPage = () => {
         for (let i = 0; i < filterList.length; i++) {
           const seachText = filterList[i].toLocaleLowerCase();
           if (
-            candidate.full_name
-              .toLocaleLowerCase()
-              .includes(filterText.toLocaleLowerCase()) ||
-            candidate.email
-              .toLocaleLowerCase()
-              .includes(filterText.toLocaleLowerCase())
+            candidate.full_name.toLocaleLowerCase().includes(seachText) ||
+            candidate.email.toLocaleLowerCase().includes(seachText)
           )
             return true;
         }
+        return false;
       })
       ?.sort((tc1, tc2) =>
         (
