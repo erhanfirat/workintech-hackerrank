@@ -65,6 +65,20 @@ export const getAllSRTestsAction = () => (dispatch) => {
 export const getAllTestsAction = () => (dispatch, getState) => {
   dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
 
+  doSRRequest(srEndpoints.getTests()).then((srTests) => {
+    console.log(srTests);
+    if (srTests.length > 0) {
+      dispatch({
+        type: testActions.addAllTests,
+        payload: srTests,
+      });
+    } else {
+      fetchHRTestsAction(dispatch, getState);
+    }
+  });
+};
+
+const fetchHRTestsAction = (dispatch, getState) => {
   doHRRequest(hrEndpoints.tests()).then((resData) => {
     dispatch({ type: testActions.addAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });

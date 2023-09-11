@@ -19,7 +19,7 @@ app.all("*", function (req, res, next) {
 app.get("/tests", async (req, res) => {
   const testsRec = await testDB.getAllTests();
   const tests = testsRec.map((tr) => JSON.parse(tr.data));
-  res.status(200).json({ tests });
+  res.status(200).json([...tests]);
 });
 
 app.get("/tests/:id", async (req, res) => {
