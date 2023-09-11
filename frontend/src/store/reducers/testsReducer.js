@@ -56,21 +56,18 @@ export const testsReducer = (state = initialTests, action) => {
 
 // ACTIONS ********************************
 
-export const getAllSRTestsAction = () => (dispatch) => {
-  doSRRequest(srEndpoints.getTests()).then((srRes) => {
-    console.log("server tests > ", srRes.data);
-  });
-};
-
 export const getAllTestsAction = () => (dispatch, getState) => {
   dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
 
   doSRRequest(srEndpoints.getTests()).then((srTests) => {
-    console.log(srTests);
     if (srTests.length > 0) {
       dispatch({
         type: testActions.addAllTests,
         payload: srTests,
+      });
+      dispatch({
+        type: testActions.setFetchState,
+        payload: FETCH_STATES.FETHCED,
       });
     } else {
       fetchHRTestsAction(dispatch, getState);
