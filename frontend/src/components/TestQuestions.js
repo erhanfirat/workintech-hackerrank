@@ -31,13 +31,25 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
                   ))}
                 </div>
               </Col>
-              <Col sm="10">
+              <Col sm="8">
                 <div
-                  className="content"
+                  className="content fs-7 overflow-hidden"
                   dangerouslySetInnerHTML={{
                     __html: question.problem_statement,
                   }}
                 ></div>
+              </Col>
+              <Col sm="2">
+                <ol className="fs-7 m-0 ps-3 overflow-hidden">
+                  {question?.options?.map((option) => (
+                    <li
+                      className="option-li"
+                      // dangerouslySetInnerHTML={{ __html: option }}
+                    >
+                      {option}
+                    </li>
+                  ))}
+                </ol>
               </Col>
             </Row>
           );

@@ -100,3 +100,15 @@ a {
 .nav-tabs .nav-link {
   cursor: pointer;
 }
+
+.fs-7 {
+  font-size: 0.75rem;
+}
+.fs-8 {
+  font-size: 0.625rem;
+}
+
+.option-li * {
+  max-width: 100%;
+  height: auto;
+}
