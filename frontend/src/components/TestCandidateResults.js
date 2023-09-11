@@ -25,7 +25,7 @@ export const TestCandidateResults = ({ test, candidates }) => {
         ))}
       </Row>
       {candidates?.map((candidate, j) => (
-        <Row key={`Candidate${j}`} className="border-bottom flex-nowrap">
+        <Row key={`Candidate${j}`} className="border-bottom flex-nowrap py-1 ">
           <Col
             sm="3"
             className="text-truncate border-end"
