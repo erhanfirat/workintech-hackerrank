@@ -1,5 +1,5 @@
 import { Col, Container, Row } from "reactstrap";
-import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
+import { getCleanTestName, getDateTimeStringFromISO } from "../utils/utils";
 
 export const TestCandidateResults = ({ test, candidates }) => {
   return (
@@ -32,7 +32,7 @@ export const TestCandidateResults = ({ test, candidates }) => {
             {candidate.email}
           </Col>
           <Col sm="2" className="text-truncate border-right border-end">
-            {getDateStringFromISO(candidate.attempt_starttime)}
+            {getDateTimeStringFromISO(candidate.attempt_starttime)}
           </Col>
           <Col sm="1">{parseInt(candidate.percentage_score)}</Col>
           {test.questions.map((question, i) => (
