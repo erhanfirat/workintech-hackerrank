@@ -58,29 +58,35 @@ const TestPage = () => {
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
 
   const candidatesToList = useCallback(() => {
-    return (
-      testCandidates
-        // ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
-        ?.filter(
-          (candidate) =>
+    return testCandidates
+      ?.filter((candidate) =>
+        selectedGroup ? students[selectedGroup].includes(candidate.email) : true
+      )
+      ?.filter((candidate) => {
+        const filterList = filterText.split(",");
+        for (let i = 0; i < filterList.length; i++) {
+          const seachText = filterList[i].toLocaleLowerCase();
+          if (
             candidate.full_name
               .toLocaleLowerCase()
               .includes(filterText.toLocaleLowerCase()) ||
             candidate.email
               .toLocaleLowerCase()
               .includes(filterText.toLocaleLowerCase())
-        )
-        ?.sort((tc1, tc2) =>
-          (
-            sortByState === "score"
-              ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
-              : tc1[fields[sortByState]].toLocaleLowerCase() >
-                tc2[fields[sortByState]].toLocaleLowerCase()
           )
-            ? numberOrder(ascState) * 1
-            : numberOrder(ascState) * -1
+            return true;
+        }
+      })
+      ?.sort((tc1, tc2) =>
+        (
+          sortByState === "score"
+            ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
+            : tc1[fields[sortByState]].toLocaleLowerCase() >
+              tc2[fields[sortByState]].toLocaleLowerCase()
         )
-    );
+          ? numberOrder(ascState) * 1
+          : numberOrder(ascState) * -1
+      );
   });
 
   const getGeneralInfo = useCallback(() => {
@@ -93,10 +99,12 @@ const TestPage = () => {
       test: test?.name,
       group: studentGroups.find((g) => g.value === selectedGroup).name,
       candidateCount: `${candidatesToList()?.length} / ${
-        students[selectedGroup].length
+        selectedGroup && students[selectedGroup]?.length
       }`,
       candidateRate:
-        (candidatesToList()?.length / students[selectedGroup].length) * 100,
+        ((candidatesToList()?.length || 0) /
+          (students[selectedGroup]?.length || 1)) *
+        100,
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].attempt_starttime,
       lastAttemptDate:
@@ -280,10 +288,15 @@ const TestPage = () => {
               <Col sm="4">Katılımcı Sayısı:</Col>
               <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
             </Row>
-            <Row className="border-bottom pb-1 mb-2">
-              <Col sm="4">Katılım Oranı (%):</Col>
-              <Col sm="8">{getGeneralInfo()?.candidateRate.toFixed(0)} %</Col>
-            </Row>
+            {selectedGroup && (
+              <Row className="border-bottom pb-1 mb-2">
+                <Col sm="4">Katılım Oranı (%):</Col>
+                <Col sm="8">
+                  {selectedGroup &&
+                    `${getGeneralInfo()?.candidateRate.toFixed(0)} %`}
+                </Col>
+              </Row>
+            )}
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Tarih Aralığı:</Col>
               <Col sm="8">

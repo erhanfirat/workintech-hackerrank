@@ -1,4 +1,5 @@
 export const studentGroups = [
+  { value: "", name: "Tüm Katılımcılar" },
   { value: "all", name: "Tüm Öğrenciler" },
   { value: "fsweb1022", name: "Fsweb 1022 - Ekim" },
   { value: "fsweb1122", name: "Fsweb 1122 - Kasım" },
