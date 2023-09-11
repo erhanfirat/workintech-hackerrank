@@ -103,10 +103,10 @@ const TestPage = () => {
           (students[selectedGroup]?.length || 1)) *
         100,
       firstAttemptDate:
-        dateOrderList?.length > 0 && dateOrderList[0].attempt_starttime,
+        dateOrderList?.length > 0 && dateOrderList[0].startDateStr,
       lastAttemptDate:
         dateOrderList?.length > 0 &&
-        dateOrderList[dateOrderList.length - 1].attempt_starttime,
+        dateOrderList[dateOrderList.length - 1].startDateStr,
       average:
         candidatesToList()?.length &&
         candidatesToList()?.reduce(
@@ -144,7 +144,7 @@ const TestPage = () => {
       const stuResult = {
         Name: stu.full_name,
         Email: stu.email,
-        Date: stu.attempt_starttime,
+        Date: stu.startDateStr,
         "Score (%)": stu.percentage_score,
       };
 
@@ -158,11 +158,18 @@ const TestPage = () => {
 
     // CREATE DETAIL SHEET
     const questionsSheetJson = test.questions.map((qId, i) => {
-      return {
+      const question = questions[qId];
+      const res = {
         No: i + 1,
         Name: questions[qId]?.name,
         Statement: questions[qId]?.problem_statement,
       };
+      question?.options?.forEach((option, i) => {
+        res[`option_${i + 1}`] = option;
+      });
+      res.tags = question?.tags?.toString();
+      res.answer = question?.answer;
+      return res;
     });
     const wsQuestions = utils.json_to_sheet(questionsSheetJson);
 
