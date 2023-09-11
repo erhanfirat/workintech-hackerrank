@@ -1,5 +1,6 @@
 import { doHRRequest } from "../../api/api";
 import { hrEndpoints } from "../../api/hrEndpoints";
+import { getDateTimeStringFromISO } from "../../utils/utils";
 import { FETCH_STATES } from "./testsReducer";
 
 export const candidateActions = Object.freeze({
@@ -54,6 +55,13 @@ export const candidatesReducer = (state = initialCandidates, action) => {
 
 // ACTIONS ********************************
 
+const addStartDateStrToCandidates = (candidates) => {
+  return candidates.map((c) => {
+    c.startDateStr = getDateTimeStringFromISO(c.attempt_starttime);
+    return c;
+  });
+};
+
 export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
   dispatch({
     type: candidateActions.setCandidatesOfTestFetchState,
@@ -63,7 +71,10 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
   doHRRequest(hrEndpoints.candidates(testId)).then((resData) => {
     dispatch({
       type: candidateActions.setCandidatesOfTest,
-      payload: { testId, candidates: resData.data },
+      payload: {
+        testId,
+        candidates: addStartDateStrToCandidates(resData.data),
+      },
     });
 
     const pageCount = Math.ceil(resData.total / 100);
@@ -73,7 +84,10 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
       ).then((innerResData) => {
         dispatch({
           type: candidateActions.addAllCandidates,
-          payload: { testId, candidates: innerResData.data },
+          payload: {
+            testId,
+            candidates: addStartDateStrToCandidates(innerResData.data),
+          },
         });
         if (i === pageCount) {
           dispatch({
