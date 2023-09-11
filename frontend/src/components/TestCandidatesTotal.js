@@ -23,7 +23,7 @@ const TestCandidatesTotal = ({
   return (
     <Container fluid>
       <Row>
-        <Col sm="4">
+        <Col sm="3">
           <Link
             to={`/tests/${testId}/name/${
               sortByState === "name" ? inverseOrder(ascState) : ascState
@@ -35,7 +35,7 @@ const TestCandidatesTotal = ({
             </h5>
           </Link>
         </Col>
-        <Col sm="4">
+        <Col sm="3">
           <Link
             to={`/tests/${testId}/email/${
               sortByState === "email" ? inverseOrder(ascState) : ascState
@@ -44,6 +44,18 @@ const TestCandidatesTotal = ({
             <h5>
               Email
               {sortIcon("email", sortByState, ascState)}
+            </h5>
+          </Link>
+        </Col>
+        <Col sm="3">
+          <Link
+            to={`/tests/${testId}/start-date/${
+              sortByState === "start-date" ? inverseOrder(ascState) : ascState
+            }`}
+          >
+            <h5>
+              Start Date Time
+              {sortIcon("start-date", sortByState, ascState)}
             </h5>
           </Link>
         </Col>
@@ -56,20 +68,23 @@ const TestCandidatesTotal = ({
             <h5>Score %{sortIcon("score", sortByState, ascState)}</h5>
           </Link>
         </Col>
-        <Col sm="2">
+        <Col sm="1">
           <Button size="sm">All PDFs</Button>
         </Col>
       </Row>
       {candidates?.map((testCandidate) => (
         <Row key={testCandidate.id} className="border-top p-1 grid-row">
-          <Col sm="4" className="text-truncate" title={testCandidate.full_name}>
+          <Col sm="3" className="text-truncate" title={testCandidate.full_name}>
             {testCandidate.full_name}
           </Col>
-          <Col sm="4" className="text-truncate" title={testCandidate.email}>
+          <Col sm="3" className="text-truncate" title={testCandidate.email}>
             {testCandidate.email}
           </Col>
+          <Col sm="3" className="text-truncate" title={testCandidate.email}>
+            {testCandidate.startDateStr}
+          </Col>
           <Col sm="2">{testCandidate.percentage_score}</Col>
-          <Col sm="2">
+          <Col sm="1">
             <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
               PDF
             </Button>

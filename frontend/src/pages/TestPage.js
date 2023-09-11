@@ -31,6 +31,7 @@ const fields = {
   name: "full_name",
   email: "email",
   score: "percentage_score",
+  "start-date": "startDateStr",
 };
 
 const TestPage = () => {
@@ -57,27 +58,29 @@ const TestPage = () => {
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
 
   const candidatesToList = useCallback(() => {
-    return testCandidates
-      ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
-      ?.filter(
-        (candidate) =>
-          candidate.full_name
-            .toLocaleLowerCase()
-            .includes(filterText.toLocaleLowerCase()) ||
-          candidate.email
-            .toLocaleLowerCase()
-            .includes(filterText.toLocaleLowerCase())
-      )
-      ?.sort((tc1, tc2) =>
-        (
-          sortByState === "score"
-            ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
-            : tc1[fields[sortByState]].toLocaleLowerCase() >
-              tc2[fields[sortByState]].toLocaleLowerCase()
+    return (
+      testCandidates
+        // ?.filter((candidate) => students[selectedGroup].includes(candidate.email))
+        ?.filter(
+          (candidate) =>
+            candidate.full_name
+              .toLocaleLowerCase()
+              .includes(filterText.toLocaleLowerCase()) ||
+            candidate.email
+              .toLocaleLowerCase()
+              .includes(filterText.toLocaleLowerCase())
         )
-          ? numberOrder(ascState) * 1
-          : numberOrder(ascState) * -1
-      );
+        ?.sort((tc1, tc2) =>
+          (
+            sortByState === "score"
+              ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
+              : tc1[fields[sortByState]].toLocaleLowerCase() >
+                tc2[fields[sortByState]].toLocaleLowerCase()
+          )
+            ? numberOrder(ascState) * 1
+            : numberOrder(ascState) * -1
+        )
+    );
   });
 
   const getGeneralInfo = useCallback(() => {
