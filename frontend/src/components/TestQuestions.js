@@ -8,8 +8,14 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
   return (
     <Container fluid>
       <Row>
-        <Col sm="4">
-          <h5>Name</h5>
+        <Col sm="2">
+          <h6>Soru</h6>
+        </Col>
+        <Col sm="8">
+          <h6>Açıklama Metni</h6>
+        </Col>
+        <Col sm="2">
+          <h6>Seçenekler</h6>
         </Col>
       </Row>
       {testQuestions?.map((questionId, i) => {
