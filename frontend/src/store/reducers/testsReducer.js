@@ -78,7 +78,7 @@ export const getAllTestsAction = () => (dispatch, getState) => {
   });
 };
 
-const fetchHRTestsAction = (dispatch, getState) => {
+export const fetchHRTestsAction = (dispatch, getState) => {
   doHRRequest(hrEndpoints.tests()).then((resData) => {
     dispatch({ type: testActions.addAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });

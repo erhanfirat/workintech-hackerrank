@@ -27,8 +27,9 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
                 <div className="fw-bold pb-2">Q {i + 1}</div>
                 <div className="pb-2">{question.name}</div>
                 <div className="d-flex flex-wrap align-items-start align-self-start">
-                  {question.tags?.map((t) => (
+                  {question.tags?.map((t, j) => (
                     <Badge
+                      key={`tag-${j}`}
                       className="text-truncate me-1 mb-1"
                       color="secondary"
                     >
@@ -48,9 +49,11 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
               {question?.options && (
                 <Col sm="2" className="fs-7">
                   <ol className="m-0 ps-3 overflow-hidden">
-                    {question?.options?.map((option) => (
+                    {question?.options?.map((option, k) => (
                       <li
+                        key={`option-${k}`}
                         className="option-li"
+                        // EF: Some options needs to be rendered as HTML, somes are not!
                         // dangerouslySetInnerHTML={{ __html: option }}
                       >
                         {option}
