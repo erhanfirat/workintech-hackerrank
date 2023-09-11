@@ -28,30 +28,33 @@ app.get("/tests/:id", async (req, res) => {
   res.status(200).json({ test });
 });
 
-const upsertTest = async (test) => {
-  const rec = await testDB.where("id", test.id);
-  if (rec) {
-    testDB.updateTest(test);
-  } else {
-    testDB.createTest(test);
-  }
-};
-
 app.post("/tests", async (req, res) => {
-  const bodyData = req.body;
-  if (bodyData instanceof Array) {
-    for (let i = 0; i < bodyData.length; i++) {
-      await upsertTest(bodyData[i]);
+  try {
+    const bodyData = req.body;
+    if (bodyData instanceof Array) {
+      for (let i = 0; i < bodyData.length; i++) {
+        await testDB.upsertTest(bodyData[i]);
+      }
+    } else {
+      await testDB.upsertTest(bodyData);
     }
-  } else {
-    await upsertTest(bodyData);
+    res.status(201).json({ id: req.body.id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
   }
-  res.status(201).json({ id: req.body.id });
 });
 
 app.put("/tests/:id", async (req, res) => {
-  const updateResult = await testDB.updateTest(req.body);
-  res.status(201).json({ id: req.body.id });
+  try {
+    const updateResult = await testDB.upsertTest(req.body);
+    res.status(201).json({ id: req.body.id });
+  } catch (err) {
+    console.error(error);
+    res.status(500).json({ error: "An error occurred" });
+  }
 });
 
-app.listen(3001);
+app.listen(3001, () => {
+  console.log("working on 3001");
+});
