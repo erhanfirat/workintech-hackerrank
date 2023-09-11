@@ -211,7 +211,7 @@ const TestPage = () => {
           <Input
             type="text"
             className="me-2"
-            placeholder="Type to filter"
+            placeholder="Multi filter query by comma: [ali, batu, hilal]"
             onChange={(e) => setFilterText(e.target.value)}
           ></Input>
           <Input
