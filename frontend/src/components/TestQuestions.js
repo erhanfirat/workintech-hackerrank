@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Col, Container, Row } from "reactstrap";
+import { Badge, Col, Container, Row } from "reactstrap";
 
 const TestQuestions = ({ testId, testQuestions = [] }) => {
   const questions = useSelector(
@@ -17,11 +17,21 @@ const TestQuestions = ({ testId, testQuestions = [] }) => {
         if (question)
           return (
             <Row key={question.id} className="border-top p-1 grid-row">
-              <Col sm="1">Q {i + 1}</Col>
-              <Col sm="2" className="text-truncate" title={question.name}>
-                {question.name}
+              <Col sm="2" className="" title={question.name}>
+                <div className="fw-bold pb-2">Q {i + 1}</div>
+                <div className="pb-2">{question.name}</div>
+                <div className="d-flex flex-wrap align-items-start align-self-start">
+                  {question.tags?.map((t) => (
+                    <Badge
+                      className="text-truncate me-1 mb-1"
+                      color="secondary"
+                    >
+                      {t}
+                    </Badge>
+                  ))}
+                </div>
               </Col>
-              <Col sm="9">
+              <Col sm="10">
                 <div
                   className="content"
                   dangerouslySetInnerHTML={{

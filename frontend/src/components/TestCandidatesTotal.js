@@ -71,7 +71,7 @@ const TestCandidatesTotal = ({
         <Col sm="1">{/* <Button size="sm">All PDFs</Button> */}</Col>
       </Row>
       {candidates?.map((testCandidate) => (
-        <Row key={testCandidate.id} className="border-top p-1 grid-row">
+        <Row key={testCandidate.id} className="border-top py-1 grid-row">
           <Col sm="3" className="text-truncate" title={testCandidate.full_name}>
             {testCandidate.full_name}
           </Col>
@@ -83,7 +83,11 @@ const TestCandidatesTotal = ({
           </Col>
           <Col sm="2">{testCandidate.percentage_score}</Col>
           <Col sm="1">
-            <Button size="sm" onClick={() => downloadPDF(testCandidate)}>
+            <Button
+              size="sm"
+              className="py-0"
+              onClick={() => downloadPDF(testCandidate)}
+            >
               PDF
             </Button>
           </Col>

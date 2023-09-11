@@ -10,16 +10,18 @@ export const TestCandidateResults = ({ test, candidates }) => {
           className="text-truncate border-right border-end"
           title={test?.name}
         >
-          {getCleanTestName(test?.name)}
+          <h6>{getCleanTestName(test?.name)}</h6>
         </Col>
         <Col sm="2" className="text-truncate border-right border-end">
-          Tarih
+          <h6>Tarih</h6>
         </Col>
         <Col sm="1" title="Score in percentage">
-          S %
+          <h6>S %</h6>
         </Col>
         {test?.questions.map((question, i) => (
-          <Col key={`Q${i}`} sm="1">{`Q${i + 1}`}</Col>
+          <Col key={`Q${i}`} sm="1">
+            <h6>{`Q${i + 1}`}</h6>
+          </Col>
         ))}
       </Row>
       {candidates?.map((candidate, j) => (
