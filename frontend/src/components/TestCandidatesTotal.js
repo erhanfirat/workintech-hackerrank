@@ -29,10 +29,10 @@ const TestCandidatesTotal = ({
               sortByState === "name" ? inverseOrder(ascState) : ascState
             }`}
           >
-            <h5>
-              Name
+            <h6>
               {sortIcon("name", sortByState, ascState)}
-            </h5>
+              İsim
+            </h6>
           </Link>
         </Col>
         <Col sm="3">
@@ -41,10 +41,10 @@ const TestCandidatesTotal = ({
               sortByState === "email" ? inverseOrder(ascState) : ascState
             }`}
           >
-            <h5>
-              Email
+            <h6>
               {sortIcon("email", sortByState, ascState)}
-            </h5>
+              Email
+            </h6>
           </Link>
         </Col>
         <Col sm="3">
@@ -53,10 +53,10 @@ const TestCandidatesTotal = ({
               sortByState === "start-date" ? inverseOrder(ascState) : ascState
             }`}
           >
-            <h5>
-              Start Date Time
+            <h6>
               {sortIcon("start-date", sortByState, ascState)}
-            </h5>
+              Başlangıç Tar.
+            </h6>
           </Link>
         </Col>
         <Col sm="2">
@@ -65,12 +65,10 @@ const TestCandidatesTotal = ({
               sortByState === "score" ? inverseOrder(ascState) : ascState
             }`}
           >
-            <h5>Score %{sortIcon("score", sortByState, ascState)}</h5>
+            <h6>{sortIcon("score", sortByState, ascState)}Sonuç %</h6>
           </Link>
         </Col>
-        <Col sm="1">
-          <Button size="sm">All PDFs</Button>
-        </Col>
+        <Col sm="1">{/* <Button size="sm">All PDFs</Button> */}</Col>
       </Row>
       {candidates?.map((testCandidate) => (
         <Row key={testCandidate.id} className="border-top p-1 grid-row">

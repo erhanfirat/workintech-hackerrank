@@ -120,7 +120,7 @@ const TestPage = () => {
     return (
       sortByVal === fieldName && (
         <i
-          className={`ps-1 fa-solid fa-chevron-${
+          className={`pe-2 fa-solid fa-chevron-${
             ascVal === "asc" ? "down" : "up"
           }`}
         ></i>
@@ -227,7 +227,7 @@ const TestPage = () => {
             ))}
           </Input>
           <Button className="text-nowrap" onClick={downloadCSV}>
-            Download CSV
+            Rapor CSV
           </Button>
         </div>
       </div>
