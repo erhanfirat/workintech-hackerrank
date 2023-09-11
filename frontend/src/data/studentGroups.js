@@ -216,17 +216,26 @@ const fsweb0423Part = [
 ];
 
 const fsweb0423 = [
-  "ismailcehreli@gmail.com",
-  "as8993@icloud.com",
-  "atillagunduz3@hotmail.com",
-  "bahuelkin@gmail.com",
-  "denizdemir955@outlook.com",
-  "farukdemir90@outlook.com",
-  "m.fatih.cakir@hotmail.com.tr",
-  "rumeysaltin97@icloud.com",
-  "safaguler2744@gmail.com",
-  "tunahnbayir@gmail.com",
-  "busra.bayram001@gmail.com",
+  "elifozlememir@gmail.com",
+  "semihgervan@hotmail.com",
+  "ecemm.basmaci@gmail.com",
+  "burcukocal97@gmail.com",
+  "ezgi.karadogan06@gmail.com",
+  "melih.ozcelik17@gmail.com",
+  "svvlerdenk@gmail.com",
+  "gurkan-satir@hotmail.com",
+  "deryabalin@gmail.com",
+  "nazlibulbuloglu@outlook.com",
+  "aksoyozgurcan@gmail.com",
+  "halilibrahimaladag@yandex.com",
+  "eray1yildiz@hotmail.com",
+  "ihsannote3@gmail.com",
+  "tugba.evli05@gmail.com",
+  "ahmetnecdetyalcn@gmail.com",
+  "mirac.gursoy@boun.edu.tr",
+  "begum.ozyer@gmail.com",
+  "volverainc@gmail.com",
+  "armaganergis@gmail.com",
 ];
 
 const fsweb0323 = [
