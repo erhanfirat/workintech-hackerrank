@@ -26,7 +26,7 @@ import {
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
-import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
+import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions";
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
@@ -205,7 +205,7 @@ const TestPage = () => {
         ) {
           dispatch(getAllCandidatesOfTestAction(testId));
           // TODO: Fetch questions logic should be depended on its own fetch state
-          dispatch(getAllQuestionsOfTestAction(testId));
+          dispatch(fetchAllQuestionsOfTestAction(testId));
         }
       } else {
         // fetch all tests here for opening test page for the first
@@ -266,7 +266,7 @@ const TestPage = () => {
             ))}
           </Input>
           <Button color="primary" className="text-nowrap" onClick={downloadCSV}>
-            <i class="fa-solid fa-download me-2"></i>
+            <i className="fa-solid fa-download me-2"></i>
             Excel Rapor
           </Button>
         </div>

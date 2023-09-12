@@ -22,7 +22,7 @@ import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReduce
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
-import { getAllQuestionsOfTestAction } from "../store/actions/questionActions";
+import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions";
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
@@ -175,7 +175,7 @@ const GroupPage = () => {
           fetchStates[testId] !== FETCH_STATES.FETCHING
         ) {
           dispatch(getAllCandidatesOfTestAction(testId));
-          dispatch(getAllQuestionsOfTestAction(testId));
+          dispatch(fetchAllQuestionsOfTestAction(testId));
         }
       } else {
         // fetch all tests here for opening test page for the first
