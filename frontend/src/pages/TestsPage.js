@@ -3,21 +3,26 @@ import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import {
   FETCH_STATES,
+  fetchHRTestsAction,
   getAllTestsAction,
 } from "../store/reducers/testsReducer";
-import { Badge, Button, Col, Container, Row } from "reactstrap";
+import { Badge, Button, Col, Container, Row, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const TestsPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { total, allTests, workintechTests, fetchState } = useSelector(
+  const { allTests, workintechTests, fetchState } = useSelector(
     (state) => state.tests
   );
 
   const navigateToTest = (test) => {
     history.push(`/tests/${test.id}`);
+  };
+
+  const refetchTests = () => {
+    dispatch(fetchHRTestsAction());
   };
 
   useEffect(() => {
@@ -28,9 +33,26 @@ const TestsPage = () => {
 
   return (
     <PageDefault pageTitle="Testler">
-      <div className="text-end fs-6 fw-bold pb-2">
-        [Total: {total} | Loaded: {allTests.length} | Workintech:
-        {workintechTests.length}]
+      <div className="text-end fs-6 fw-bold pb-3">
+        <Badge color="warning" className="me-2">
+          Loaded: {allTests.length}
+        </Badge>
+        <Badge color="warning" className="me-2">
+          Workintech: {workintechTests.length}
+        </Badge>
+        <Button
+          size="sm"
+          color="primary"
+          title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
+          onClick={refetchTests}
+        >
+          <i
+            class={`fa-solid fa-rotate me-2 ${
+              fetchState === FETCH_STATES.FETCHING ? " rotate" : ""
+            }`}
+          />
+          Sync Tests with HR
+        </Button>
       </div>
       <Container fluid>
         <Row>

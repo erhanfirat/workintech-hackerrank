@@ -14,6 +14,7 @@ export const testActions = Object.freeze({
   addAllTests: "ADD_ALL_TESTS",
   setWorkintechTests: "SET_WORKINTECH_TESTS",
   setTotal: "SET_TOTAL_TEST_COUNT",
+  clearTests: "CLEAR_TESTS",
 });
 
 // REDUCER ********************************
@@ -49,6 +50,9 @@ export const testsReducer = (state = initialTests, action) => {
         fetchState: action.payload,
       };
 
+    case testActions.clearTests:
+      return initialTests;
+
     default:
       return state;
   }
@@ -70,12 +74,17 @@ export const getAllTestsAction = () => (dispatch, getState) => {
         payload: FETCH_STATES.FETHCED,
       });
     } else {
-      fetchHRTestsAction(dispatch, getState);
+      fetchHRTests(dispatch, getState);
     }
   });
 };
 
-export const fetchHRTestsAction = (dispatch, getState) => {
+export const fetchHRTestsAction = () => fetchHRTests;
+
+const fetchHRTests = (dispatch, getState) => {
+  dispatch({ type: testActions.clearTests });
+  dispatch({ type: testActions.setFetchState, payload: FETCH_STATES.FETCHING });
+
   doHRRequest(hrEndpoints.tests()).then((resData) => {
     dispatch({ type: testActions.addAllTests, payload: resData.data });
     dispatch({ type: testActions.setTotal, payload: resData.total });
