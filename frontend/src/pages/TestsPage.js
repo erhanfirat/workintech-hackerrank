@@ -47,7 +47,7 @@ const TestsPage = () => {
           onClick={refetchTests}
         >
           <i
-            class={`fa-solid fa-rotate me-2 ${
+            className={`fa-solid fa-rotate me-2 ${
               fetchState === FETCH_STATES.FETCHING ? " rotate" : ""
             }`}
           />

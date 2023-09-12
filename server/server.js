@@ -6,8 +6,9 @@ const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: "5mb" }));
+app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
+app.use(express.json());
 
 // Test Endpoints
 
@@ -88,11 +89,11 @@ app.post("/tests/:testId/candidates", async (req, res) => {
 
 app.get("/tests/:testId/candidates", async (req, res) => {
   try {
+    const testId = req.params.testId;
     const candidates = await candidateDB.getAllCandidatesOfTest(
       req.params.testId
     );
-    const test = JSON.parse(testRec.data);
-    res.status(200).json(test);
+    res.status(200).json({ testId, candidates });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred", err });

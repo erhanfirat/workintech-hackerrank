@@ -18,4 +18,15 @@ export const srEndpoints = {
     endpoint: "tests",
     payload: tests,
   }),
+
+  getAllCandidatesOfTest: (testId) => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: `tests/${testId}/candidates`,
+  }),
+
+  setCandidatesOfTest: (testId, candidates) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: `tests/${testId}/candidates`,
+    payload: candidates,
+  }),
 };

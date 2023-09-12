@@ -1,5 +1,6 @@
-import { doHRRequest } from "../../api/api";
+import { doHRRequest, doSRRequest } from "../../api/api";
 import { hrEndpoints } from "../../api/hrEndpoints";
+import { srEndpoints } from "../../api/srEndpoints";
 import { getDateTimeStringFromISO } from "../../utils/utils";
 import { FETCH_STATES } from "./testsReducer";
 
@@ -62,12 +63,46 @@ const addStartDateStrToCandidates = (candidates) => {
   });
 };
 
-export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
-  dispatch({
-    type: candidateActions.setCandidatesOfTestFetchState,
-    payload: { testId, fetchState: FETCH_STATES.FETCHING },
-  });
+export const getAllCandidatesOfTestAction =
+  (testId) => (dispatch, getState) => {
+    dispatch({
+      type: candidateActions.setCandidatesOfTestFetchState,
+      payload: { testId, fetchState: FETCH_STATES.FETCHING },
+    });
 
+    doSRRequest(srEndpoints.getAllCandidatesOfTest(testId)).then(
+      (srCandidateRes) => {
+        console.log("srCandidateRes > ", srCandidateRes);
+        if (srCandidateRes.candidates.length === 0) {
+          fetchTestCandidates(dispatch, getState, testId);
+        } else {
+          dispatch({
+            type: candidateActions.setCandidatesOfTest,
+            payload: {
+              testId: srCandidateRes.testId,
+              candidates: addStartDateStrToCandidates(
+                srCandidateRes.candidates.map((candidateRec) =>
+                  JSON.parse(candidateRec.data)
+                )
+              ),
+            },
+          });
+        }
+      }
+    );
+  };
+
+export const fetchAllCandidatesOfTestAction =
+  (testId) => (dispatch, getState) => {
+    dispatch({
+      type: candidateActions.setCandidatesOfTestFetchState,
+      payload: { testId, fetchState: FETCH_STATES.FETCHING },
+    });
+
+    fetchTestCandidates(dispatch, getState, testId);
+  };
+
+const fetchTestCandidates = (dispatch, getState, testId) => {
   doHRRequest(hrEndpoints.candidates(testId)).then((resData) => {
     dispatch({
       type: candidateActions.setCandidatesOfTest,
@@ -76,6 +111,19 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
         candidates: addStartDateStrToCandidates(resData.data),
       },
     });
+
+    if (getState().candidates.candidates[testId].length === resData.total) {
+      dispatch({
+        type: candidateActions.setCandidatesOfTestFetchState,
+        payload: { testId, fetchState: FETCH_STATES.FETHCED },
+      });
+      doSRRequest(
+        srEndpoints.setCandidatesOfTest(
+          testId,
+          getState().candidates.candidates[testId]
+        )
+      );
+    }
 
     const pageCount = Math.ceil(resData.total / 100);
     for (let i = 1; i < pageCount; i++) {
@@ -89,11 +137,17 @@ export const getAllCandidatesOfTestAction = (testId) => (dispatch) => {
             candidates: addStartDateStrToCandidates(innerResData.data),
           },
         });
-        if (i === pageCount) {
+        if (getState().candidates.candidates[testId].length === resData.total) {
           dispatch({
-            type: candidateActions.setFetchState,
+            type: candidateActions.setCandidatesOfTestFetchState,
             payload: { testId, fetchState: FETCH_STATES.FETHCED },
           });
+          doSRRequest(
+            srEndpoints.setCandidatesOfTest(
+              testId,
+              getState().candidates.candidates[testId]
+            )
+          );
         }
       });
     }

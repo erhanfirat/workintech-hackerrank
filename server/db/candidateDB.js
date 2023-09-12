@@ -22,6 +22,5 @@ const deleteCandidate = (testId) => knex("candidate").where("id", testId).del();
 module.exports = {
   upsertCandidate,
   getAllCandidatesOfTest,
-  getCandidate,
   deleteCandidate,
 };
