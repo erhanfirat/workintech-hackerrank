@@ -1,6 +1,8 @@
 import { REQ_TYPES } from "./api";
 
 export const srEndpoints = {
+  // Tests **************************
+
   /** Gets all tests
    *
    * @param {Number} params.limit   tests count for a page
@@ -19,6 +21,8 @@ export const srEndpoints = {
     payload: tests,
   }),
 
+  // Candidates **************************
+
   getAllCandidatesOfTest: (testId) => ({
     reqType: REQ_TYPES.GET,
     endpoint: `tests/${testId}/candidates`,
@@ -28,5 +32,24 @@ export const srEndpoints = {
     reqType: REQ_TYPES.POST,
     endpoint: `tests/${testId}/candidates`,
     payload: candidates,
+  }),
+
+  // Questions **************************
+
+  getAllQuestions: () => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: "questions",
+  }),
+
+  saveQuestion: (question) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "questions",
+    payload: question,
+  }),
+
+  saveQuestions: (questionList) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "questions",
+    payload: questionList,
   }),
 };
