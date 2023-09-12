@@ -87,6 +87,10 @@ export const getAllCandidatesOfTestAction =
               ),
             },
           });
+          dispatch({
+            type: candidateActions.setCandidatesOfTestFetchState,
+            payload: { testId, fetchState: FETCH_STATES.FETHCED },
+          });
         }
       }
     );

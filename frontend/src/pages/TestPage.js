@@ -3,6 +3,7 @@ import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  Badge,
   Button,
   Col,
   Container,
@@ -18,7 +19,10 @@ import {
   FETCH_STATES,
   getAllTestsAction,
 } from "../store/reducers/testsReducer";
-import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
+import {
+  fetchAllCandidatesOfTestAction,
+  getAllCandidatesOfTestAction,
+} from "../store/reducers/candidatesReducer";
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
@@ -40,10 +44,16 @@ const TestPage = () => {
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
   );
-  const { candidates, fetchStates } = useSelector((state) => state.candidates);
+  const test = useSelector((state) =>
+    state.tests.workintechTests.find((t) => t.id === testId)
+  );
+  const candidateFetchState = useSelector(
+    (state) => state.candidates?.fetchStates?.[testId]
+  );
+  const testCandidates = useSelector(
+    (state) => state.candidates?.candidates?.[testId]
+  );
 
-  const [testCandidates, setTestCandidates] = useState([]);
-  const [test, setTest] = useState();
   const [sortByState, setSortByState] = useState("full_name");
   const [ascState, setAscState] = useState("asc");
   const [selectedGroup, setSelectedGroup] = useState("all");
@@ -67,8 +77,8 @@ const TestPage = () => {
         for (let i = 0; i < filterList.length; i++) {
           const seachText = filterList[i].toLocaleLowerCase();
           if (
-            candidate.full_name.toLocaleLowerCase().includes(seachText) ||
-            candidate.email.toLocaleLowerCase().includes(seachText)
+            candidate.full_name?.toLocaleLowerCase().includes(seachText) ||
+            candidate.email?.toLocaleLowerCase().includes(seachText)
           )
             return true;
         }
@@ -78,8 +88,8 @@ const TestPage = () => {
         (
           sortByState === "score"
             ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
-            : tc1[fields[sortByState]].toLocaleLowerCase() >
-              tc2[fields[sortByState]].toLocaleLowerCase()
+            : tc1[fields[sortByState]]?.toLocaleLowerCase() >
+              tc2[fields[sortByState]]?.toLocaleLowerCase()
         )
           ? numberOrder(ascState) * 1
           : numberOrder(ascState) * -1
@@ -181,16 +191,20 @@ const TestPage = () => {
     writeFile(wb, `${test.name}_${selectedGroup}.xlsx`);
   };
 
+  const refetchTestCandidates = () => {
+    dispatch(fetchAllCandidatesOfTestAction(testId));
+  };
+
   useEffect(() => {
     if (testId) {
-      const testInStore = workintechTests.find((t) => t.id === testId);
-      if (testInStore) {
-        setTest(workintechTests.find((t) => t.id === testId));
+      if (test) {
         if (
-          fetchStates[testId] !== FETCH_STATES.FETHCED &&
-          fetchStates[testId] !== FETCH_STATES.FETCHING
+          !candidateFetchState?.[testId] ||
+          (candidateFetchState[testId] !== FETCH_STATES.FETHCED &&
+            candidateFetchState[testId] !== FETCH_STATES.FETCHING)
         ) {
           dispatch(getAllCandidatesOfTestAction(testId));
+          // TODO: Fetch questions logic should be depended on its own fetch state
           dispatch(getAllQuestionsOfTestAction(testId));
         }
       } else {
@@ -203,17 +217,35 @@ const TestPage = () => {
   }, [workintechTests, testId]);
 
   useEffect(() => {
-    setTestCandidates(candidates[testId]);
-  }, [candidates]);
-
-  useEffect(() => {
     setSortByState(sortBy || "name");
     setAscState(asc || "asc");
   }, [sortBy, asc]);
 
   return (
     <PageDefault pageTitle={getCleanTestName(test?.name)}>
-      <div className="pt-3 pb-2">
+      <div className="d-flex justify-content-end align-items-baseline pb-3">
+        <Badge color="warning" className="me-2">
+          All: {testCandidates?.length || 0}
+        </Badge>
+        <Badge color="warning" className="me-2">
+          Current: {candidatesToList()?.length || 0}
+        </Badge>
+        <Button
+          size="sm"
+          color="primary"
+          title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
+          onClick={refetchTestCandidates}
+        >
+          <i
+            className={`fa-solid fa-rotate me-2 ${
+              candidateFetchState === FETCH_STATES.FETCHING ? " rotate" : ""
+            }`}
+          />
+          Sync Candidates with HR
+        </Button>
+      </div>
+
+      <div className="pb-2">
         <div className="d-flex">
           <Input
             type="text"
@@ -233,8 +265,9 @@ const TestPage = () => {
               </option>
             ))}
           </Input>
-          <Button className="text-nowrap" onClick={downloadCSV}>
-            Rapor CSV
+          <Button color="primary" className="text-nowrap" onClick={downloadCSV}>
+            <i class="fa-solid fa-download me-2"></i>
+            Excel Rapor
           </Button>
         </div>
       </div>
