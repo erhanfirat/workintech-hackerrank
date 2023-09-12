@@ -4,13 +4,14 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
+const questionDB = require("./db/questionDB");
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
 app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
 app.use(express.json());
 
-// Test Endpoints
+// Test Endpoints ****************************************
 
 app.all("*", function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
@@ -67,7 +68,7 @@ app.put("/tests/:id", async (req, res) => {
   }
 });
 
-// Candidate Endpoints
+// Candidate Endpoints ****************************************
 
 app.post("/tests/:testId/candidates", async (req, res) => {
   try {
@@ -97,6 +98,35 @@ app.get("/tests/:testId/candidates", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred", err });
+  }
+});
+
+// Questions Endpoints ****************************************
+
+app.get("/questions", async (req, res) => {
+  try {
+    const questions = await questionDB.getAllQuestions();
+    res.status(200).json([questions]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
+});
+
+app.post("/questions", async (req, res) => {
+  try {
+    const bodyData = req.body;
+    if (bodyData instanceof Array) {
+      for (let i = 0; i < bodyData.length; i++) {
+        await questionDB.upsertQuestion(bodyData[i]);
+      }
+    } else {
+      await questionDB.upsertQuestion(bodyData);
+    }
+    res.status(201).json(bodyData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
   }
 });
 
