@@ -41,6 +41,11 @@ export const srEndpoints = {
     endpoint: "questions",
   }),
 
+  getQuestionsByIdList: (idList) => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: `questions?ids=${idList.join(",")}`,
+  }),
+
   saveQuestion: (question) => ({
     reqType: REQ_TYPES.POST,
     endpoint: "questions",

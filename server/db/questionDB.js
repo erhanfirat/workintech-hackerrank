@@ -2,6 +2,9 @@ const knex = require("./knex");
 
 const getAllQuestions = () => knex("question").select("*");
 
+const getQuestionsByIdList = (idList) =>
+  knex("question").select().whereIn("id", idList);
+
 const upsertQuestion = (question) => {
   return knex.transaction(
     async (trx) =>
@@ -20,6 +23,7 @@ const deleteQuestion = (questionId) =>
 
 module.exports = {
   upsertQuestion,
+  getQuestionsByIdList,
   getAllQuestions,
   deleteQuestion,
 };

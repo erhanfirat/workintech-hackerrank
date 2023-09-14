@@ -103,10 +103,20 @@ app.get("/tests/:testId/candidates", async (req, res) => {
 
 // Questions Endpoints ****************************************
 
+/**
+ * if comma seperated [ids] query parameters sent by it finds and returns founded questions
+ * else it returns all questions
+ */
 app.get("/questions", async (req, res) => {
   try {
-    const questions = await questionDB.getAllQuestions();
-    res.status(200).json([questions]);
+    const idList = req.query.ids.split(",");
+    let questions = [];
+    if (idList) {
+      questions = await questionDB.getQuestionsByIdList(idList);
+    } else {
+      questions = await questionDB.getAllQuestions();
+    }
+    res.status(200).json(questions);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred", err });
