@@ -8,23 +8,15 @@ import { questionActions } from "../reducers/questionsReducer";
 export const getAllQuestions = () => (dispatch, getState) => {
   doSRRequest(srEndpoints.getAllQuestions()).then((questions) => {
     if (questions?.length > 0) {
-      dispatch(
-        addQuestionToAllAction(questions.map((q) => JSON.parse(q.data)))
-      );
+      questions
+        .map((q) => JSON.parse(q.data))
+        .forEach((q) => dispatch(addQuestionToAllAction(q)));
     }
   });
 };
 
-const saveAllQuestions = (questions) => {
-  doSRRequest(srEndpoints.saveQuestions(questions)).then((savedQuestions) =>
-    console.log("questions saved > ", savedQuestions)
-  );
-};
-
 const saveQuestion = (question) => {
-  doSRRequest(srEndpoints.saveQuestions(question)).then((savedQuestion) =>
-    console.log("question saved > ", savedQuestion)
-  );
+  doSRRequest(srEndpoints.saveQuestions(question)).then((savedQuestion) => {});
 };
 
 export const fetchAllQuestionsOfTestAction =
@@ -32,6 +24,7 @@ export const fetchAllQuestionsOfTestAction =
     const allQuestions = getState().questions.allQuestions;
     const testQuestions = getState().questions.testQuestions[testId];
     const test = getState().tests.workintechTests.find((t) => t.id === testId);
+    const questionsNeedsToBeFetched = [];
 
     test.questions.forEach((questionId) => {
       if (testQuestions && testQuestions[questionId]) {
@@ -40,25 +33,42 @@ export const fetchAllQuestionsOfTestAction =
       if (allQuestions[questionId]) {
         dispatch(addQuestionToTestAction(testId, allQuestions[questionId]));
       } else {
-        getQuestionById(questionId)
-          .then((res) => {
-            dispatch(addQuestionToAllAction(res));
-            dispatch(addQuestionToTestAction(testId, res));
-          })
-          .catch((err) => {
-            console.error(`HATA: ${questionId} id'li soru datası çekilirken bir hata karşılaşıldı.
-${err.message}`);
-          });
+        questionsNeedsToBeFetched.push(questionId);
       }
     });
+
+    if (questionsNeedsToBeFetched.length > 0) {
+      doSRRequest(srEndpoints.getQuestionsByIdList(questionsNeedsToBeFetched))
+        .then((questionListRaw) =>
+          questionListRaw.map((qr) => JSON.parse(qr.data))
+        )
+        .then((questionList) => {
+          questionList.forEach((q) => {
+            dispatch(addQuestionToAllAction(q));
+            dispatch(addQuestionToTestAction(testId, q));
+          });
+          if (questionList.length !== questionsNeedsToBeFetched.length) {
+            questionsNeedsToBeFetched.forEach((qId) => {
+              if (!questionList.find((qlq) => qlq.id === qId)) {
+                fetchQuestionById(qId)
+                  .then((question) => {
+                    dispatch(addQuestionToAllAction(question));
+                    dispatch(addQuestionToTestAction(testId, question));
+                    saveQuestion(question);
+                  })
+                  .catch((err) => {
+                    console.error(`HATA: ${qId} id'li soru datası çekilirken bir hata karşılaşıldı.
+                ${err.message}`);
+                  });
+              }
+            });
+          }
+        });
+    }
   };
 
-const getQuestionById = (questionId) => {
-  return doHRRequest(hrEndpoints.question(questionId)).catch((err) => {
-    console.error(`HATA: ${questionId} id'li soru datası çekilirken bir hata ile karşılaşıldı.
-${err.message}`);
-    throw err;
-  });
+const fetchQuestionById = (questionId) => {
+  return doHRRequest(hrEndpoints.question(questionId));
 };
 
 // REDUCER ACTIONS ********************************
