@@ -25,6 +25,11 @@ const SideBar = () => {
             G<span className="hide-on-mouseout">roups</span>
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink to={"/login"} className={`nav-link`} exact>
+            L<span className="hide-on-mouseout">ogin</span>
+          </NavLink>
+        </NavItem>
       </Nav>
     </div>
   );
