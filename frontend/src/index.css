@@ -125,3 +125,9 @@ a {
     transform: rotate(360deg);
   }
 }
+
+.gravatar {
+  max-height: 40px;
+  width: auto;
+  border-radius: 50%;
+}

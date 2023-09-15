@@ -1,10 +1,11 @@
-import { Navbar, NavbarBrand } from "reactstrap";
+import { Navbar, NavbarBrand, NavbarText } from "reactstrap";
 
 import logo from "../logo-dark.svg";
+import UserInfo from "../components/UserInfo";
 
 const Header = () => {
   return (
-    <Navbar color="dark" dark className="px-3">
+    <Navbar color="dark" dark className="justify-content-between px-3">
       <NavbarBrand href="/" className="d-flex align-items-center">
         <img
           alt="logo"
@@ -16,6 +17,9 @@ const Header = () => {
         />
         Hackerrank Tests
       </NavbarBrand>
+      <NavbarText>
+        <UserInfo />
+      </NavbarText>
     </Navbar>
   );
 };
