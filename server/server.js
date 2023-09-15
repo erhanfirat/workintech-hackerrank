@@ -141,7 +141,7 @@ app.post("/questions", async (req, res) => {
   }
 });
 
-// Login ****************************************
+// JOURNEY: Login ****************************************
 
 app.post("/login", async (req, res) => {
   try {
@@ -152,6 +152,23 @@ app.post("/login", async (req, res) => {
       Password: password,
       LanguageCode: "tr",
     });
+    res.status(201).json(journeyRes.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
+});
+
+app.get("/verify/me", async (req, res) => {
+  try {
+    const Authorization = req.headers["authorization"];
+
+    const journeyRes = await axios.get("https://api.journeyapp.com/user/me", {
+      headers: {
+        Authorization,
+      },
+    });
+
     res.status(201).json(journeyRes.data);
   } catch (err) {
     console.error(err);
