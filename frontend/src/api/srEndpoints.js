@@ -9,6 +9,11 @@ export const srEndpoints = {
     payload: loginData,
   }),
 
+  verifyMe: () => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: "verify/me",
+  }),
+
   // Tests **************************
 
   /** Gets all tests
