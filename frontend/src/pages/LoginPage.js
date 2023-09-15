@@ -12,7 +12,7 @@ import FormInput from "../components/atoms/FormInput";
 import SpinnerButton from "../components/atoms/SpinnerButton";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActionCreator } from "../store/reducers/userReducer";
-import { FETCH_STATES } from "../store/reducers/testsReducer";
+import { FETCH_STATES } from "../utils/constants";
 
 export const LoginPage = () => {
   const dispatch = useDispatch();

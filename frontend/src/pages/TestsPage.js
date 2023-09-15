@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FETCH_STATES,
   fetchHRTestsAction,
   getAllTestsAction,
 } from "../store/reducers/testsReducer";
 import { Badge, Button, Col, Container, Row, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { FETCH_STATES } from "../utils/constants";
 
 const TestsPage = () => {
   const dispatch = useDispatch();

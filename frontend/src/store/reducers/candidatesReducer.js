@@ -1,8 +1,8 @@
 import { doHRRequest, doSRRequest } from "../../api/api";
 import { hrEndpoints } from "../../api/hrEndpoints";
 import { srEndpoints } from "../../api/srEndpoints";
+import { FETCH_STATES } from "../../utils/constants";
 import { getDateTimeStringFromISO } from "../../utils/utils";
-import { FETCH_STATES } from "./testsReducer";
 
 export const candidateActions = Object.freeze({
   setCandidatesOfTestFetchState: "SET_TEST_CANDIDATES_FETCH_STATE",

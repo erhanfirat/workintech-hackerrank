@@ -14,10 +14,7 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import {
-  FETCH_STATES,
-  getAllTestsAction,
-} from "../store/reducers/testsReducer";
+import { getAllTestsAction } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
 import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
@@ -26,6 +23,7 @@ import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions"
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
+import { FETCH_STATES } from "../utils/constants";
 
 const fields = {
   name: "full_name",

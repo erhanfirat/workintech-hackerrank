@@ -16,7 +16,6 @@ import {
   TabPane,
 } from "reactstrap";
 import {
-  FETCH_STATES,
   getAllTestsAction,
 } from "../store/reducers/testsReducer";
 import {
@@ -30,6 +29,7 @@ import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions"
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
+import { FETCH_STATES } from "../utils/constants";
 
 const fields = {
   name: "full_name",

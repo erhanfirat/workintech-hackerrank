@@ -1,13 +1,7 @@
-import { doHRRequest, doSRRequest, doServerRequest } from "../../api/api";
+import { doHRRequest, doSRRequest } from "../../api/api";
 import { hrEndpoints } from "../../api/hrEndpoints";
 import { srEndpoints } from "../../api/srEndpoints";
-
-export const FETCH_STATES = Object.freeze({
-  NOT_STARTED: "NotStarted",
-  FETCHING: "Fetching",
-  FETHCED: "Fetched",
-  FAILED: "Failed",
-});
+import { FETCH_STATES } from "../../utils/constants";
 
 export const testActions = Object.freeze({
   setFetchState: "SET_TESTS_FETCH_STATE",
