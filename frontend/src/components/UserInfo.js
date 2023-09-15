@@ -4,11 +4,14 @@ import { useCallback } from "react";
 import { Button } from "reactstrap";
 import { signOutAction } from "../store/reducers/userReducer";
 import { useHistory } from "react-router-dom";
+import SpinnerButton from "./atoms/SpinnerButton";
+import { FETCH_STATES } from "../utils/constants";
 
 const UserInfo = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const user = useSelector((s) => s.user.user);
+  const userFetchState = useSelector((s) => s.user.fetchState);
 
   const userAvatarURL = useCallback(() => {
     return (
@@ -26,8 +29,6 @@ const UserInfo = () => {
     history.push("/login");
   };
 
-  console.log(user);
-
   return (
     <div className="d-flex align-items-center">
       {user && (
@@ -43,9 +44,14 @@ const UserInfo = () => {
         </>
       )}
       {!user && (
-        <Button color="primary" size="sm" onClick={login}>
+        <SpinnerButton
+          color="primary"
+          size="sm"
+          onClick={login}
+          loading={userFetchState === FETCH_STATES.FETCHING}
+        >
           Sign In
-        </Button>
+        </SpinnerButton>
       )}
     </div>
   );
