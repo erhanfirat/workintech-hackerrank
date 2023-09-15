@@ -78,7 +78,10 @@ export const loginActionCreator =
 export const verifyUserAction = () => (dispatch, getState) => {
   const token = localStorage.getItem(STORE_TOKEN);
   if (token) {
-    generateSrApi();
+    dispatch({
+      type: userActions.setFetchState,
+      payload: FETCH_STATES.FETCHING,
+    });
     doSRRequest(srEndpoints.verifyMe())
       .then((res) => {
         dispatch({
@@ -90,8 +93,13 @@ export const verifyUserAction = () => (dispatch, getState) => {
           payload: FETCH_STATES.FETHCED,
         });
         localStorage.setItem(STORE_TOKEN, res.AuthToken);
+        generateSrApi();
       })
       .catch((err) => {
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FAILED,
+        });
         localStorage.removeItem(STORE_TOKEN);
       });
   }
