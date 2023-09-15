@@ -16,6 +16,7 @@ const userInitial = {
 export const userActions = {
   setUser: "SET_USER_INFORMATION",
   setFetchState: "SET_USER_FETCH_STATE",
+  signOut: "SIGN_OUT_USER",
 };
 
 // Reducer ***************************
@@ -30,6 +31,9 @@ export const userReducer = (state = userInitial, action) => {
         token: payload.AuthToken,
         isAdmin: payload.is_manager,
       };
+
+    case userActions.signOut:
+      return userInitial;
 
     case userActions.setFetchState:
       return { ...state, fetchState: payload };
@@ -86,4 +90,10 @@ export const verifyUserAction = () => (dispatch, getState) => {
         localStorage.removeItem(STORE_TOKEN);
       });
   }
+};
+
+export const signOutAction = () => (dispatch) => {
+  localStorage.removeItem(STORE_TOKEN);
+  dispatch({ type: userActions.signOut });
+  generateSrApi();
 };
