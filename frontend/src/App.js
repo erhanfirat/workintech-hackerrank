@@ -1,20 +1,25 @@
 import { BrowserRouter } from "react-router-dom";
-import { Provider } from "react-redux";
+import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
+import { useEffect } from "react";
 
-import { store } from "./store/store";
+import { verifyUserAction } from "./store/reducers/userReducer";
 import Main from "./layout/Main";
 
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(verifyUserAction());
+  }, []);
+
   return (
-    <Provider store={store}>
-      <BrowserRouter>
-        <Main />
-        <ToastContainer />
-      </BrowserRouter>
-    </Provider>
+    <BrowserRouter>
+      <Main />
+      <ToastContainer />
+    </BrowserRouter>
   );
 }
 

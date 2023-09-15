@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { STORE_TOKEN } from "../utils/constants";
 
 export const REQ_TYPES = {
   GET: "get",
@@ -28,12 +29,25 @@ export const doHRRequest = ({ reqType, endpoint, payload, config }) => {
     });
 };
 
-export let srAPI = axios.create({
-  baseURL: process.env.REACT_APP_SERVER_URL,
-  // headers: {
-  //   Authorization: `Bearer ${process.env.REACT_APP_SERVER_API_KEY}`,
-  // },
-});
+export let srAPI;
+
+export const generateSrApi = () => {
+  const token = localStorage.getItem(STORE_TOKEN);
+  if (token) {
+    srAPI = axios.create({
+      baseURL: process.env.REACT_APP_SERVER_URL,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  } else {
+    srAPI = axios.create({
+      baseURL: process.env.REACT_APP_SERVER_URL,
+    });
+  }
+};
+
+generateSrApi();
 
 export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
   return srAPI[reqType](endpoint, payload || config, payload && config)

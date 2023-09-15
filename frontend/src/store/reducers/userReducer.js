@@ -1,6 +1,8 @@
-import { doSRRequest } from "../../api/api";
+import { doSRRequest, generateSrApi } from "../../api/api";
 import { srEndpoints } from "../../api/srEndpoints";
-import { FETCH_STATES } from "./testsReducer";
+import { FETCH_STATES, STORE_TOKEN } from "../../utils/constants";
+
+// Statics ***************************
 
 const userInitial = {
   user: null,
@@ -16,6 +18,8 @@ export const userActions = {
   setFetchState: "SET_USER_FETCH_STATE",
 };
 
+// Reducer ***************************
+
 export const userReducer = (state = userInitial, action) => {
   const { type, payload } = action;
   switch (type) {
@@ -30,15 +34,12 @@ export const userReducer = (state = userInitial, action) => {
     case userActions.setFetchState:
       return { ...state, fetchState: payload };
 
-    case userActions.default:
-      return state;
-
     default:
       return state;
   }
 };
 
-// Actions ********************
+// Actions ************************
 
 export const loginActionCreator = (loginData) => (dispatch, getState) => {
   dispatch({ type: userActions.setFetchState, payload: FETCH_STATES.FETCHING });
@@ -46,17 +47,43 @@ export const loginActionCreator = (loginData) => (dispatch, getState) => {
     .then((res) => {
       dispatch({
         type: userActions.setUser,
-        payload: res.data,
+        payload: res,
       });
       dispatch({
         type: userActions.setFetchState,
         payload: FETCH_STATES.FETHCED,
       });
+      localStorage.setItem(STORE_TOKEN, res.AuthToken);
+      generateSrApi();
     })
     .catch((err) => {
       dispatch({
         type: userActions.setFetchState,
         payload: FETCH_STATES.FAILED,
       });
+      localStorage.removeItem(STORE_TOKEN);
+      generateSrApi();
     });
+};
+
+export const verifyUserAction = () => (dispatch, getState) => {
+  const token = localStorage.getItem(STORE_TOKEN);
+  if (token) {
+    generateSrApi();
+    doSRRequest(srEndpoints.verifyMe())
+      .then((res) => {
+        dispatch({
+          type: userActions.setUser,
+          payload: res,
+        });
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FETHCED,
+        });
+        localStorage.setItem(STORE_TOKEN, res.AuthToken);
+      })
+      .catch((err) => {
+        localStorage.removeItem(STORE_TOKEN);
+      });
+  }
 };
