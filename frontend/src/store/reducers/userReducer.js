@@ -45,30 +45,35 @@ export const userReducer = (state = userInitial, action) => {
 
 // Actions ************************
 
-export const loginActionCreator = (loginData) => (dispatch, getState) => {
-  dispatch({ type: userActions.setFetchState, payload: FETCH_STATES.FETCHING });
-  doSRRequest(srEndpoints.login(loginData))
-    .then((res) => {
-      dispatch({
-        type: userActions.setUser,
-        payload: res,
-      });
-      dispatch({
-        type: userActions.setFetchState,
-        payload: FETCH_STATES.FETHCED,
-      });
-      localStorage.setItem(STORE_TOKEN, res.AuthToken);
-      generateSrApi();
-    })
-    .catch((err) => {
-      dispatch({
-        type: userActions.setFetchState,
-        payload: FETCH_STATES.FAILED,
-      });
-      localStorage.removeItem(STORE_TOKEN);
-      generateSrApi();
+export const loginActionCreator =
+  (loginData, loginCallback) => (dispatch, getState) => {
+    dispatch({
+      type: userActions.setFetchState,
+      payload: FETCH_STATES.FETCHING,
     });
-};
+    doSRRequest(srEndpoints.login(loginData))
+      .then((res) => {
+        dispatch({
+          type: userActions.setUser,
+          payload: res,
+        });
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FETHCED,
+        });
+        localStorage.setItem(STORE_TOKEN, res.AuthToken);
+        generateSrApi();
+        loginCallback();
+      })
+      .catch((err) => {
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FAILED,
+        });
+        localStorage.removeItem(STORE_TOKEN);
+        generateSrApi();
+      });
+  };
 
 export const verifyUserAction = () => (dispatch, getState) => {
   const token = localStorage.getItem(STORE_TOKEN);

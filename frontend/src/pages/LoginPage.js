@@ -13,9 +13,12 @@ import SpinnerButton from "../components/atoms/SpinnerButton";
 import { useDispatch, useSelector } from "react-redux";
 import { loginActionCreator } from "../store/reducers/userReducer";
 import { FETCH_STATES } from "../utils/constants";
+import { useHistory, useLocation } from "react-router-dom";
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const location = useLocation();
   const userFetchState = useSelector((s) => s.user.fetchState);
   const {
     register,
@@ -28,8 +31,12 @@ export const LoginPage = () => {
     },
   });
 
+  const loginCallback = () => {
+    history.push(location.state.referrer);
+  };
+
   const handleLogin = (loginData) => {
-    dispatch(loginActionCreator(loginData));
+    dispatch(loginActionCreator(loginData, loginCallback));
   };
 
   return (
