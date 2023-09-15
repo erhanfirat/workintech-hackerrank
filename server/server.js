@@ -5,6 +5,7 @@ const cors = require("cors");
 const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
 const questionDB = require("./db/questionDB");
+const axios = require("axios");
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -137,6 +138,24 @@ app.post("/questions", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+// Login ****************************************
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const journeyRes = await axios.post("https://api.journeyapp.com/login", {
+      Username: email,
+      Password: password,
+      LanguageCode: "tr",
+    });
+    res.status(201).json(journeyRes.data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
   }
 });
 

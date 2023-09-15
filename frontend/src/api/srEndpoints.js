@@ -1,6 +1,14 @@
 import { REQ_TYPES } from "./api";
 
 export const srEndpoints = {
+  // Login **************************
+
+  login: (loginData) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "login",
+    payload: loginData,
+  }),
+
   // Tests **************************
 
   /** Gets all tests

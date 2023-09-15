@@ -1,445 +1,410 @@
 {
-	"info": {
-		"_postman_id": "f9672576-0a7c-4bdc-b73b-299308fdb7ee",
-		"name": "Journey Authentication",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6424696"
-	},
-	"item": [
-		{
-			"name": "Client Login",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = JSON.parse(responseBody);",
-							"pm.collectionVariables.set(\"clientToken\",jsonData.AuthToken);",
-							"pm.collectionVariables.set(\"loggedInUSerId\",jsonData.user_id);"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
-				},
-				"url": {
-					"raw": "{{CLIENT_API_ADDRESS}}/login",
-					"host": [
-						"{{CLIENT_API_ADDRESS}}"
-					],
-					"path": [
-						"login"
-					]
-				}
-			},
-			"response": [
-				{
-					"name": "Success",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
-						},
-						"url": {
-							"raw": "https://api.journeyapp.com/login",
-							"protocol": "https",
-							"host": [
-								"api",
-								"journeyapp",
-								"com"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Wed, 13 Sep 2023 13:44:13 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Server",
-							"value": "Apache"
-						},
-						{
-							"key": "Strict-Transport-Security",
-							"value": "max-age=63072000; includeSubdomains;"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, private"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "allow-from *.microsoft.com"
-						},
-						{
-							"key": "Content-Security-Policy",
-							"value": "frame-ancestors 'self' *.microsoft.com"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "1;mode=block"
-						},
-						{
-							"key": "Set-Cookie",
-							"value": "journey_session=eyJpdiI6IndkM2NjbFU0NkJGQ3NCbE1rYkhPS1E9PSIsInZhbHVlIjoiT0x0cWhPTi91VFVVMlE5cU5KTFJZV3hhMDd6VHpGdEh6dWwwSTU0aTBva05XNlZlbjBkNjd5OEU3dVpWMDEyYUlXSjdUV0wxbzg1Tjc0VFdIM1hmc2hLK3dLQm93a1VpZ3ZwR21OUW14V05lbnNia0pvRjQ4QjI3VnhxSGMzRUwiLCJtYWMiOiIxM2JhNTYxNTQ1M2JjMjQ2ZGFjZTVkY2VkZjZmZTY1OWFhMmY1YzJjYWQzN2M2N2M1NDQxYzk1ZDdjNGNhNDE3In0%3D; expires=Wed, 13-Sep-2023 15:44:13 GMT; Max-Age=7200; path=/; secure; httponly"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"StatusCode\": 200,\n    \"StatusMessage\": \"Login succesful\",\n    \"is_manager\": 0,\n    \"visible_pages\": [\n        \"To-Dos\"\n    ],\n    \"profile\": [\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Library\",\n            \"title\": \"Öğrenmeye Devam Et\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Recommended\",\n            \"title\": \"Bana Önerilenler\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"History\",\n            \"title\": \"İncelediklerim\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Completed\",\n            \"title\": \"Tamamladıklarım\",\n            \"icon\": null\n        }\n    ],\n    \"onboard_user_for_lxp\": 1,\n    \"Lang\": \"tr\",\n    \"Name\": \"Deneme Emre\",\n    \"email\": \"ed@link.com\",\n    \"user_id\": 146835,\n    \"has_journey_packet\": 0,\n    \"profile_image_url\": null,\n    \"menu\": [\n        \"journeys\",\n        \"incomplete\",\n        \"notifications\",\n        \"me\"\n    ],\n    \"AuthToken\": \"MktIV0dFeDJVbjFuemU2OTE0NWJRdlZKaUdxT0g4RzhEakh6Y2tLTGEzZWN4Q2w1TUJ6alNMQjJUVzA3SXRTaFU5M3l6RlpkY2tkWTBiZTJI\",\n    \"has_share_permission\": 0,\n    \"splash_image_url\": \"\",\n    \"customization\": {\n        \"mobile_background\": null,\n        \"web_background\": null,\n        \"custom_topbar\": true,\n        \"logo\": \"https://s3-spaced-learning-prod.s3.amazonaws.com/webapp/Denizbank/denizakademi_logo.png\",\n        \"main_color\": \"#369DD0\",\n        \"secondary_color\": \"#369DD0\",\n        \"progress_min_color\": \"#336E97\",\n        \"progress_max_color\": \"#36D0B6\",\n        \"button_completed_color\": \"#36D0B6\",\n        \"button_add_color\": \"#36D0B6\",\n        \"button_remove_color\": \"#D03650\",\n        \"company_name\": \"Denizbank\"\n    },\n    \"manager\": null,\n    \"is_privacy_policy_needed\": 1,\n    \"unit\": null,\n    \"division\": null,\n    \"title\": null,\n    \"privacy_policy_url\": \"https://cdn.journeyapp.com/privacyPolicies/27-tr.html\"\n}"
-				},
-				{
-					"name": "Fail",
-					"originalRequest": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
-						},
-						"url": {
-							"raw": "{{CLIENT_API_ADDRESS}}/login",
-							"host": [
-								"{{CLIENT_API_ADDRESS}}"
-							],
-							"path": [
-								"login"
-							]
-						}
-					},
-					"status": "Bad Request",
-					"code": 400,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Wed, 13 Sep 2023 13:44:49 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Server",
-							"value": "Apache"
-						},
-						{
-							"key": "Strict-Transport-Security",
-							"value": "max-age=63072000; includeSubdomains;"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, private"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "allow-from *.microsoft.com"
-						},
-						{
-							"key": "Content-Security-Policy",
-							"value": "frame-ancestors 'self' *.microsoft.com"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "1;mode=block"
-						},
-						{
-							"key": "Set-Cookie",
-							"value": "journey_session=eyJpdiI6Ikd5VFZTOFB0dVRFZGM4QUpFaERRNnc9PSIsInZhbHVlIjoiTmVmMHp1S2tSY0FLMitZTFhoTHUyaWZsbDZrNExiUXY1RVVldG9uZmpmSEtPb2FtaFVham11NmwzcmtvTXJlQ1F4cCtDcyt0aDR3VWhtbXNVV1lxbUFDOE9NL0hVN25QODZJT1ladFpsRXFKbFpGb1FpeTVVQVBtekxmcnlxYU8iLCJtYWMiOiJjZmI1YjVlMzUxMTMwMWE2NGYzZWFiYzNmYjEyMGYyNmUzNzJjMzUwZjJiYTUxZjIzY2Y5ZWE0NTZlMzhlODEyIn0%3D; expires=Wed, 13-Sep-2023 15:44:49 GMT; Max-Age=7200; path=/; secure; httponly"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"StatusCode\": 400,\n    \"StatusMessage\": \"Username or password is incorrect.\"\n}"
-				}
-			]
-		},
-		{
-			"name": "Get Me",
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "Bearer {{clientToken}}",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "{{API_ADDRESS}}/user/me",
-					"host": [
-						"{{API_ADDRESS}}"
-					],
-					"path": [
-						"user",
-						"me"
-					]
-				},
-				"description": "\"title\": \"admin\","
-			},
-			"response": [
-				{
-					"name": "Fai",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer ",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://api.journeyapp.com/user/me",
-							"protocol": "https",
-							"host": [
-								"api",
-								"journeyapp",
-								"com"
-							],
-							"path": [
-								"user",
-								"me"
-							]
-						}
-					},
-					"status": "Forbidden",
-					"code": 403,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Wed, 13 Sep 2023 13:47:06 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Server",
-							"value": "Apache"
-						},
-						{
-							"key": "Strict-Transport-Security",
-							"value": "max-age=63072000; includeSubdomains;"
-						},
-						{
-							"key": "Vary",
-							"value": "Authorization"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, private"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "allow-from *.microsoft.com"
-						},
-						{
-							"key": "Content-Security-Policy",
-							"value": "frame-ancestors 'self' *.microsoft.com"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "1;mode=block"
-						},
-						{
-							"key": "Set-Cookie",
-							"value": "journey_session=eyJpdiI6IlJnZnJrKzc4Umw5NHJ5YkhrcUdpTWc9PSIsInZhbHVlIjoibXFtOXFlY2s0T3loN242TXZTOFFiQUdEVkJtZlJ4R0ZQaW56eXpraVAzWkFtU0NWazJieVI5WlYzd3cwUmJ5dlgyMStCbmdJN0pVdHVINE01V0g0cEJzQitGeWV4TThyV2hSU2Iya3RiOExwZkJvUS84UEJweDBxREkreHZUc1EiLCJtYWMiOiIzZDRkN2QzNGNkZGNhNGM2MDZiOGM1ZmM5ZmU0MDI4ODUwYmRjOTBhMjJjNjliNjhlODNmNTg5ODdiYWY3NTAzIn0%3D; expires=Wed, 13-Sep-2023 15:47:06 GMT; Max-Age=7200; path=/; secure; httponly"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"StatusCode\": 403,\n    \"StatusMessage\": \"Token expired!\",\n    \"Data\": {\n        \"sso_uri\": null\n    }\n}"
-				},
-				{
-					"name": "success",
-					"originalRequest": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{clientToken}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{CLIENT_API_ADDRESS}}/user/me",
-							"host": [
-								"{{CLIENT_API_ADDRESS}}"
-							],
-							"path": [
-								"user",
-								"me"
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "json",
-					"header": [
-						{
-							"key": "Date",
-							"value": "Wed, 13 Sep 2023 13:53:16 GMT"
-						},
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						},
-						{
-							"key": "Transfer-Encoding",
-							"value": "chunked"
-						},
-						{
-							"key": "Connection",
-							"value": "keep-alive"
-						},
-						{
-							"key": "Server",
-							"value": "Apache"
-						},
-						{
-							"key": "Strict-Transport-Security",
-							"value": "max-age=63072000; includeSubdomains;"
-						},
-						{
-							"key": "Vary",
-							"value": "Authorization"
-						},
-						{
-							"key": "Cache-Control",
-							"value": "no-cache, private"
-						},
-						{
-							"key": "X-Frame-Options",
-							"value": "allow-from *.microsoft.com"
-						},
-						{
-							"key": "Content-Security-Policy",
-							"value": "frame-ancestors 'self' *.microsoft.com"
-						},
-						{
-							"key": "X-XSS-Protection",
-							"value": "1;mode=block"
-						},
-						{
-							"key": "Set-Cookie",
-							"value": "journey_session=eyJpdiI6IjBzRWtsOGVYR1M3VkxRUWdYWU8vd0E9PSIsInZhbHVlIjoiSUFoUTNMR1hxL2dlbCthMEFKQzcxcHZ5QzIwc0FTNVNUcFlpNENXSWtyQ0NMYytZdk9IejNiMUdWaVh6VE1GVkpycnBpNzFiWjU4OFJuSlk5bk12QjFKalVNNmtNVWYremlTckFpdUp1emgzVFdmZ09LZUtDVXJmcDJYZDNmd0QiLCJtYWMiOiJiOTk0NDIxNDc5ODdhYmE3OGQ2NzBiY2VlMzcyNzMyZTgyYzRkZmJjZDdlYzdkODZjMTMwMTI4MThkZDc5ZGZkIn0%3D; expires=Wed, 13-Sep-2023 15:53:16 GMT; Max-Age=7200; path=/; secure; httponly"
-						},
-						{
-							"key": "Access-Control-Allow-Origin",
-							"value": "*"
-						}
-					],
-					"cookie": [],
-					"body": "{\n    \"StatusCode\": 200,\n    \"StatusMessage\": \"\",\n    \"is_manager\": 0,\n    \"visible_pages\": [\n        \"To-Dos\"\n    ],\n    \"profile\": null,\n    \"onboard_user_for_lxp\": 1,\n    \"Lang\": \"tr\",\n    \"Name\": \"Emre Şahiner\",\n    \"email\": \"emre@workintech.com.tr\",\n    \"user_id\": 115192,\n    \"has_journey_packet\": 0,\n    \"profile_image_url\": null,\n    \"menu\": [\n        \"journeys\",\n        \"incomplete\",\n        \"notifications\",\n        \"me\"\n    ],\n    \"AuthToken\": \"WTdDMkZWbDBQSXl5UlRZNUtoZ25aMU9iRThxd2dER21NRFJtZjQ0anZmRXZDY0JPdGt2NERxcm9NdGRIQnJXbDEwOU9ZVWE1bERYTXl4elRy\",\n    \"has_share_permission\": 1,\n    \"splash_image_url\": \"\",\n    \"customization\": {\n        \"mobile_background\": \"https://cdn.journeyapp.com/Customizations/369/mobile_background.png\",\n        \"web_background\": \"https://cdn.journeyapp.com/Customizations/369/web_background.png\",\n        \"custom_topbar\": null,\n        \"logo\": null,\n        \"main_color\": null,\n        \"secondary_color\": null,\n        \"progress_min_color\": null,\n        \"progress_max_color\": null,\n        \"button_completed_color\": null,\n        \"button_add_color\": null,\n        \"button_remove_color\": null,\n        \"company_name\": null\n    },\n    \"manager\": null,\n    \"is_privacy_policy_needed\": 0,\n    \"unit\": \"FSWEB1122\",\n    \"division\": \"FSWEB0423\",\n    \"title\": \"admin\",\n    \"privacy_policy_url\": \"https://cdn.journeyapp.com/privacyPolicies/369-tr.html\"\n}"
-				}
-			]
-		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"variable": [
-		{
-			"key": "CLIENT_API_ADDRESS",
-			"value": "https://api.journeyapp.com",
-			"type": "string"
-		},
-		{
-			"key": "clientToken",
-			"value": "",
-			"type": "string"
-		},
-		{
-			"key": "loggedInUSerId",
-			"value": ""
-		}
-	]
+  "info": {
+    "_postman_id": "f9672576-0a7c-4bdc-b73b-299308fdb7ee",
+    "name": "Journey Authentication",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "6424696"
+  },
+  "item": [
+    {
+      "name": "Client Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = JSON.parse(responseBody);",
+              "pm.collectionVariables.set(\"clientToken\",jsonData.AuthToken);",
+              "pm.collectionVariables.set(\"loggedInUSerId\",jsonData.user_id);"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "type": "text",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
+        },
+        "url": {
+          "raw": "{{CLIENT_API_ADDRESS}}/login",
+          "host": ["{{CLIENT_API_ADDRESS}}"],
+          "path": ["login"]
+        }
+      },
+      "response": [
+        {
+          "name": "Success",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "https://api.journeyapp.com/login",
+              "protocol": "https",
+              "host": ["api", "journeyapp", "com"],
+              "path": ["login"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 13 Sep 2023 13:44:13 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "Apache"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubdomains;"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "allow-from *.microsoft.com"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' *.microsoft.com"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1;mode=block"
+            },
+            {
+              "key": "Set-Cookie",
+              "value": "journey_session=eyJpdiI6IndkM2NjbFU0NkJGQ3NCbE1rYkhPS1E9PSIsInZhbHVlIjoiT0x0cWhPTi91VFVVMlE5cU5KTFJZV3hhMDd6VHpGdEh6dWwwSTU0aTBva05XNlZlbjBkNjd5OEU3dVpWMDEyYUlXSjdUV0wxbzg1Tjc0VFdIM1hmc2hLK3dLQm93a1VpZ3ZwR21OUW14V05lbnNia0pvRjQ4QjI3VnhxSGMzRUwiLCJtYWMiOiIxM2JhNTYxNTQ1M2JjMjQ2ZGFjZTVkY2VkZjZmZTY1OWFhMmY1YzJjYWQzN2M2N2M1NDQxYzk1ZDdjNGNhNDE3In0%3D; expires=Wed, 13-Sep-2023 15:44:13 GMT; Max-Age=7200; path=/; secure; httponly"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"StatusCode\": 200,\n    \"StatusMessage\": \"Login succesful\",\n    \"is_manager\": 0,\n    \"visible_pages\": [\n        \"To-Dos\"\n    ],\n    \"profile\": [\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Library\",\n            \"title\": \"Öğrenmeye Devam Et\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Recommended\",\n            \"title\": \"Bana Önerilenler\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"History\",\n            \"title\": \"İncelediklerim\",\n            \"icon\": null\n        },\n        {\n            \"type\": \"predefined\",\n            \"data\": \"Completed\",\n            \"title\": \"Tamamladıklarım\",\n            \"icon\": null\n        }\n    ],\n    \"onboard_user_for_lxp\": 1,\n    \"Lang\": \"tr\",\n    \"Name\": \"Deneme Emre\",\n    \"email\": \"ed@link.com\",\n    \"user_id\": 146835,\n    \"has_journey_packet\": 0,\n    \"profile_image_url\": null,\n    \"menu\": [\n        \"journeys\",\n        \"incomplete\",\n        \"notifications\",\n        \"me\"\n    ],\n    \"AuthToken\": \"MktIV0dFeDJVbjFuemU2OTE0NWJRdlZKaUdxT0g4RzhEakh6Y2tLTGEzZWN4Q2w1TUJ6alNMQjJUVzA3SXRTaFU5M3l6RlpkY2tkWTBiZTJI\",\n    \"has_share_permission\": 0,\n    \"splash_image_url\": \"\",\n    \"customization\": {\n        \"mobile_background\": null,\n        \"web_background\": null,\n        \"custom_topbar\": true,\n        \"logo\": \"https://s3-spaced-learning-prod.s3.amazonaws.com/webapp/Denizbank/denizakademi_logo.png\",\n        \"main_color\": \"#369DD0\",\n        \"secondary_color\": \"#369DD0\",\n        \"progress_min_color\": \"#336E97\",\n        \"progress_max_color\": \"#36D0B6\",\n        \"button_completed_color\": \"#36D0B6\",\n        \"button_add_color\": \"#36D0B6\",\n        \"button_remove_color\": \"#D03650\",\n        \"company_name\": \"Denizbank\"\n    },\n    \"manager\": null,\n    \"is_privacy_policy_needed\": 1,\n    \"unit\": null,\n    \"division\": null,\n    \"title\": null,\n    \"privacy_policy_url\": \"https://cdn.journeyapp.com/privacyPolicies/27-tr.html\"\n}"
+        },
+        {
+          "name": "Fail",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"Username\":\"ed@link.com\",\n\t\"Password\": \"123456\",\n\t\"LanguageCode\": \"en\"\n}"
+            },
+            "url": {
+              "raw": "{{CLIENT_API_ADDRESS}}/login",
+              "host": ["{{CLIENT_API_ADDRESS}}"],
+              "path": ["login"]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 13 Sep 2023 13:44:49 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "Apache"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubdomains;"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "allow-from *.microsoft.com"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' *.microsoft.com"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1;mode=block"
+            },
+            {
+              "key": "Set-Cookie",
+              "value": "journey_session=eyJpdiI6Ikd5VFZTOFB0dVRFZGM4QUpFaERRNnc9PSIsInZhbHVlIjoiTmVmMHp1S2tSY0FLMitZTFhoTHUyaWZsbDZrNExiUXY1RVVldG9uZmpmSEtPb2FtaFVham11NmwzcmtvTXJlQ1F4cCtDcyt0aDR3VWhtbXNVV1lxbUFDOE9NL0hVN25QODZJT1ladFpsRXFKbFpGb1FpeTVVQVBtekxmcnlxYU8iLCJtYWMiOiJjZmI1YjVlMzUxMTMwMWE2NGYzZWFiYzNmYjEyMGYyNmUzNzJjMzUwZjJiYTUxZjIzY2Y5ZWE0NTZlMzhlODEyIn0%3D; expires=Wed, 13-Sep-2023 15:44:49 GMT; Max-Age=7200; path=/; secure; httponly"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"StatusCode\": 400,\n    \"StatusMessage\": \"Username or password is incorrect.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Get Me",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{clientToken}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{API_ADDRESS}}/user/me",
+          "host": ["{{API_ADDRESS}}"],
+          "path": ["user", "me"]
+        },
+        "description": "\"title\": \"admin\","
+      },
+      "response": [
+        {
+          "name": "Fai",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer ",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://api.journeyapp.com/user/me",
+              "protocol": "https",
+              "host": ["api", "journeyapp", "com"],
+              "path": ["user", "me"]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 13 Sep 2023 13:47:06 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "Apache"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubdomains;"
+            },
+            {
+              "key": "Vary",
+              "value": "Authorization"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "allow-from *.microsoft.com"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' *.microsoft.com"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1;mode=block"
+            },
+            {
+              "key": "Set-Cookie",
+              "value": "journey_session=eyJpdiI6IlJnZnJrKzc4Umw5NHJ5YkhrcUdpTWc9PSIsInZhbHVlIjoibXFtOXFlY2s0T3loN242TXZTOFFiQUdEVkJtZlJ4R0ZQaW56eXpraVAzWkFtU0NWazJieVI5WlYzd3cwUmJ5dlgyMStCbmdJN0pVdHVINE01V0g0cEJzQitGeWV4TThyV2hSU2Iya3RiOExwZkJvUS84UEJweDBxREkreHZUc1EiLCJtYWMiOiIzZDRkN2QzNGNkZGNhNGM2MDZiOGM1ZmM5ZmU0MDI4ODUwYmRjOTBhMjJjNjliNjhlODNmNTg5ODdiYWY3NTAzIn0%3D; expires=Wed, 13-Sep-2023 15:47:06 GMT; Max-Age=7200; path=/; secure; httponly"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"StatusCode\": 403,\n    \"StatusMessage\": \"Token expired!\",\n    \"Data\": {\n        \"sso_uri\": null\n    }\n}"
+        },
+        {
+          "name": "success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{clientToken}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{CLIENT_API_ADDRESS}}/user/me",
+              "host": ["{{CLIENT_API_ADDRESS}}"],
+              "path": ["user", "me"]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 13 Sep 2023 13:53:16 GMT"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Transfer-Encoding",
+              "value": "chunked"
+            },
+            {
+              "key": "Connection",
+              "value": "keep-alive"
+            },
+            {
+              "key": "Server",
+              "value": "Apache"
+            },
+            {
+              "key": "Strict-Transport-Security",
+              "value": "max-age=63072000; includeSubdomains;"
+            },
+            {
+              "key": "Vary",
+              "value": "Authorization"
+            },
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, private"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "allow-from *.microsoft.com"
+            },
+            {
+              "key": "Content-Security-Policy",
+              "value": "frame-ancestors 'self' *.microsoft.com"
+            },
+            {
+              "key": "X-XSS-Protection",
+              "value": "1;mode=block"
+            },
+            {
+              "key": "Set-Cookie",
+              "value": "journey_session=eyJpdiI6IjBzRWtsOGVYR1M3VkxRUWdYWU8vd0E9PSIsInZhbHVlIjoiSUFoUTNMR1hxL2dlbCthMEFKQzcxcHZ5QzIwc0FTNVNUcFlpNENXSWtyQ0NMYytZdk9IejNiMUdWaVh6VE1GVkpycnBpNzFiWjU4OFJuSlk5bk12QjFKalVNNmtNVWYremlTckFpdUp1emgzVFdmZ09LZUtDVXJmcDJYZDNmd0QiLCJtYWMiOiJiOTk0NDIxNDc5ODdhYmE3OGQ2NzBiY2VlMzcyNzMyZTgyYzRkZmJjZDdlYzdkODZjMTMwMTI4MThkZDc5ZGZkIn0%3D; expires=Wed, 13-Sep-2023 15:53:16 GMT; Max-Age=7200; path=/; secure; httponly"
+            },
+            {
+              "key": "Access-Control-Allow-Origin",
+              "value": "*"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"StatusCode\": 200,\n    \"StatusMessage\": \"\",\n    \"is_manager\": 0,\n    \"visible_pages\": [\n        \"To-Dos\"\n    ],\n    \"profile\": null,\n    \"onboard_user_for_lxp\": 1,\n    \"Lang\": \"tr\",\n    \"Name\": \"Emre Şahiner\",\n    \"email\": \"emre@workintech.com.tr\",\n    \"user_id\": 115192,\n    \"has_journey_packet\": 0,\n    \"profile_image_url\": null,\n    \"menu\": [\n        \"journeys\",\n        \"incomplete\",\n        \"notifications\",\n        \"me\"\n    ],\n    \"AuthToken\": \"WTdDMkZWbDBQSXl5UlRZNUtoZ25aMU9iRThxd2dER21NRFJtZjQ0anZmRXZDY0JPdGt2NERxcm9NdGRIQnJXbDEwOU9ZVWE1bERYTXl4elRy\",\n    \"has_share_permission\": 1,\n    \"splash_image_url\": \"\",\n    \"customization\": {\n        \"mobile_background\": \"https://cdn.journeyapp.com/Customizations/369/mobile_background.png\",\n        \"web_background\": \"https://cdn.journeyapp.com/Customizations/369/web_background.png\",\n        \"custom_topbar\": null,\n        \"logo\": null,\n        \"main_color\": null,\n        \"secondary_color\": null,\n        \"progress_min_color\": null,\n        \"progress_max_color\": null,\n        \"button_completed_color\": null,\n        \"button_add_color\": null,\n        \"button_remove_color\": null,\n        \"company_name\": null\n    },\n    \"manager\": null,\n    \"is_privacy_policy_needed\": 0,\n    \"unit\": \"FSWEB1122\",\n    \"division\": \"FSWEB0423\",\n    \"title\": \"admin\",\n    \"privacy_policy_url\": \"https://cdn.journeyapp.com/privacyPolicies/369-tr.html\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "CLIENT_API_ADDRESS",
+      "value": "https://api.journeyapp.com",
+      "type": "string"
+    },
+    {
+      "key": "clientToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "loggedInUSerId",
+      "value": ""
+    }
+  ]
 }
