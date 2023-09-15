@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { loginActionCreator } from "../store/reducers/userReducer";
 import { FETCH_STATES } from "../utils/constants";
 import { useHistory, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 export const LoginPage = () => {
   const dispatch = useDispatch();
@@ -32,12 +33,18 @@ export const LoginPage = () => {
   });
 
   const loginCallback = () => {
-    history.push(location.state.referrer);
+    history.push(location?.state?.referrer ? location.state.referrer : "/");
   };
 
   const handleLogin = (loginData) => {
     dispatch(loginActionCreator(loginData, loginCallback));
   };
+
+  useEffect(() => {
+    if (userFetchState === FETCH_STATES.FETHCED) {
+      loginCallback();
+    }
+  }, [userFetchState]);
 
   return (
     <PageDefault pageTitle="Kullanıcı Giriş Sayfası">
