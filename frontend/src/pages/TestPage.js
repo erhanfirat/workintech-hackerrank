@@ -15,9 +15,7 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
-import {
-  getAllTestsAction,
-} from "../store/reducers/testsReducer";
+import { getAllTestsAction } from "../store/reducers/testsReducer";
 import {
   fetchAllCandidatesOfTestAction,
   getAllCandidatesOfTestAction,
@@ -30,6 +28,8 @@ import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
 import { FETCH_STATES } from "../utils/constants";
+import { doHRRequest } from "../api/api";
+import { hrEndpoints } from "../api/hrEndpoints";
 
 const fields = {
   name: "full_name",
@@ -191,6 +191,21 @@ const TestPage = () => {
     writeFile(wb, `${test.name}_${selectedGroup}.xlsx`);
   };
 
+  const downloadAllPDF = () => {
+    const pdfURLs = [];
+
+    candidatesToList().forEach((candidate) => {
+      doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
+        (pdfURL) => {
+          pdfURLs.push(pdfURL);
+          if (pdfURLs.length === candidatesToList().length) {
+            console.log(pdfURLs);
+          }
+        }
+      );
+    });
+  };
+
   const refetchTestCandidates = () => {
     dispatch(fetchAllCandidatesOfTestAction(testId));
   };
@@ -265,9 +280,21 @@ const TestPage = () => {
               </option>
             ))}
           </Input>
-          <Button color="primary" className="text-nowrap" onClick={downloadCSV}>
+          <Button
+            color="primary"
+            className="text-nowrap me-2"
+            onClick={downloadCSV}
+          >
             <i className="fa-solid fa-download me-2"></i>
             Excel Rapor
+          </Button>
+          <Button
+            color="primary"
+            className="text-nowrap"
+            onClick={downloadAllPDF}
+          >
+            <i className="fa-solid fa-download me-2"></i>
+            All PDFs
           </Button>
         </div>
       </div>

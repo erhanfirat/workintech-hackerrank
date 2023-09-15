@@ -92,9 +92,24 @@ app.post("/tests/:testId/candidates", async (req, res) => {
 app.get("/tests/:testId/candidates", async (req, res) => {
   try {
     const testId = req.params.testId;
-    const candidates = await candidateDB.getAllCandidatesOfTest(
-      req.params.testId
-    );
+    const candidates = await candidateDB.getAllCandidatesOfTest(testId);
+    res.status(200).json({ testId, candidates });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
+});
+
+app.post("/tests/:testId/candidates/pdf", async (req, res) => {
+  try {
+    const pdfURLs = req.body;
+    const testId = req.params.testId;
+    const test = await testDB.getTest(testId);
+
+    console.log(
+      
+    )
+
     res.status(200).json({ testId, candidates });
   } catch (err) {
     console.error(err);
