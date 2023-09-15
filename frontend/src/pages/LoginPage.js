@@ -9,12 +9,14 @@ import {
 } from "reactstrap";
 import PageDefault from "./PageDefault";
 import FormInput from "../components/atoms/FormInput";
-import { doSRRequest } from "../api/api";
-import { srEndpoints } from "../api/srEndpoints";
 import SpinnerButton from "../components/atoms/SpinnerButton";
-import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loginActionCreator } from "../store/reducers/userReducer";
+import { FETCH_STATES } from "../store/reducers/testsReducer";
 
 export const LoginPage = () => {
+  const dispatch = useDispatch();
+  const userFetchState = useSelector((s) => s.user.fetchState);
   const {
     register,
     handleSubmit,
@@ -26,14 +28,8 @@ export const LoginPage = () => {
     },
   });
 
-  const [loading, setLoading] = useState(false);
-
   const handleLogin = (loginData) => {
-    setLoading(true);
-    doSRRequest(srEndpoints.login(loginData))
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err))
-      .finally(() => setLoading(false));
+    dispatch(loginActionCreator(loginData));
   };
 
   return (
@@ -50,7 +46,11 @@ export const LoginPage = () => {
             <FormInput type="password" name="password" register={register} />
             <FormFeedback>{errors.password}</FormFeedback>
           </FormGroup>
-          <SpinnerButton loading={loading} color="primary" type="submit">
+          <SpinnerButton
+            loading={userFetchState === FETCH_STATES.FETCHING}
+            color="primary"
+            type="submit"
+          >
             Giriş
           </SpinnerButton>
         </Form>
