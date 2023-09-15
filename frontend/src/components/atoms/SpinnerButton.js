@@ -3,7 +3,8 @@ import { Button, Spinner } from "reactstrap";
 const SpinnerButton = ({ children, loading, iconClass, ...rest }) => {
   return (
     <Button {...rest}>
-      {loading && <Spinner size={"sm"} className="me-2 " />}
+      {!iconClass && loading && <Spinner size={"sm"} className="me-2 " />}
+      {iconClass && <i className={`${iconClass} ${loading ? "rotate" : ""}`} />}
       {children}
     </Button>
   );
