@@ -11,6 +11,8 @@ import PageDefault from "./PageDefault";
 import FormInput from "../components/atoms/FormInput";
 import { doSRRequest } from "../api/api";
 import { srEndpoints } from "../api/srEndpoints";
+import SpinnerButton from "../components/atoms/SpinnerButton";
+import { useState } from "react";
 
 export const LoginPage = () => {
   const {
@@ -24,11 +26,14 @@ export const LoginPage = () => {
     },
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleLogin = (loginData) => {
-    console.log("loginData ", loginData);
+    setLoading(true);
     doSRRequest(srEndpoints.login(loginData))
       .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err))
+      .finally(() => setLoading(false));
   };
 
   return (
@@ -45,9 +50,9 @@ export const LoginPage = () => {
             <FormInput type="password" name="password" register={register} />
             <FormFeedback>{errors.password}</FormFeedback>
           </FormGroup>
-          <Button color="primary" type="submit">
+          <SpinnerButton loading={loading} color="primary" type="submit">
             Giriş
-          </Button>
+          </SpinnerButton>
         </Form>
       </Container>
     </PageDefault>
