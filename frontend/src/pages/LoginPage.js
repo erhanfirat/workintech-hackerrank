@@ -5,10 +5,10 @@ import {
   Form,
   FormFeedback,
   FormGroup,
-  Input,
   Label,
 } from "reactstrap";
 import PageDefault from "./PageDefault";
+import FormInput from "../components/atoms/FormInput";
 
 export const LoginPage = () => {
   const {
@@ -32,12 +32,12 @@ export const LoginPage = () => {
         <Form onSubmit={handleSubmit(handleLogin)}>
           <FormGroup>
             <Label>Email</Label>
-            <Input type="email" {...register("email")} />
+            <FormInput type="email" name="email" register={register} />
             <FormFeedback>{errors.email}</FormFeedback>
           </FormGroup>
           <FormGroup>
             <Label>Şifre</Label>
-            <Input type="password" {...register("password")} />
+            <FormInput type="password" name="password" register={register} />
             <FormFeedback>{errors.password}</FormFeedback>
           </FormGroup>
           <Button type="submit">Giriş</Button>
