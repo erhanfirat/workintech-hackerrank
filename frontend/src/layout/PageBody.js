@@ -4,6 +4,7 @@ import TestsPage from "../pages/TestsPage";
 import TestPage from "../pages/TestPage";
 import GroupsPage from "../pages/GroupsPage";
 import { LoginPage } from "../pages/LoginPage";
+import ProtectedPage from "../pages/ProtectedPage";
 
 const PageBody = () => {
   return (
@@ -16,16 +17,16 @@ const PageBody = () => {
           <LoginPage />
         </Route>
         <Route path="/tests" exact>
-          <TestsPage />
+          <ProtectedPage PageComponent={TestsPage} />
         </Route>
         <Route path="/tests/:testId/:sortBy?/:asc?/:groupCode?" exact>
-          <TestPage />
+          <ProtectedPage PageComponent={TestPage} />
         </Route>
         <Route path="/groups" exact>
-          <GroupsPage />
+          <ProtectedPage PageComponent={GroupsPage} />
         </Route>
         <Route path="/groups/:groupCode/:sortBy?/:asc?" exact>
-          <TestPage />
+          <ProtectedPage PageComponent={GroupsPage} />
         </Route>
         <Route path="*">
           <div style={{ color: "red" }}>
