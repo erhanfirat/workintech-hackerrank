@@ -49,7 +49,10 @@ export const LoginPage = () => {
   return (
     <PageDefault pageTitle="Kullanıcı Giriş Sayfası">
       <Container fluid>
-        <Form onSubmit={handleSubmit(handleLogin)}>
+        <Form
+          onSubmit={handleSubmit(handleLogin)}
+          className="border px-3 py-5 shadow login-form rounded"
+        >
           <FormGroup>
             <Label>Email</Label>
             <FormInput type="email" name="email" register={register} />
