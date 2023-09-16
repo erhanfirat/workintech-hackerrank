@@ -6,6 +6,7 @@ const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
 const questionDB = require("./db/questionDB");
 const axios = require("axios");
+const archiver = require("archiver");
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -14,9 +15,18 @@ app.use(express.json());
 
 // Test Endpoints ****************************************
 
-app.all("*", function (req, res, next) {
+app.use((req, res, next) => {
+  // Set the Access-Control-Expose-Headers header to expose additional headers to the client
+  res.header("Access-Control-Expose-Headers", "Content-Disposition");
+
+  // Allow cross-origin requests (CORS)
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Content-Disposition, Accept"
+  );
+
   next();
 });
 
@@ -100,20 +110,38 @@ app.get("/tests/:testId/candidates", async (req, res) => {
   }
 });
 
-app.post("/tests/:testId/candidates/pdf", async (req, res) => {
+app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
+  const pdfList = req.body;
+  const testId = req.params.testId;
+  const group = req.params.group;
+  const testRecord = await testDB.getTest(testId);
+  const test = JSON.parse(testRecord[0].data);
+
+  const dateISO = new Date().toISOString();
+  const zipFilName = `${test.name.replaceAll(
+    " ",
+    "_"
+  )}_${group}_${dateISO.substring(0, dateISO.indexOf("."))}.zip`;
+
   try {
-    const pdfURLs = req.body;
-    const testId = req.params.testId;
-    const test = await testDB.getTest(testId);
+    const archive = archiver("zip", { zlib: { level: 9 } });
+    res.attachment(zipFilName);
+    archive.pipe(res);
 
-    console.log(
-      
-    )
+    for (const pdf of pdfList) {
+      const response = await axios.get(pdf.url, { responseType: "stream" });
+      const fileName = `${test.name.replaceAll(
+        " ",
+        "_"
+      )}_${pdf.candidate.substring(0, pdf.candidate.indexOf("@"))}.pdf`;
 
-    res.status(200).json({ testId, candidates });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "An error occurred", err });
+      archive.append(response.data, { name: fileName });
+    }
+
+    await archive.finalize();
+  } catch (error) {
+    console.error("Error downloading or creating zip:", error);
+    res.status(500).send("Internal Server Error");
   }
 });
 
