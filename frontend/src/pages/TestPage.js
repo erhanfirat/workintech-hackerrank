@@ -31,6 +31,7 @@ import { FETCH_STATES } from "../utils/constants";
 import { doHRRequest, doSRRequestResponse } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
 import { srEndpoints } from "../api/srEndpoints";
+import SpinnerButton from "../components/atoms/SpinnerButton";
 
 const fields = {
   name: "full_name",
@@ -60,6 +61,7 @@ const TestPage = () => {
   const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("results");
+  const [allPDFLoading, setAllPDFLoading] = useState(false);
   const questions = useSelector(
     (state) => state.questions.testQuestions[testId]
   );
@@ -194,42 +196,47 @@ const TestPage = () => {
 
   const downloadAllPDF = () => {
     const pdfURLs = [];
+    try {
+      setAllPDFLoading(true);
+      candidatesToList().forEach((candidate) => {
+        doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
+          (pdfURL) => {
+            pdfURLs.push({ candidate: candidate.email, url: pdfURL });
+            if (pdfURLs.length === candidatesToList().length) {
+              console.log(pdfURLs);
+              doSRRequestResponse(
+                srEndpoints.downloadAllPDFs(testId, selectedGroup, pdfURLs)
+              )
+                .then((res) => {
+                  const contentDisposition = res.headers["content-disposition"];
+                  const match = contentDisposition.match(/filename="(.+)"/);
+                  const fileName = match[1];
 
-    candidatesToList().forEach((candidate) => {
-      doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
-        (pdfURL) => {
-          pdfURLs.push({ candidate: candidate.email, url: pdfURL });
-          if (pdfURLs.length === candidatesToList().length) {
-            console.log(pdfURLs);
-            doSRRequestResponse(
-              srEndpoints.downloadAllPDFs(testId, selectedGroup, pdfURLs)
-            )
-              .then((res) => {
-                const contentDisposition = res.headers["content-disposition"];
-                const match = contentDisposition.match(/filename="(.+)"/);
-                const fileName = match[1];
+                  const blob = new Blob([res.data], {
+                    type: "application/zip",
+                  });
+                  const url = window.URL.createObjectURL(blob);
+                  const link = document.createElement("a");
+                  link.href = url;
+                  link.download = fileName;
 
-                const blob = new Blob([res.data], {
-                  type: "application/zip",
-                });
-                const url = window.URL.createObjectURL(blob);
-                const link = document.createElement("a");
-                link.href = url;
-                link.download = fileName;
+                  document.body.appendChild(link);
+                  link.click();
 
-                document.body.appendChild(link);
-                link.click();
-
-                window.URL.revokeObjectURL(url);
-                document.body.removeChild(link);
-              })
-              .catch((err) => {
-                console.log("download err: ", err);
-              });
+                  window.URL.revokeObjectURL(url);
+                  document.body.removeChild(link);
+                })
+                .catch((err) => {
+                  console.log("download err: ", err);
+                })
+                .finally(() => setAllPDFLoading(false));
+            }
           }
-        }
-      );
-    });
+        );
+      });
+    } catch (e) {
+      setAllPDFLoading(false);
+    }
   };
 
   const refetchTestCandidates = () => {
@@ -271,19 +278,16 @@ const TestPage = () => {
         <Badge color="warning" className="me-2">
           Current: {candidatesToList()?.length || 0}
         </Badge>
-        <Button
+        <SpinnerButton
           size="sm"
+          iconClass="fa-solid fa-rotate me-2"
+          loading={candidateFetchState === FETCH_STATES.FETCHING}
           color="primary"
           title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
           onClick={refetchTestCandidates}
         >
-          <i
-            className={`fa-solid fa-rotate me-2 ${
-              candidateFetchState === FETCH_STATES.FETCHING ? " rotate" : ""
-            }`}
-          />
           Sync Candidates with HR
-        </Button>
+        </SpinnerButton>
       </div>
 
       <div className="pb-2">
@@ -314,14 +318,15 @@ const TestPage = () => {
             <i className="fa-solid fa-download me-2"></i>
             Excel Rapor
           </Button>
-          <Button
+          <SpinnerButton
             color="primary"
             className="text-nowrap"
             onClick={downloadAllPDF}
+            loading={allPDFLoading}
           >
             <i className="fa-solid fa-download me-2"></i>
             All PDFs
-          </Button>
+          </SpinnerButton>
         </div>
       </div>
 

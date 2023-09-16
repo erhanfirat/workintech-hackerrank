@@ -8,6 +8,7 @@ import {
 import { Badge, Button, Col, Container, Row, Spinner } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { FETCH_STATES } from "../utils/constants";
+import SpinnerButton from "../components/atoms/SpinnerButton";
 
 const TestsPage = () => {
   const dispatch = useDispatch();
@@ -40,19 +41,16 @@ const TestsPage = () => {
         <Badge color="warning" className="me-2">
           Workintech: {workintechTests.length}
         </Badge>
-        <Button
+        <SpinnerButton
+          loading={fetchState === FETCH_STATES.FETCHING}
+          iconClass={"fa-solid fa-rotate me-2"}
           size="sm"
           color="primary"
           title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
           onClick={refetchTests}
         >
-          <i
-            className={`fa-solid fa-rotate me-2 ${
-              fetchState === FETCH_STATES.FETCHING ? " rotate" : ""
-            }`}
-          />
           Sync Tests with HR
-        </Button>
+        </SpinnerButton>
       </div>
       <Container fluid>
         <Row>

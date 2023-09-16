@@ -38,7 +38,7 @@ const UserInfo = () => {
             <div>{user?.Name}</div>
             <div className="fs-7">{user?.title}</div>
           </div>
-          <Button size="sm" className="ms-2" onClick={signOut}>
+          <Button size="sm" className="ms-3" onClick={signOut}>
             Sign Out
           </Button>
         </>
