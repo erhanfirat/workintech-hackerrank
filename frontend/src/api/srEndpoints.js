@@ -47,6 +47,13 @@ export const srEndpoints = {
     payload: candidates,
   }),
 
+  downloadAllPDFs: (testId, groupCode, pdfURLs) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: `/tests/${testId}/candidates/${groupCode}/pdf`,
+    payload: pdfURLs,
+    config: { responseType: "arraybuffer" },
+  }),
+
   // Questions **************************
 
   getAllQuestions: () => ({
