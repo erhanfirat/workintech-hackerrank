@@ -61,3 +61,7 @@ export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
       throw err;
     });
 };
+
+export const doSRRequestResponse = ({ reqType, endpoint, payload, config }) => {
+  return srAPI[reqType](endpoint, payload || config, payload && config);
+};
