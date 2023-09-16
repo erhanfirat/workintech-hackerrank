@@ -28,8 +28,9 @@ import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
 import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
 import { FETCH_STATES } from "../utils/constants";
-import { doHRRequest } from "../api/api";
+import { doHRRequest, doSRRequestResponse } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
+import { srEndpoints } from "../api/srEndpoints";
 
 const fields = {
   name: "full_name",
@@ -197,9 +198,34 @@ const TestPage = () => {
     candidatesToList().forEach((candidate) => {
       doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
         (pdfURL) => {
-          pdfURLs.push(pdfURL);
+          pdfURLs.push({ candidate: candidate.email, url: pdfURL });
           if (pdfURLs.length === candidatesToList().length) {
             console.log(pdfURLs);
+            doSRRequestResponse(
+              srEndpoints.downloadAllPDFs(testId, selectedGroup, pdfURLs)
+            )
+              .then((res) => {
+                const contentDisposition = res.headers["content-disposition"];
+                const match = contentDisposition.match(/filename="(.+)"/);
+                const fileName = match[1];
+
+                const blob = new Blob([res.data], {
+                  type: "application/zip",
+                });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement("a");
+                link.href = url;
+                link.download = fileName;
+
+                document.body.appendChild(link);
+                link.click();
+
+                window.URL.revokeObjectURL(url);
+                document.body.removeChild(link);
+              })
+              .catch((err) => {
+                console.log("download err: ", err);
+              });
           }
         }
       );
