@@ -31,7 +31,7 @@ const TestCandidatesTotal = ({
   return (
     <Container fluid>
       <Row>
-        <Col sm="3">
+        <Col sm="2">
           <Link
             to={`/tests/${testId}/name/${
               sortByState === "name" ? inverseOrder(ascState) : ascState
@@ -55,7 +55,7 @@ const TestCandidatesTotal = ({
             </h6>
           </Link>
         </Col>
-        <Col sm="3">
+        <Col sm="2">
           <Link
             to={`/tests/${testId}/start-date/${
               sortByState === "start-date" ? inverseOrder(ascState) : ascState
@@ -69,6 +69,18 @@ const TestCandidatesTotal = ({
         </Col>
         <Col sm="2">
           <Link
+            to={`/tests/${testId}/end-date/${
+              sortByState === "end-date" ? inverseOrder(ascState) : ascState
+            }`}
+          >
+            <h6>
+              {sortIcon("end-date", sortByState, ascState)}
+              Bitiş Tar.
+            </h6>
+          </Link>
+        </Col>
+        <Col sm="1">
+          <Link
             to={`/tests/${testId}/score/${
               sortByState === "score" ? inverseOrder(ascState) : ascState
             }`}
@@ -80,14 +92,17 @@ const TestCandidatesTotal = ({
       </Row>
       {candidates?.map((testCandidate) => (
         <Row key={testCandidate.id} className="border-top py-1 grid-row">
-          <Col sm="3" className="text-truncate" title={testCandidate.full_name}>
+          <Col sm="2" className="text-truncate" title={testCandidate.full_name}>
             {testCandidate.full_name}
           </Col>
           <Col sm="3" className="text-truncate" title={testCandidate.email}>
             {testCandidate.email}
           </Col>
-          <Col sm="3" className="text-truncate" title={testCandidate.email}>
+          <Col sm="2" className="text-truncate" title={testCandidate.email}>
             {testCandidate.startDateStr}
+          </Col>
+          <Col sm="2" className="text-truncate" title={testCandidate.email}>
+            {testCandidate.endDateStr}
           </Col>
           <Col sm="2">{testCandidate.percentage_score}</Col>
           <Col sm="1">

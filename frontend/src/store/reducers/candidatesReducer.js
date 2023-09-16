@@ -59,6 +59,7 @@ export const candidatesReducer = (state = initialCandidates, action) => {
 const addStartDateStrToCandidates = (candidates) => {
   return candidates.map((c) => {
     c.startDateStr = getDateTimeStringFromISO(c.attempt_starttime);
+    c.endDateStr = getDateTimeStringFromISO(c.attempt_endtime);
     return c;
   });
 };

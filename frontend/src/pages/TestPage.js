@@ -38,6 +38,7 @@ const fields = {
   email: "email",
   score: "percentage_score",
   "start-date": "startDateStr",
+  "end-date": "endDateStr",
 };
 
 const TestPage = () => {
