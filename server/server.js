@@ -116,7 +116,10 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
     const testId = req.params.testId;
     const group = req.params.group;
     const testRecord = await testDB.getTest(testId);
+    console.log("testRecord: ", testRecord);
+
     const test = JSON.parse(testRecord[0].data);
+    console.log("test: ", test);
 
     const dateISO = new Date().toISOString();
     const zipFilName = `${test?.name?.replaceAll(
