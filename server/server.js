@@ -5,6 +5,7 @@ const cors = require("cors");
 const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
 const questionDB = require("./db/questionDB");
+const groupDB = require("./db/groupDB");
 const axios = require("axios");
 const archiver = require("archiver");
 
@@ -80,6 +81,35 @@ app.put("/tests/:id", async (req, res) => {
 });
 
 // Candidate Endpoints ****************************************
+
+app.get("/student/:studentId/results", async (req, res) => {
+  try {
+    const bodyData = req.body;
+    const candidateId = req.params.candidateId;
+    if (bodyData instanceof Array) {
+      for (let i = 0; i < bodyData.length; i++) {
+        await candidateDB.upsertCandidate(testId, bodyData[i]);
+      }
+    } else {
+      await candidateDB.upsertCandidate(testId, bodyData);
+    }
+    res.status(201).json(bodyData);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+app.get("/tests/:testId/candidates", async (req, res) => {
+  try {
+    const testId = req.params.testId;
+    const candidates = await candidateDB.getAllCandidatesOfTest(testId);
+    res.status(200).json({ testId, candidates });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
+});
 
 app.post("/tests/:testId/candidates", async (req, res) => {
   try {
@@ -182,6 +212,19 @@ app.post("/questions", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred" });
+  }
+});
+
+// Groups ************************************************
+
+app.get("/group", async (req, res) => {
+  try {
+    const groups = await groupDB.getAllGroups();
+
+    res.status(201).json(groups);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
   }
 });
 
