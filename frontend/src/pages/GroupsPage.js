@@ -1,37 +1,31 @@
 import { useEffect } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  getAllTestsAction,
-} from "../store/reducers/testsReducer";
-import { Badge, Button, Col, Container, Row } from "reactstrap";
+import { Button, Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
-import { studentGroups, students } from "../data/studentGroups";
 import { FETCH_STATES } from "../utils/constants";
+import { getAllGroupsActionCreator } from "../store/reducers/studentsReducer";
 
 const GroupsPage = () => {
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const { total, allTests, workintechTests, fetchState } = useSelector(
-    (state) => state.tests
-  );
+  const { groups, groupsFetchState, students, studentsFetchState } =
+    useSelector((state) => state.students);
 
   const navigateToGroup = (group) => {
-    history.push(`/groups/${group.value}`);
+    history.push(`/groups/${group.id}`);
   };
 
   useEffect(() => {
-    if (fetchState === FETCH_STATES.NOT_STARTED) {
-      dispatch(getAllTestsAction());
+    if (groupsFetchState === FETCH_STATES.NOT_STARTED) {
+      dispatch(getAllGroupsActionCreator());
     }
   }, []);
 
   return (
     <PageDefault pageTitle="Gruplar">
-      <div className="text-end fs-6 fw-bold pb-2">
-        [Total: {studentGroups.length}]
-      </div>
+      <div className="text-end fs-6 fw-bold pb-2">[Total: {groups.length}]</div>
       <Container fluid>
         <Row>
           <Col sm="5">
@@ -50,7 +44,7 @@ const GroupsPage = () => {
             <h5>Actions</h5>
           </Col>
         </Row>
-        {studentGroups.map((group) => (
+        {groups.map((group) => (
           <Row className="border-top p-1 grid-row">
             <Col sm="5">{group.name}</Col>
             <Col sm="2">{group.value}</Col>
