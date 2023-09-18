@@ -116,16 +116,14 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
     const testId = req.params.testId;
     const group = req.params.group;
     const testRecord = await testDB.getTest(testId);
-    console.log("testRecord: ", testRecord);
-
     const test = JSON.parse(testRecord[0].data);
-    console.log("test: ", test);
 
     const dateISO = new Date().toISOString();
-    const zipFilName = `${test?.name?.replaceAll(
-      " ",
-      "_"
-    )}_${group}_${dateISO.substring(0, dateISO.indexOf("."))}.zip`;
+    const testName = test.name.replace(/ /g, "_");
+    const zipFilName = `${testName}_${group}_${dateISO.substring(
+      0,
+      dateISO.indexOf(".")
+    )}.zip`;
 
     const archive = archiver("zip", { zlib: { level: 9 } });
     res.attachment(zipFilName);
@@ -133,10 +131,10 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
 
     for (const pdf of pdfList) {
       const response = await axios.get(pdf.url, { responseType: "stream" });
-      const fileName = `${test.name.replaceAll(
-        " ",
-        "_"
-      )}_${pdf.candidate.substring(0, pdf.candidate.indexOf("@"))}.pdf`;
+      const fileName = `${testName}_${group}_${pdf.candidate.substring(
+        0,
+        pdf.candidate.indexOf("@")
+      )}.pdf`;
 
       archive.append(response.data, { name: fileName });
     }
