@@ -77,4 +77,11 @@ export const srEndpoints = {
     endpoint: "questions",
     payload: questionList,
   }),
+
+  // Groups & Students ***********************
+
+  getAllGroups: () => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: "group",
+  }),
 };
