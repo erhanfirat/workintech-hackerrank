@@ -29,14 +29,15 @@ export const candidatesReducer = (state = initialCandidates, action) => {
       };
 
     case candidateActions.addCandidatesOfTest:
+      const storeCandidates = state.candidates[action.payload.testId] || [];
+      const newCandidates = action.payload.candidates.filter(
+        (candidate) => !storeCandidates.find((sc) => sc.id === candidate.id)
+      );
       return {
         ...state,
         candidates: {
           ...state.candidates,
-          [action.payload.testId]: [
-            ...state.candidates[action.payload.testId],
-            ...action.payload.candidates,
-          ],
+          [action.payload.testId]: [...storeCandidates, ...newCandidates],
         },
       };
 
@@ -107,54 +108,41 @@ export const fetchAllCandidatesOfTestAction =
     fetchTestCandidates(dispatch, getState, testId);
   };
 
+/**Recursively fetch candidates list of test
+ * @param {Function} dispatch Redux thunk dispatch
+ * @param {Function} getState Redux thunk getState
+ * @param {String} testId Id of the test
+ */
 const fetchTestCandidates = (dispatch, getState, testId) => {
-  doHRRequest(hrEndpoints.candidates(testId)).then((resData) => {
+  doHRRequest(
+    hrEndpoints.candidates(testId, {
+      limit: 100,
+      offset: getState().candidates.candidates[testId].length,
+    })
+  ).then((resData) => {
     dispatch({
-      type: candidateActions.setCandidatesOfTest,
+      type: candidateActions.addCandidatesOfTest,
       payload: {
         testId,
         candidates: addStartDateStrToCandidates(resData.data),
       },
     });
 
-    if (getState().candidates.candidates[testId].length === resData.total) {
+    if (resData.total > getState().candidates.candidates[testId].length) {
+      fetchTestCandidates(dispatch, getState, testId);
+    } else {
+      // finish fetching
       dispatch({
         type: candidateActions.setCandidatesOfTestFetchState,
         payload: { testId, fetchState: FETCH_STATES.FETHCED },
       });
+      // save fetched candidates to server
       doSRRequest(
         srEndpoints.setCandidatesOfTest(
           testId,
           getState().candidates.candidates[testId]
         )
       );
-    }
-
-    const pageCount = Math.ceil(resData.total / 100);
-    for (let i = 1; i < pageCount; i++) {
-      doHRRequest(
-        hrEndpoints.candidates(testId, { limit: 100, offset: i * 100 })
-      ).then((innerResData) => {
-        dispatch({
-          type: candidateActions.addAllCandidates,
-          payload: {
-            testId,
-            candidates: addStartDateStrToCandidates(innerResData.data),
-          },
-        });
-        if (getState().candidates.candidates[testId].length === resData.total) {
-          dispatch({
-            type: candidateActions.setCandidatesOfTestFetchState,
-            payload: { testId, fetchState: FETCH_STATES.FETHCED },
-          });
-          doSRRequest(
-            srEndpoints.setCandidatesOfTest(
-              testId,
-              getState().candidates.candidates[testId]
-            )
-          );
-        }
-      });
     }
   });
 };
