@@ -118,7 +118,7 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
   const test = JSON.parse(testRecord[0].data);
 
   const dateISO = new Date().toISOString();
-  const zipFilName = `${test.name.replaceAll(
+  const zipFilName = `${test?.name?.replaceAll(
     " ",
     "_"
   )}_${group}_${dateISO.substring(0, dateISO.indexOf("."))}.zip`;
