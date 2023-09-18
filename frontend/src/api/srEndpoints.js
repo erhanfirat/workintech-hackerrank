@@ -84,4 +84,9 @@ export const srEndpoints = {
     reqType: REQ_TYPES.GET,
     endpoint: "group",
   }),
+
+  getAllStudents: () => ({
+    reqType: REQ_TYPES.GET,
+    endpoint: "student",
+  }),
 };
