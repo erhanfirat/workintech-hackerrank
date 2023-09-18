@@ -111,19 +111,19 @@ app.get("/tests/:testId/candidates", async (req, res) => {
 });
 
 app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
-  const pdfList = req.body;
-  const testId = req.params.testId;
-  const group = req.params.group;
-  const testRecord = await testDB.getTest(testId);
-  const test = JSON.parse(testRecord[0].data);
-
-  const dateISO = new Date().toISOString();
-  const zipFilName = `${test?.name?.replaceAll(
-    " ",
-    "_"
-  )}_${group}_${dateISO.substring(0, dateISO.indexOf("."))}.zip`;
-
   try {
+    const pdfList = req.body;
+    const testId = req.params.testId;
+    const group = req.params.group;
+    const testRecord = await testDB.getTest(testId);
+    const test = JSON.parse(testRecord[0].data);
+
+    const dateISO = new Date().toISOString();
+    const zipFilName = `${test?.name?.replaceAll(
+      " ",
+      "_"
+    )}_${group}_${dateISO.substring(0, dateISO.indexOf("."))}.zip`;
+
     const archive = archiver("zip", { zlib: { level: 9 } });
     res.attachment(zipFilName);
     archive.pipe(res);
