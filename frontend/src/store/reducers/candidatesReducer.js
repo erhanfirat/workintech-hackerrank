@@ -104,6 +104,12 @@ export const fetchAllCandidatesOfTestAction =
       type: candidateActions.setCandidatesOfTestFetchState,
       payload: { testId, fetchState: FETCH_STATES.FETCHING },
     });
+    // As a result of the HR service there has no static order for candidates
+    // So before each fetching it should start from the very beggining
+    dispatch({
+      type: candidateActions.setCandidatesOfTest,
+      payload: { testId, candidates: [] },
+    });
 
     fetchTestCandidates(dispatch, getState, testId);
   };
