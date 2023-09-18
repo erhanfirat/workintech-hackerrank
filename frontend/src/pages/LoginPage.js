@@ -52,16 +52,41 @@ export const LoginPage = () => {
         <Form
           onSubmit={handleSubmit(handleLogin)}
           className="border px-3 py-5 shadow login-form rounded"
+          noValidate="noValidate"
         >
           <FormGroup>
             <Label>Email</Label>
-            <FormInput type="email" name="email" register={register} />
-            <FormFeedback>{errors.email}</FormFeedback>
+            <FormInput
+              type="email"
+              name="email"
+              register={register}
+              validation={{
+                required: "Email bilgisini giriniz.",
+                pattern: {
+                  value: /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                  message: "Lütfen geçerli bir Email adresi giriniz.",
+                },
+              }}
+              invalid={!!errors.email?.message}
+            />
+            <FormFeedback>{errors.email?.message}</FormFeedback>
           </FormGroup>
           <FormGroup>
             <Label>Şifre</Label>
-            <FormInput type="password" name="password" register={register} />
-            <FormFeedback>{errors.password}</FormFeedback>
+            <FormInput
+              type="password"
+              name="password"
+              register={register}
+              validation={{
+                required: "Şifre bilgisini giriniz.",
+                minLength: {
+                  value: 6,
+                  message: "En az 6 karakter girmeniz gerekmektedir.",
+                },
+              }}
+              invalid={!!errors.password?.message}
+            />
+            <FormFeedback>{errors.password?.message}</FormFeedback>
           </FormGroup>
           <SpinnerButton
             loading={userFetchState === FETCH_STATES.FETCHING}
