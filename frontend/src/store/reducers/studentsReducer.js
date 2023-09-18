@@ -1,5 +1,7 @@
 // CONSTANT DEFINITIONS *********************
 
+import { doSRRequest } from "../../api/api";
+import { srEndpoints } from "../../api/srEndpoints";
 import { FETCH_STATES } from "../../utils/constants";
 
 export const studentActions = Object.freeze({
@@ -74,4 +76,57 @@ export const studentsReducer = (state = initialStudents, action) => {
     default:
       return state;
   }
+};
+
+export const getAllGroupsActionCreator = () => (dispatch) => {
+  dispatch({
+    type: studentActions.setGroupsFetchState,
+    payload: FETCH_STATES.FETCHING,
+  });
+
+  doSRRequest(srEndpoints.getAllGroups())
+    .then((groupsFethced) => {
+      console.log("groupsFethced: ", groupsFethced);
+      dispatch({
+        type: studentActions.setGroups,
+        payload: groupsFethced,
+      });
+      dispatch({
+        type: studentActions.setGroupsFetchState,
+        payload: FETCH_STATES.FETHCED,
+      });
+      dispatch(getAllStudentsActionCreator());
+    })
+    .catch((err) => {
+      dispatch({
+        type: studentActions.setGroupsFetchState,
+        payload: FETCH_STATES.FAILED,
+      });
+    });
+};
+
+export const getAllStudentsActionCreator = () => (dispatch) => {
+  dispatch({
+    type: studentActions.setStudentsFetchState,
+    payload: FETCH_STATES.FETCHING,
+  });
+
+  doSRRequest(srEndpoints.getAllStudents())
+    .then((studentsFethced) => {
+      console.log("studentsFethced: ", studentsFethced);
+      dispatch({
+        type: studentActions.setStudents,
+        payload: studentsFethced,
+      });
+      dispatch({
+        type: studentActions.setStudentsFetchState,
+        payload: FETCH_STATES.FETHCED,
+      });
+    })
+    .catch((err) => {
+      dispatch({
+        type: studentActions.setStudentsFetchState,
+        payload: FETCH_STATES.FAILED,
+      });
+    });
 };
