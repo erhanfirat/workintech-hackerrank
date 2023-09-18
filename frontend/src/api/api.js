@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import { STORE_TOKEN } from "../utils/constants";
 
 export const REQ_TYPES = {
@@ -56,7 +56,7 @@ export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
     })
     .catch((err) => {
       toast.error(
-        `SERVER/${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+        `${process.env.REACT_APP_SERVER_URL}${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
       );
       throw err;
     });
