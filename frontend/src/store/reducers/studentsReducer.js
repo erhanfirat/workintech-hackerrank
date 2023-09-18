@@ -12,7 +12,10 @@ export const studentActions = Object.freeze({
 });
 
 const initialStudents = {
-  groups: {
+  groups: [
+    // all groups
+  ],
+  students: {
     // fsweb0323: {
     //   name: "Fsweb 0323 - Mart",
     //   students: [
@@ -34,9 +37,6 @@ const initialStudents = {
     //   ],
     // },
   },
-  students: [
-    // all students also listed here!
-  ],
   groupsFetchState: FETCH_STATES.NOT_STARTED,
   studentsFetchState: FETCH_STATES.NOT_STARTED,
 };
@@ -54,7 +54,7 @@ export const studentsReducer = (state = initialStudents, action) => {
     case studentActions.setStudents:
       const newState = { ...state };
       action.payload.forEach((student) => {
-        newState.groups[student.group].push(student);
+        newState.students[student.group].push(student);
       });
       return {
         ...newState,
