@@ -228,6 +228,17 @@ app.get("/group", async (req, res) => {
   }
 });
 
+app.get("/student", async (req, res) => {
+  try {
+    // const students = await studentDB.getAllGroups();
+
+    res.status(201).json([]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
 // JOURNEY: Login ****************************************
 
 app.post("/login", async (req, res) => {
