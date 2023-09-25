@@ -7,6 +7,7 @@ import { FETCH_STATES } from "../../utils/constants";
 export const studentActions = Object.freeze({
   setGroups: "SET_ALL_GROUPS",
   setStudents: "SET_STUDENTS",
+  updateStudent: "UPDATE_STUDENT",
   setGroupsFetchState: "SET_GROUPS_FETCH_STATE",
   setStudentsFetchState: "SET_STUDENTS_FETCH_STATE",
 });
@@ -75,6 +76,19 @@ export const studentsReducer = (state = initialStudents, action) => {
         studentsFetchState: action.payload,
       };
 
+    case studentActions.updateStudent:
+      const student = action.payload;
+      return {
+        ...state,
+        students: {
+          ...state.students,
+          [student.group]: [
+            ...state.students[student.group].filter((s) => s.id !== student.id),
+            student,
+          ],
+        },
+      };
+
     default:
       return state;
   }
@@ -138,3 +152,8 @@ export const fetchGroupsAndStudents = () => (dispatch) => {
     dispatch(getAllStudentsActionCreator());
   });
 };
+
+export const updateStudentAction = (student) => ({
+  type: studentActions.updateStudent,
+  payload: student,
+});
