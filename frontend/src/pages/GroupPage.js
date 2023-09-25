@@ -14,12 +14,15 @@ import {
   TabContent,
   TabPane,
 } from "reactstrap";
+import SpinnerButton from "../components/atoms/SpinnerButton";
 import { utils, writeFile } from "xlsx";
 import { FETCH_STATES } from "../utils/constants";
 import {
   getAllGroupsActionCreator,
-  getAllStudentsActionCreator,
+  updateStudentAction,
 } from "../store/reducers/studentsReducer";
+import { doSRRequest } from "../api/api";
+import { srEndpoints } from "../api/srEndpoints";
 
 const fields = {
   name: "full_name",
@@ -41,6 +44,7 @@ const GroupPage = () => {
   const [ascState, setAscState] = useState("asc");
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("students");
+  const [hrEmails, setHrEmails] = useState([]);
 
   const dispatch = useDispatch();
 
@@ -71,6 +75,69 @@ const GroupPage = () => {
     setActiveTab(tabId);
   };
 
+  const studentHREmailChange = (student, e) => {
+    setHrEmails({
+      ...hrEmails,
+      [student.id]: {
+        ...hrEmails[student.id],
+        hrEmail: e.target.value,
+      },
+    });
+  };
+
+  const saveHrEmail = (student) => {
+    // save hr email
+    setHrEmails({
+      ...hrEmails,
+      [student.id]: {
+        ...hrEmails[student.id],
+        loading: true,
+      },
+    });
+    doSRRequest(
+      srEndpoints.setStudentHREmail({
+        student: student.id,
+        email: hrEmails[student.id].hrEmail,
+      })
+    )
+      .then((res) => {
+        setHrEmails({
+          ...hrEmails,
+          [student.id]: {
+            ...hrEmails[student.id],
+            editMode: false,
+          },
+        });
+        dispatch(
+          updateStudentAction({
+            ...student,
+            hrEmail: hrEmails[student.id].hrEmail,
+          })
+        );
+      })
+      .finally(() => {
+        setHrEmails({
+          ...hrEmails,
+          [student.id]: {
+            ...hrEmails[student.id],
+            loading: false,
+          },
+        });
+      });
+  };
+
+  const cancelEditMode = (student) => {
+    setHrEmails({
+      ...hrEmails,
+      [student.id]: {
+        student: student.id,
+        hrEmail: student.hrEmail,
+        editMode: false,
+        loading: false,
+      },
+    });
+  };
+
   const downloadCSV = () => {
     // CREATE WORKBOOK
     const wb = utils.book_new();
@@ -91,6 +158,24 @@ const GroupPage = () => {
       }
     }
   }, [groupName]);
+
+  useEffect(() => {
+    setHrEmails(() => {
+      const hrStudents = {};
+      students?.forEach((s) => {
+        const hrStudent = hrEmails[s.id]
+          ? hrEmails[s.id]
+          : {
+              student: s.id,
+              hrEmail: s.hrEmail,
+              editMode: false,
+              loading: false,
+            };
+        hrStudents[s.id] = hrStudent;
+      });
+      return hrStudents;
+    });
+  }, [students]);
 
   useEffect(() => {
     setSortByState(sortBy || "name");
@@ -132,18 +217,52 @@ const GroupPage = () => {
         <TabPane tabId="students">
           <Container fluid>
             <Row className="pb-1 mb-2">
-              <Col sm="3">İsim</Col>
-              <Col sm="3">Eposta</Col>
-              <Col sm="3">HR Eposta</Col>
-              <Col sm="3"></Col>
+              <Col sm="4">İsim</Col>
+              <Col sm="4">Eposta</Col>
+              <Col sm="4">HR Eposta</Col>
             </Row>
             {studentsToList()?.map((student) => (
               <Row className="border-top py-1 grid-row">
-                <Col sm="3">{student.name}</Col>
-                <Col sm="3">{student.email}</Col>
-                <Col sm="3">{student.hrEmail}</Col>
-                <Col sm="3" className="text-right">
-                  <Button> HR Eposta</Button>
+                <Col sm="4">{student.name}</Col>
+                <Col sm="4">{student.email}</Col>
+                <Col sm="4">
+                  <div className="d-flex justify-content-between">
+                    {!hrEmails[student.id]?.editMode ? (
+                      <>
+                        <span>{student.hrEmail}</span>
+                        <SpinnerButton
+                          iconClass="fa-solid fa-pen-to-square"
+                          onClick={() =>
+                            setHrEmails({
+                              ...hrEmails,
+                              [student.id]: {
+                                ...hrEmails[student.id],
+                                editMode: true,
+                              },
+                            })
+                          }
+                        ></SpinnerButton>
+                      </>
+                    ) : (
+                      <>
+                        <Input
+                          type="email"
+                          value={hrEmails[student.id].hrEmail}
+                          onChange={(e) => studentHREmailChange(student, e)}
+                        />
+                        <SpinnerButton
+                          iconClass="fa-solid fa-floppy-disk"
+                          onClick={() => saveHrEmail(student)}
+                          loading={hrEmails[student.id].loading}
+                        ></SpinnerButton>
+                        <SpinnerButton
+                          iconClass="fa-solid fa-xmark"
+                          color="danger"
+                          onClick={() => cancelEditMode(student)}
+                        ></SpinnerButton>
+                      </>
+                    )}
+                  </div>
                 </Col>
               </Row>
             ))}
