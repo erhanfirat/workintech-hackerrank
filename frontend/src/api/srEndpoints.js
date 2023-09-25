@@ -89,4 +89,9 @@ export const srEndpoints = {
     reqType: REQ_TYPES.GET,
     endpoint: "student",
   }),
+
+  fetchAllGroupsAndStudents: () => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "fetch-groups-and-users",
+  }),
 };

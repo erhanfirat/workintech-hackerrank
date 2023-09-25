@@ -130,3 +130,9 @@ export const getAllStudentsActionCreator = () => (dispatch) => {
       });
     });
 };
+
+export const fetchGroupsAndStudents = () => {
+  doSRRequest(srEndpoints.fetchAllGroupsAndStudents()).then((res) => {
+    console.log("fetchGroupsAndStudents res > ", res);
+  });
+};
