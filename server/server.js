@@ -8,6 +8,7 @@ const questionDB = require("./db/questionDB");
 const groupDB = require("./db/groupDB");
 const axios = require("axios");
 const archiver = require("archiver");
+const journeyAPI = "https://api.journeyapp.com/api";
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -272,6 +273,23 @@ app.get("/verify/me", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "An error occurred", err });
   }
+});
+
+app.post("/fetch-groups-and-users", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const adminLoginRes = await axios.post(`${journeyAPI}/auth/login`, {
+      email: "admin@workintech.com.tr",
+      password: "GQ1qfFAKpInI6UoOKWB**@",
+    });
+    const authorization = `Bearer ${adminLoginRes.token}`;
+
+    const groupsRes = await axios.get(
+      `${journeyAPI}/usergroup/datatables?per_page=100`
+    );
+
+    console.log(groupsRes);
+  } catch (err) {}
 });
 
 // APP STARTS ON 3001
