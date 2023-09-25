@@ -16,7 +16,6 @@ import {
 } from "reactstrap";
 import { getAllTestsAction } from "../store/reducers/testsReducer";
 import { getAllCandidatesOfTestAction } from "../store/reducers/candidatesReducer";
-import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions";
@@ -37,6 +36,7 @@ const GroupPage = () => {
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
   );
+  const { groups, students } = useSelector((s) => s.students);
   const { candidates, fetchStates } = useSelector((state) => state.candidates);
 
   const [testCandidates, setTestCandidates] = useState([]);
@@ -86,7 +86,7 @@ const GroupPage = () => {
 
     return {
       test: test?.name,
-      group: studentGroups.find((g) => g.value === selectedGroup).name,
+      group: groups.find((g) => g.name === selectedGroup).name,
       candidateCount: candidatesToList()?.length,
       candidateRate:
         (candidatesToList()?.length / students[selectedGroup].length) * 100,
@@ -208,9 +208,9 @@ const GroupPage = () => {
             defaultValue={"all"}
             onChange={(e) => setSelectedGroup(e.target.value)}
           >
-            {studentGroups.map((group) => (
-              <option value={group.value} key={group.value}>
-                {group.name}
+            {groups.map((group) => (
+              <option value={group.name} key={group.name}>
+                {group.title}
               </option>
             ))}
           </Input>
