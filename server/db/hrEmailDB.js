@@ -2,7 +2,7 @@ const knex = require("./knex");
 
 const getAllHrEmails = () => knex("hr_email").select("*");
 
-const getHrEmailsById = (studentId) =>
+const getHrEmailsByStudentId = (studentId) =>
   knex("hr_email").select().where("student", studentId);
 
 const upsertHrEmail = (hrEmail) => {
@@ -17,7 +17,7 @@ const deleteHrEmail = (studentId) =>
 
 module.exports = {
   upsertHrEmail,
-  getHrEmailsById,
+  getHrEmailsByStudentId,
   getAllHrEmails,
   deleteHrEmail,
 };
