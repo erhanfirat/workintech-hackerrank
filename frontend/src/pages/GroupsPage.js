@@ -14,7 +14,7 @@ const GroupsPage = () => {
     useSelector((state) => state.students);
 
   const navigateToGroup = (group) => {
-    history.push(`/groups/${group.id}`);
+    history.push(`/groups/${group.name.toLowerCase()}`);
   };
 
   useEffect(() => {
@@ -46,10 +46,10 @@ const GroupsPage = () => {
         </Row>
         {groups.map((group) => (
           <Row className="border-top p-1 grid-row">
-            <Col sm="5">{group.name}</Col>
-            <Col sm="2">{group.value}</Col>
-            <Col sm="2"></Col>
-            <Col sm="2">{students[group.value]?.length}</Col>
+            <Col sm="5">{group.title}</Col>
+            <Col sm="2">{group.name}</Col>
+            <Col sm="2">{group.activeSprint}</Col>
+            <Col sm="2">{students[group.id]?.length}</Col>
             <Col sm="1">
               <Button size="sm" onClick={() => navigateToGroup(group)}>
                 Open
