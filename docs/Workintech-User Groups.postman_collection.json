@@ -1,0 +1,806 @@
+{
+	"info": {
+		"_postman_id": "58d2078b-8441-4046-8bc2-e4274e21ebed",
+		"name": "Workintech-User Groups",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6424696"
+	},
+	"item": [
+		{
+			"name": "Get Admin Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"token\",jsonData.token);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "admin@workintech.com.tr",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "GQ1qfFAKpInI6UoOKWB**@",
+							"description": "Journey4963 Journey3013",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/auth/login",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"auth",
+						"login"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "admin@workintech.com.tr",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "GQ1qfFAKpInI6UoOKWB**@",
+									"description": "Journey4963 Journey3013",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/api/auth/login",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 22 Sep 2023 16:16:23 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=63072000; includeSubdomains;"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "300"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "299"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "allow-from *.microsoft.com"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "frame-ancestors 'self' *.microsoft.com"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1;mode=block"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "journey_session=v9mnOUA3xVAQDXz0DJqCGAPgwxTPxHXf4GSnnB0N; expires=Fri, 22-Sep-2023 18:16:23 GMT; Max-Age=7200; path=/; secure; httponly"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"user_id\": 160017,\n    \"token\": \"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC81Mi4yMy4xMzYuMjVcL2FwaVwvYXV0aFwvbG9naW4iLCJpYXQiOjE2OTUzOTkzODMsImV4cCI6MTY5NTQxMDE4MywibmJmIjoxNjk1Mzk5MzgzLCJqdGkiOiI1d05nbHE4dkxMVjFtblU5Iiwic3ViIjoxNjAwMTd9.OO6FoNTiWS7TwEPJ85AK4TSqDhqJvN2krxFElSnojq8\",\n    \"expires\": 10800\n}"
+				}
+			]
+		},
+		{
+			"name": "User Group Datatable",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "BEARER {{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Group",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "customer_id",
+							"value": "2",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "search[value]",
+							"value": "",
+							"type": "text",
+							"disabled": true
+						},
+						{
+							"key": "length",
+							"value": "100",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/usergroup/datatables?customer_id=369&per_page=100",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"usergroup",
+						"datatables"
+					],
+					"query": [
+						{
+							"key": "customer_id",
+							"value": "369"
+						},
+						{
+							"key": "search",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "per_page",
+							"value": "100"
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "first_name",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "BEARER {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Group",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "customer_id",
+									"value": "2",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "search[value]",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "length",
+									"value": "100",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/api/usergroup/datatables?customer_id=369&per_page=100",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"api",
+								"usergroup",
+								"datatables"
+							],
+							"query": [
+								{
+									"key": "customer_id",
+									"value": "369"
+								},
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "100"
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "first_name",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 22 Sep 2023 16:06:59 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=63072000; includeSubdomains;"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "300"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "299"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "allow-from *.microsoft.com"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "frame-ancestors 'self' *.microsoft.com"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1;mode=block"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "journey_session=6VwpG1N21Vu7z9k9htz3tQuOJk6Joanlz7h8BTZ4; expires=Fri, 22-Sep-2023 18:06:59 GMT; Max-Age=7200; path=/; secure; httponly"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 6747,\n            \"name\": \"FSWEB0923\",\n            \"for_dropdown\": 0,\n            \"user_count\": 41\n        },\n        {\n            \"id\": 6734,\n            \"name\": \"FSWEBP0923\",\n            \"for_dropdown\": 0,\n            \"user_count\": 89\n        },\n        {\n            \"id\": 6635,\n            \"name\": \"FSWEB0823\",\n            \"for_dropdown\": 0,\n            \"user_count\": 20\n        },\n        {\n            \"id\": 6600,\n            \"name\": \"FSWEBP0823\",\n            \"for_dropdown\": 0,\n            \"user_count\": 8\n        },\n        {\n            \"id\": 6410,\n            \"name\": \"challange 4\",\n            \"for_dropdown\": 0,\n            \"user_count\": 18\n        },\n        {\n            \"id\": 6356,\n            \"name\": \"FSWEB0723\",\n            \"for_dropdown\": 0,\n            \"user_count\": 18\n        },\n        {\n            \"id\": 6309,\n            \"name\": \"FSWEBP0723\",\n            \"for_dropdown\": 0,\n            \"user_count\": 9\n        },\n        {\n            \"id\": 6232,\n            \"name\": \" FSWEB0623 \",\n            \"for_dropdown\": 0,\n            \"user_count\": 14\n        },\n        {\n            \"id\": 6192,\n            \"name\": \"Challenge H\",\n            \"for_dropdown\": 0,\n            \"user_count\": 10\n        },\n        {\n            \"id\": 6109,\n            \"name\": \"FSWEBP0523\",\n            \"for_dropdown\": 0,\n            \"user_count\": 9\n        },\n        {\n            \"id\": 6107,\n            \"name\": \"FSWEB0523\",\n            \"for_dropdown\": 0,\n            \"user_count\": 17\n        },\n        {\n            \"id\": 6094,\n            \"name\": \"Challenge3\",\n            \"for_dropdown\": 0,\n            \"user_count\": 17\n        },\n        {\n            \"id\": 6070,\n            \"name\": \"Challenge-part\",\n            \"for_dropdown\": 0,\n            \"user_count\": 8\n        },\n        {\n            \"id\": 6015,\n            \"name\": \"LXP Test 2\",\n            \"for_dropdown\": 0,\n            \"user_count\": 0\n        },\n        {\n            \"id\": 6014,\n            \"name\": \"LXP Test 1 \",\n            \"for_dropdown\": 0,\n            \"user_count\": 0\n        },\n        {\n            \"id\": 6012,\n            \"name\": \"FSWEB0423\",\n            \"for_dropdown\": 0,\n            \"user_count\": 22\n        },\n        {\n            \"id\": 5955,\n            \"name\": \"challenge2\",\n            \"for_dropdown\": 0,\n            \"user_count\": 35\n        },\n        {\n            \"id\": 5954,\n            \"name\": \"FSWEBP0423\",\n            \"for_dropdown\": 0,\n            \"user_count\": 12\n        },\n        {\n            \"id\": 5883,\n            \"name\": \"Fsweb0423-prework\",\n            \"for_dropdown\": 0,\n            \"user_count\": 2\n        },\n        {\n            \"id\": 5878,\n            \"name\": \"FsWeb-0323\",\n            \"for_dropdown\": 0,\n            \"user_count\": 30\n        },\n        {\n            \"id\": 5821,\n            \"name\": \"assigmentfull\",\n            \"for_dropdown\": 0,\n            \"user_count\": 212\n        },\n        {\n            \"id\": 5783,\n            \"name\": \"Full time assigment\",\n            \"for_dropdown\": 0,\n            \"user_count\": 55\n        },\n        {\n            \"id\": 5782,\n            \"name\": \"Fulltime assigment\",\n            \"for_dropdown\": 0,\n            \"user_count\": 0\n        },\n        {\n            \"id\": 5741,\n            \"name\": \"fsweb0323-prework\",\n            \"for_dropdown\": 0,\n            \"user_count\": 18\n        },\n        {\n            \"id\": 5731,\n            \"name\": \"fsweb0223\",\n            \"for_dropdown\": 0,\n            \"user_count\": 26\n        },\n        {\n            \"id\": 5706,\n            \"name\": \"Challenge Test\",\n            \"for_dropdown\": 0,\n            \"user_count\": 4\n        },\n        {\n            \"id\": 5674,\n            \"name\": \"Fsweb0233-prework\",\n            \"for_dropdown\": 0,\n            \"user_count\": 0\n        },\n        {\n            \"id\": 5607,\n            \"name\": \"Fsweb0223-prework\",\n            \"for_dropdown\": 0,\n            \"user_count\": 13\n        },\n        {\n            \"id\": 5542,\n            \"name\": \"FSWeb-0123\",\n            \"for_dropdown\": 0,\n            \"user_count\": 16\n        },\n        {\n            \"id\": 5271,\n            \"name\": \"PreWork- Ocak\",\n            \"for_dropdown\": 0,\n            \"user_count\": 10\n        },\n        {\n            \"id\": 5230,\n            \"name\": \"FSWeb-1222\",\n            \"for_dropdown\": 0,\n            \"user_count\": 18\n        },\n        {\n            \"id\": 5219,\n            \"name\": \"Pre-course ARALIK\",\n            \"for_dropdown\": 0,\n            \"user_count\": 2\n        },\n        {\n            \"id\": 5146,\n            \"name\": \"FSWeb-1122\",\n            \"for_dropdown\": 0,\n            \"user_count\": 20\n        },\n        {\n            \"id\": 5105,\n            \"name\": \"Grup 2\",\n            \"for_dropdown\": 0,\n            \"user_count\": 1\n        },\n        {\n            \"id\": 5104,\n            \"name\": \"Admin Grubu\",\n            \"for_dropdown\": 0,\n            \"user_count\": 1\n        },\n        {\n            \"id\": 5103,\n            \"name\": \"Oryantasyon Kasım 23\",\n            \"for_dropdown\": 0,\n            \"user_count\": 1\n        },\n        {\n            \"id\": 5102,\n            \"name\": \"Oryantasyon Kasım 22\",\n            \"for_dropdown\": 0,\n            \"user_count\": 4\n        },\n        {\n            \"id\": 5024,\n            \"name\": \"Eğitmenler\",\n            \"for_dropdown\": 0,\n            \"user_count\": 4\n        },\n        {\n            \"id\": 4970,\n            \"name\": \"FSWeb-1022\",\n            \"for_dropdown\": 0,\n            \"user_count\": 10\n        },\n        {\n            \"id\": 4959,\n            \"name\": \"sprint test\",\n            \"for_dropdown\": 0,\n            \"user_count\": 4\n        }\n    ],\n    \"links\": {\n        \"first\": \"http://52.23.136.25/api/usergroup/datatables?page=1\",\n        \"last\": \"http://52.23.136.25/api/usergroup/datatables?page=1\",\n        \"prev\": null,\n        \"next\": null\n    },\n    \"meta\": {\n        \"current_page\": 1,\n        \"from\": 1,\n        \"last_page\": 1,\n        \"path\": \"http://52.23.136.25/api/usergroup/datatables\",\n        \"per_page\": 100,\n        \"to\": 40,\n        \"total\": 40\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Journeys of  a User Group",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "BEARER {{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/usergroup/journey/9",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"usergroup",
+						"journey",
+						"9"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "onboarding",
+							"disabled": true
+						},
+						{
+							"key": "per_page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "first_name",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "BEARER {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/api/usergroup/journey/{{group_id}}",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"api",
+								"usergroup",
+								"journey",
+								"{{group_id}}"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "onboarding",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "first_name",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 22 Sep 2023 16:09:07 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=63072000; includeSubdomains;"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "300"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "298"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "allow-from *.microsoft.com"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "frame-ancestors 'self' *.microsoft.com"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1;mode=block"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "journey_session=V0iY3qnyP0PQ1aewJMytCVvG5SXnOmiuKCIESHH2; expires=Fri, 22-Sep-2023 18:09:07 GMT; Max-Age=7200; path=/; secure; httponly"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"current_page\": 1,\n    \"data\": [\n        {\n            \"id\": 36045,\n            \"name\": \"Workintech Sprint 1\",\n            \"desc\": null,\n            \"activation_date\": \"2023-09-14T08:00:00.000000Z\",\n            \"is_active\": 1,\n            \"lang\": \"tr\",\n            \"is_list_on_the_catalog_enabled\": 0,\n            \"friendly_name\": \"\",\n            \"is_welcome_notifications_enabled\": 0,\n            \"push_notification_title\": \"Merhaba {NAME},\",\n            \"push_notification_body\": \"Workintech Sprint 1 yolculuğuna hoş geldin. Keyifli yolculuklar.\",\n            \"is_public\": 0,\n            \"deadline\": null,\n            \"duplicated_journey_id\": 31330,\n            \"is_self_paced\": 0,\n            \"options\": null,\n            \"journey_type\": 0,\n            \"hide_from_lxp\": 1,\n            \"thumbnail_image\": \"https://cdn.journeyapp.com/contents/y7oCEyQVHRqY2fAERu1Q5ojnVddvojANI1W7MrDJ5heHrqSwfH2ceCsCoBVqPDKt_1694755059.jpg\",\n            \"mobile_device_penetration\": {\n                \"number_of_mobile_device_registered_users\": 0,\n                \"number_of_total_users\": 37,\n                \"mobile_device_penetration_ratio\": 0\n            },\n            \"template_thumbnail_image\": \"https://cdn.journeyapp.com/contents/YQ0e4oaUcc6h2nkPqgSvXYKHCRUv9Q1zosrt9ColzM4q0xWbtEYRJnjDZt2Pwl9z_1694755059.jpg\",\n            \"journey_item_count\": 42,\n            \"total_content_count\": 42,\n            \"customer_id\": 369,\n            \"users_count\": 37,\n            \"journey_type_text\": \"STANDARD\"\n        },\n        {\n            \"id\": 36044,\n            \"name\": \"Workintech Oryantasyon\",\n            \"desc\": null,\n            \"activation_date\": \"2023-09-15T08:00:00.000000Z\",\n            \"is_active\": 1,\n            \"lang\": \"tr\",\n            \"is_list_on_the_catalog_enabled\": 0,\n            \"friendly_name\": \"\",\n            \"is_welcome_notifications_enabled\": 0,\n            \"push_notification_title\": \"Merhaba {NAME},\",\n            \"push_notification_body\": \"Workintech Oryantasyon yolculuğuna hoş geldin. Keyifli yolculuklar.\",\n            \"is_public\": 0,\n            \"deadline\": null,\n            \"duplicated_journey_id\": 32185,\n            \"is_self_paced\": 0,\n            \"options\": null,\n            \"journey_type\": 0,\n            \"hide_from_lxp\": 1,\n            \"thumbnail_image\": \"https://cdn.journeyapp.com/contents/V2hQDqqz5KRJRPvayAIrzdQ93ufswqwXGxRgnXCnJuJeFSJV6dmd5D2C0EEXLo8Z_1694754434.jpg\",\n            \"mobile_device_penetration\": {\n                \"number_of_mobile_device_registered_users\": 0,\n                \"number_of_total_users\": 36,\n                \"mobile_device_penetration_ratio\": 0\n            },\n            \"template_thumbnail_image\": \"https://cdn.journeyapp.com/contents/2R2vBAE8Vh0JNgfeHEhFBgpGRISNClGuiNW8WRHcfYrmKGTkV9256exNhqEeHBU0_1694754434.jpg\",\n            \"journey_item_count\": 15,\n            \"total_content_count\": 15,\n            \"customer_id\": 369,\n            \"users_count\": 36,\n            \"journey_type_text\": \"STANDARD\"\n        }\n    ],\n    \"first_page_url\": \"http://52.23.136.25/api/usergroup/journey/6747?page=1\",\n    \"from\": 1,\n    \"last_page\": 1,\n    \"last_page_url\": \"http://52.23.136.25/api/usergroup/journey/6747?page=1\",\n    \"next_page_url\": null,\n    \"path\": \"http://52.23.136.25/api/usergroup/journey/6747\",\n    \"per_page\": 10,\n    \"prev_page_url\": null,\n    \"to\": 2,\n    \"total\": 2\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Users of a User Group",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "BEARER {{token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{API_ADDRESS}}/api/usergroup/user/datatables/1",
+					"host": [
+						"{{API_ADDRESS}}"
+					],
+					"path": [
+						"api",
+						"usergroup",
+						"user",
+						"datatables",
+						"1"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "per_page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "order",
+							"value": "desc",
+							"disabled": true
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "sort",
+							"value": "first_name",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "BEARER {{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{API_ADDRESS}}/api/usergroup/user/datatables/{{group_id}}",
+							"host": [
+								"{{API_ADDRESS}}"
+							],
+							"path": [
+								"api",
+								"usergroup",
+								"user",
+								"datatables",
+								"{{group_id}}"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "per_page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "order",
+									"value": "desc",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "first_name",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Fri, 22 Sep 2023 16:09:54 GMT"
+						},
+						{
+							"key": "Server",
+							"value": "Apache"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=63072000; includeSubdomains;"
+						},
+						{
+							"key": "Vary",
+							"value": "Authorization"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "X-RateLimit-Limit",
+							"value": "300"
+						},
+						{
+							"key": "X-RateLimit-Remaining",
+							"value": "299"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "allow-from *.microsoft.com"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "frame-ancestors 'self' *.microsoft.com"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "1;mode=block"
+						},
+						{
+							"key": "Set-Cookie",
+							"value": "journey_session=2LiB4VRWTE7uOAjrYi6bTiynU6E4UQF1vHStZYjA; expires=Fri, 22-Sep-2023 18:09:54 GMT; Max-Age=7200; path=/; secure; httponly"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5, max=100"
+						},
+						{
+							"key": "Connection",
+							"value": "Keep-Alive"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 159161,\n            \"name\": \"Ahmet Semih  Turan\",\n            \"email\": \"bordosemih34@gmail.com\"\n        },\n        {\n            \"id\": 159160,\n            \"name\": \"Ali Berk Çetin\",\n            \"email\": \"aliberkcetin17@gmail.com\"\n        },\n        {\n            \"id\": 159154,\n            \"name\": \"Mehmet Emre Bora\",\n            \"email\": \"mehmetemrebora@gmail.com\"\n        },\n        {\n            \"id\": 159137,\n            \"name\": \"Şevval Yurtseven\",\n            \"email\": \"aysesevvalyurtseven@hotmail.com\"\n        },\n        {\n            \"id\": 158981,\n            \"name\": \"Mehmet Can Tiryakioğlu\",\n            \"email\": \"info@cantiryakioglu.com.tr\"\n        },\n        {\n            \"id\": 158955,\n            \"name\": \"Yusuf Can\",\n            \"email\": \"ycangoktas@icloud.com\"\n        },\n        {\n            \"id\": 158954,\n            \"name\": \"Suat Çelik\",\n            \"email\": \"sc.suatcelik@gmail.com\"\n        },\n        {\n            \"id\": 158953,\n            \"name\": \"Samet Öztürk\",\n            \"email\": \"sametozturk973@gmail.com\"\n        },\n        {\n            \"id\": 158952,\n            \"name\": \"Özgenur Doğru\",\n            \"email\": \"ozgenurkarademir@gmail.com\"\n        },\n        {\n            \"id\": 158951,\n            \"name\": \"Özge Melike\",\n            \"email\": \"oaydemir18@ku.edu.tr\"\n        }\n    ],\n    \"links\": {\n        \"first\": \"http://52.23.136.25/api/usergroup/user/datatables/6747?page=1\",\n        \"last\": \"http://52.23.136.25/api/usergroup/user/datatables/6747?page=5\",\n        \"prev\": null,\n        \"next\": \"http://52.23.136.25/api/usergroup/user/datatables/6747?page=2\"\n    },\n    \"meta\": {\n        \"current_page\": 1,\n        \"from\": 1,\n        \"last_page\": 5,\n        \"path\": \"http://52.23.136.25/api/usergroup/user/datatables/6747\",\n        \"per_page\": 10,\n        \"to\": 10,\n        \"total\": 41\n    }\n}"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "group_id",
+			"value": "6747",
+			"type": "string"
+		}
+	]
+}
