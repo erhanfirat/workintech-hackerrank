@@ -6,13 +6,7 @@ const getGroupsById = (id) => knex("group").select().where("id", id);
 
 const upsertGroup = (group) => {
   return knex.transaction(
-    async (trx) =>
-      await trx("group")
-        .insert({
-          group,
-        })
-        .onConflict("id")
-        .merge()
+    async (trx) => await trx("group").insert(group).onConflict("id").merge()
   );
 };
 
