@@ -1,6 +1,9 @@
 const knex = require("./knex");
 
-const getAllStudents = () => knex("student").select("*");
+const getAllStudents = () =>
+  knex("student")
+    .select("student.*", "hr_email.email as hrEmail")
+    .leftJoin("hr_email", "student.id", "hr_email.student");
 
 const getStudentsById = (id) => knex("student").select().where("id", id);
 
