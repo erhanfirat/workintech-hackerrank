@@ -5,6 +5,7 @@ import TestPage from "../pages/TestPage";
 import GroupsPage from "../pages/GroupsPage";
 import { LoginPage } from "../pages/LoginPage";
 import ProtectedPage from "../pages/ProtectedPage";
+import GroupPage from "../pages/GroupPage";
 
 const PageBody = () => {
   return (
@@ -25,12 +26,15 @@ const PageBody = () => {
         <Route path="/groups" exact>
           <ProtectedPage PageComponent={GroupsPage} />
         </Route>
+        <Route path="/groups/:groupName" exact>
+          <ProtectedPage PageComponent={GroupPage} />
+        </Route>
         <Route path="/groups/:groupCode/:sortBy?/:asc?" exact>
           <ProtectedPage PageComponent={GroupsPage} />
         </Route>
         <Route path="*">
           <div style={{ color: "red" }}>
-            <h1>404 - Aradığınız sayfa bulunamadı!</h1>
+            <h1>404 - 4 Kahve 0 Süt 4 Şeker</h1>
           </div>
         </Route>
       </Switch>
