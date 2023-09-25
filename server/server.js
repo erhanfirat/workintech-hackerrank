@@ -245,10 +245,15 @@ app.get("/student", async (req, res) => {
 
 app.post("/set-student-hr-email", async (req, res) => {
   try {
-    const student = req.body;
-    const res = await hrEmailDB.upsertHrEmail(student);
+    const hrStudent = req.body;
+    console.log("hrStudent >", hrStudent);
+    if (hrStudent.email) {
+      const upsertRes = await hrEmailDB.upsertHrEmail(hrStudent);
+    } else {
+      const deleteRes = await hrEmailDB.deleteHrEmail(hrStudent.student);
+    }
 
-    res.status(201).json(res);
+    res.status(201).json(true);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred", error });
