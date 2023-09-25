@@ -94,4 +94,10 @@ export const srEndpoints = {
     reqType: REQ_TYPES.POST,
     endpoint: "fetch-groups-and-users",
   }),
+
+  setStudentHREmail: (studentHr) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "set-student-hr-email",
+    payload: studentHr,
+  }),
 };
