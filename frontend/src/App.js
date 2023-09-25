@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import { verifyUserAction } from "./store/reducers/userReducer";
-import { getAllGroupsActionCreator } from "./store/reducers/studentsReducer";
+import {
+  fetchGroupsAndStudents,
+  getAllGroupsActionCreator,
+} from "./store/reducers/studentsReducer";
 import Main from "./layout/Main";
 import { FETCH_STATES } from "./utils/constants";
 
@@ -15,6 +18,7 @@ function App() {
 
   useEffect(() => {
     dispatch(verifyUserAction());
+    // fetchGroupsAndStudents();
   }, []);
 
   useEffect(() => {
