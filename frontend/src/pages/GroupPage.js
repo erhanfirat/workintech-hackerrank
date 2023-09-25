@@ -86,9 +86,8 @@ const GroupPage = () => {
 
   useEffect(() => {
     if (groupName) {
-      if (!group && groupsFetchState !== FETCH_STATES.NOT_STARTED) {
+      if (!group && groupsFetchState === FETCH_STATES.NOT_STARTED) {
         dispatch(getAllGroupsActionCreator());
-        dispatch(getAllStudentsActionCreator());
       }
     }
   }, [groupName]);
@@ -138,7 +137,7 @@ const GroupPage = () => {
               <Col sm="3">HR Eposta</Col>
               <Col sm="3"></Col>
             </Row>
-            {studentsToList().map((student) => (
+            {studentsToList()?.map((student) => (
               <Row className="border-top py-1 grid-row">
                 <Col sm="3">{student.name}</Col>
                 <Col sm="3">{student.email}</Col>
