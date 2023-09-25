@@ -20,7 +20,6 @@ import {
   fetchAllCandidatesOfTestAction,
   getAllCandidatesOfTestAction,
 } from "../store/reducers/candidatesReducer";
-import { studentGroups, students } from "../data/studentGroups";
 import { TestCandidateResults } from "../components/TestCandidateResults";
 import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions";
@@ -47,6 +46,7 @@ const TestPage = () => {
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
   );
+  const { groups, students } = useSelector((s) => s.students);
   const test = useSelector((state) =>
     state.tests.workintechTests.find((t) => t.id === testId)
   );
@@ -73,8 +73,13 @@ const TestPage = () => {
 
   const candidatesToList = useCallback(() => {
     return testCandidates
-      ?.filter((candidate) =>
-        selectedGroup ? students[selectedGroup].includes(candidate.email) : true
+      ?.filter(
+        (candidate) =>
+          selectedGroup === "all" ||
+          students[getIdOfSelectedGroup(selectedGroup)]?.find(
+            (ss) =>
+              ss.email === candidate.email || ss.hrEmail == candidate.email
+          )
       )
       ?.filter((candidate) => {
         const filterList = filterText.split(",");
@@ -108,13 +113,15 @@ const TestPage = () => {
 
     return {
       test: test?.name,
-      group: studentGroups.find((g) => g.value === selectedGroup).name,
+      group: groups.find(
+        (g) => g.name.toLowerCase() === selectedGroup.toLowerCase()
+      ).title,
       candidateCount: `${candidatesToList()?.length} / ${
-        selectedGroup && students[selectedGroup]?.length
+        selectedGroup && students[getIdOfSelectedGroup(selectedGroup)]?.length
       }`,
       candidateRate:
         ((candidatesToList()?.length || 0) /
-          (students[selectedGroup]?.length || 1)) *
+          (students[getIdOfSelectedGroup(selectedGroup)]?.length || 1)) *
         100,
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].startDateStr,
@@ -141,6 +148,13 @@ const TestPage = () => {
       )
     );
   });
+
+  const getIdOfSelectedGroup = useCallback(
+    (selectedGroupName) =>
+      groups.find(
+        (g) => g.name.toLowerCase() === selectedGroupName.toLowerCase()
+      )?.id
+  );
 
   const toggleTab = (tabId) => {
     setActiveTab(tabId);
@@ -305,9 +319,9 @@ const TestPage = () => {
             defaultValue={"all"}
             onChange={(e) => setSelectedGroup(e.target.value)}
           >
-            {studentGroups.map((group) => (
-              <option value={group.value} key={group.value}>
-                {group.name}
+            {groups.map((group) => (
+              <option value={group.name} key={group.name}>
+                {group.title}
               </option>
             ))}
           </Input>
