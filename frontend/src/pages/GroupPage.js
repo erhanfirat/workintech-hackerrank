@@ -232,7 +232,7 @@ const GroupPage = () => {
                 <Col sm="4">{student.name}</Col>
                 <Col sm="4">{student.email}</Col>
                 <Col sm="4">
-                  <div className="d-flex justify-content-between">
+                  <div className="d-flex justify-content-between gap-1">
                     {!hrEmails[student.id]?.editMode ? (
                       <>
                         <span>{student.hrEmail}</span>
