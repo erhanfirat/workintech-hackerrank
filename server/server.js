@@ -8,7 +8,8 @@ const questionDB = require("./db/questionDB");
 const groupDB = require("./db/groupDB");
 const axios = require("axios");
 const archiver = require("archiver");
-const journeyAPI = "https://api.journeyapp.com/api";
+const { generateReadableTitleByGroupName } = require("./utils/utils");
+const JOURNEY = "https://api.journeyapp.com";
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -246,7 +247,7 @@ app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const journeyRes = await axios.post("https://api.journeyapp.com/login", {
+    const journeyRes = await axios.post(`${JOURNEY}/login`, {
       Username: email,
       Password: password,
       LanguageCode: "tr",
@@ -278,18 +279,41 @@ app.get("/verify/me", async (req, res) => {
 app.post("/fetch-groups-and-users", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const adminLoginRes = await axios.post(`${journeyAPI}/auth/login`, {
+
+    const adminLoginRes = await axios.post(`${JOURNEY}/api/auth/login`, {
       email: "admin@workintech.com.tr",
       password: "GQ1qfFAKpInI6UoOKWB**@",
     });
-    const authorization = `Bearer ${adminLoginRes.token}`;
+    const authorization = `Bearer ${adminLoginRes.data.token}`;
 
     const groupsRes = await axios.get(
-      `${journeyAPI}/usergroup/datatables?per_page=100`
+      `${JOURNEY}/api/usergroup/datatables?per_page=1000&search=fsweb`,
+      { headers: { authorization } }
     );
 
-    console.log(groupsRes);
-  } catch (err) {}
+    const groups = groupsRes.data.data.filter(
+      (g) => !g.name.toLowerCase().includes("prework")
+    );
+
+    for (let i = 0; i < groups.length; i++) {
+      const group = groups[i];
+      const studentsRes = await axios.get(
+        `${JOURNEY}/api/usergroup/user/datatables/${group.id}?per_page=1000`,
+        {
+          headers: {
+            authorization,
+          },
+        }
+      );
+      group.title = generateReadableTitleByGroupName(group.name);
+      group.students = studentsRes.data.data;
+    }
+
+    res.status(201).json(groups);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
 });
 
 // APP STARTS ON 3001
