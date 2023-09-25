@@ -7,6 +7,7 @@ const candidateDB = require("./db/candidateDB");
 const questionDB = require("./db/questionDB");
 const groupDB = require("./db/groupDB");
 const studentDB = require("./db/studentDB");
+const hrEmailDB = require("./db/hrEmailDB");
 const axios = require("axios");
 const archiver = require("archiver");
 const { generateReadableTitleByGroupName } = require("./utils/utils");
@@ -236,6 +237,18 @@ app.get("/student", async (req, res) => {
     const students = await studentDB.getAllStudents();
 
     res.status(200).json(students);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
+app.post("/set-student-hr-email", async (req, res) => {
+  try {
+    const student = req.body;
+    const res = await hrEmailDB.upsertHrEmail(student);
+
+    res.status(201).json(res);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred", error });
