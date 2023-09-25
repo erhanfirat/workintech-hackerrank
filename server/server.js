@@ -6,6 +6,7 @@ const testDB = require("./db/testDB");
 const candidateDB = require("./db/candidateDB");
 const questionDB = require("./db/questionDB");
 const groupDB = require("./db/groupDB");
+const studentDB = require("./db/studentDB");
 const axios = require("axios");
 const archiver = require("archiver");
 const { generateReadableTitleByGroupName } = require("./utils/utils");
@@ -232,9 +233,9 @@ app.get("/group", async (req, res) => {
 
 app.get("/student", async (req, res) => {
   try {
-    // const students = await studentDB.getAllGroups();
+    const students = await studentDB.getAllStudents();
 
-    res.status(201).json([]);
+    res.status(200).json(students);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred", error });
@@ -295,6 +296,8 @@ app.post("/fetch-groups-and-users", async (req, res) => {
       (g) => !g.name.toLowerCase().includes("prework")
     );
 
+    const students = {};
+
     for (let i = 0; i < groups.length; i++) {
       const group = groups[i];
       const studentsRes = await axios.get(
@@ -306,10 +309,19 @@ app.post("/fetch-groups-and-users", async (req, res) => {
         }
       );
       group.title = generateReadableTitleByGroupName(group.name);
-      group.students = studentsRes.data.data;
+      students[group.id] = studentsRes.data.data;
+
+      delete group.for_dropdown;
+      await groupDB.upsertGroup(group);
+
+      for (let j = 0; j < studentsRes.data.data.length; j++) {
+        const student = studentsRes.data.data[j];
+        student.group = group.id;
+        await studentDB.upsertStudent(student);
+      }
     }
 
-    res.status(201).json(groups);
+    res.status(201).json({ groups, students });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: "An error occurred", err });
