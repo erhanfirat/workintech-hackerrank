@@ -6,19 +6,21 @@ import { FETCH_STATES } from "../../utils/constants";
 
 export const studentActions = Object.freeze({
   setGroups: "SET_ALL_GROUPS",
-  setStudents: "SET_STUDENTS_TO_GROUPS",
+  setStudents: "SET_STUDENTS",
   setGroupsFetchState: "SET_GROUPS_FETCH_STATE",
   setStudentsFetchState: "SET_STUDENTS_FETCH_STATE",
 });
 
+const allGroup = {
+  id: "all",
+  name: "all",
+  title: "Tüm Katılımcılar",
+};
+
 const initialStudents = {
-  groups: [
-    // all groups
-  ],
+  groups: [],
   students: {
-    // fsweb0323: {
-    //   name: "Fsweb 0323 - Mart",
-    //   students: [
+    // [groupId]: [
     //     {
     //       email: "samilkafa@gmail.com",
     //       hrEmail: "samilkafa@gmail.com",
@@ -35,7 +37,6 @@ const initialStudents = {
     //       name: "Ayşegül Neşe",
     //     },
     //   ],
-    // },
   },
   groupsFetchState: FETCH_STATES.NOT_STARTED,
   studentsFetchState: FETCH_STATES.NOT_STARTED,
@@ -48,18 +49,19 @@ export const studentsReducer = (state = initialStudents, action) => {
     case studentActions.setGroups:
       return {
         ...state,
-        groups: action.payload,
+        groups: [allGroup, ...action.payload],
       };
 
     case studentActions.setStudents:
       const newState = { ...state };
       action.payload.forEach((student) => {
+        if (!newState.students[student.group]) {
+          newState.students[student.group] = [];
+        }
         newState.students[student.group].push(student);
       });
-      return {
-        ...newState,
-        students: action.payload,
-      };
+      newState.students.all = action.payload;
+      return newState;
 
     case studentActions.setGroupsFetchState:
       return {
@@ -113,7 +115,6 @@ export const getAllStudentsActionCreator = () => (dispatch) => {
 
   doSRRequest(srEndpoints.getAllStudents())
     .then((studentsFethced) => {
-      console.log("studentsFethced: ", studentsFethced);
       dispatch({
         type: studentActions.setStudents,
         payload: studentsFethced,
@@ -131,8 +132,9 @@ export const getAllStudentsActionCreator = () => (dispatch) => {
     });
 };
 
-export const fetchGroupsAndStudents = () => {
+export const fetchGroupsAndStudents = () => (dispatch) => {
   doSRRequest(srEndpoints.fetchAllGroupsAndStudents()).then((res) => {
-    console.log("fetchGroupsAndStudents res > ", res);
+    dispatch(getAllGroupsActionCreator());
+    dispatch(getAllStudentsActionCreator());
   });
 };
