@@ -78,7 +78,7 @@ const TestPage = () => {
           selectedGroup === "all" ||
           students[getIdOfSelectedGroup(selectedGroup)]?.find(
             (ss) =>
-              ss.email === candidate.email || ss.hrEmail == candidate.email
+              ss.email === candidate.email || ss.hrEmail === candidate.email
           )
       )
       ?.filter((candidate) => {

@@ -217,9 +217,15 @@ const GroupPage = () => {
         <TabPane tabId="students">
           <Container fluid>
             <Row className="pb-1 mb-2">
-              <Col sm="4">İsim</Col>
-              <Col sm="4">Eposta</Col>
-              <Col sm="4">HR Eposta</Col>
+              <Col sm="4">
+                <h5>İsim</h5>
+              </Col>
+              <Col sm="4">
+                <h5>Eposta</h5>
+              </Col>
+              <Col sm="4">
+                <h5>HR Eposta</h5>
+              </Col>
             </Row>
             {studentsToList()?.map((student) => (
               <Row className="border-top py-1 grid-row">
