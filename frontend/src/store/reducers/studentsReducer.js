@@ -19,7 +19,16 @@ const allGroup = {
 };
 
 const initialStudents = {
-  groups: [],
+  groups: [
+    // {
+    //   active_sprint: null,
+    //   id: "5878",
+    //   name: "FSWEB0323",
+    //   title: "Fsweb 0323 - Mart",
+    //   user_count: 30,
+    // },
+    // ...
+  ],
   students: {
     // [groupId]: [
     //     {
@@ -32,11 +41,7 @@ const initialStudents = {
     //       hrEmail: "y.sinanerdem@gmail.com",
     //       name: "Sinan Yaşar Erdem",
     //     },
-    //     {
-    //       email: "aysgl_nese@hotmail.com",
-    //       hrEmail: "aysgl_nese@hotmail.com",
-    //       name: "Ayşegül Neşe",
-    //     },
+    //     ...
     //   ],
   },
   groupsFetchState: FETCH_STATES.NOT_STARTED,

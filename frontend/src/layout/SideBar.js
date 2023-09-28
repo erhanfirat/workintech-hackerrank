@@ -1,11 +1,6 @@
 import { NavLink } from "react-router-dom";
 import { Nav, NavItem } from "reactstrap";
 
-const activeNavLink = {
-  backgroundColor: "#fffff !important",
-  color: "rgb(13,110,253) !important",
-};
-
 const SideBar = () => {
   return (
     <div className="side-bar">

@@ -93,16 +93,23 @@ const TestPage = () => {
         }
         return false;
       })
-      ?.sort((tc1, tc2) =>
-        (
-          sortByState === "score"
-            ? tc1[fields[sortByState]] > tc2[fields[sortByState]]
-            : tc1[fields[sortByState]]?.toLocaleLowerCase() >
-              tc2[fields[sortByState]]?.toLocaleLowerCase()
-        )
-          ? numberOrder(ascState) * 1
-          : numberOrder(ascState) * -1
-      );
+      ?.sort((tc1, tc2) => {
+        if (sortByState === "score") {
+          return tc1[fields[sortByState]] > tc2[fields[sortByState]]
+            ? numberOrder(ascState) * 1
+            : numberOrder(ascState) * -1;
+        } else if (sortByState === "group") {
+          return getStudentByEmail(tc1.email)?.group >
+            getStudentByEmail(tc2.email)?.group
+            ? numberOrder(ascState) * 1
+            : numberOrder(ascState) * -1;
+        } else {
+          return tc1[fields[sortByState]]?.toLocaleLowerCase() >
+            tc2[fields[sortByState]]?.toLocaleLowerCase()
+            ? numberOrder(ascState) * 1
+            : numberOrder(ascState) * -1;
+        }
+      });
   });
 
   const getGeneralInfo = useCallback(() => {
@@ -115,7 +122,7 @@ const TestPage = () => {
       test: test?.name,
       group: groups.find(
         (g) => g.name.toLowerCase() === selectedGroup.toLowerCase()
-      ).title,
+      )?.title,
       candidateCount: `${candidatesToList()?.length} / ${
         selectedGroup && students[getIdOfSelectedGroup(selectedGroup)]?.length
       }`,
@@ -159,6 +166,17 @@ const TestPage = () => {
   const toggleTab = (tabId) => {
     setActiveTab(tabId);
   };
+
+  const getStudentByEmail = useCallback((candidateEmail) =>
+    students.all.find(
+      (s) => s.email === candidateEmail || s.hrEmail === candidateEmail
+    )
+  );
+
+  const getGroupNameByEmail = useCallback((candidateEmail) => {
+    const student = getStudentByEmail(candidateEmail);
+    return groups.find((g) => g.id == student?.group)?.title;
+  });
 
   const downloadCSV = () => {
     // CREATE WORKBOOK
@@ -428,6 +446,8 @@ const TestPage = () => {
             sortByState={sortByState}
             ascState={ascState}
             testId={testId}
+            selectedGroup={selectedGroup}
+            getGroupNameByEmail={getGroupNameByEmail}
           />
         </TabPane>
         <TabPane tabId="resultsInDetail">
