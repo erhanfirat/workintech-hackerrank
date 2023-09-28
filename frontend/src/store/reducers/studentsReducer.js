@@ -55,13 +55,16 @@ export const studentsReducer = (state = initialStudents, action) => {
 
     case studentActions.setStudents:
       const newState = { ...state };
+
+      // clear all students of groups
+      state.groups.forEach((g) => (newState.students[g.id] = []));
+
+      // add students to their groups
       action.payload.forEach((student) => {
-        if (!newState.students[student.group]) {
-          newState.students[student.group] = [];
-        }
         newState.students[student.group].push(student);
       });
       newState.students.all = action.payload;
+
       return newState;
 
     case studentActions.setGroupsFetchState:
@@ -102,7 +105,6 @@ export const getAllGroupsActionCreator = () => (dispatch) => {
 
   doSRRequest(srEndpoints.getAllGroups())
     .then((groupsFethced) => {
-      console.log("groupsFethced: ", groupsFethced);
       dispatch({
         type: studentActions.setGroups,
         payload: groupsFethced,
@@ -153,7 +155,6 @@ export const fetchGroupsAndStudents = () => (dispatch) => {
   });
   doSRRequest(srEndpoints.fetchAllGroupsAndStudents()).then((res) => {
     dispatch(getAllGroupsActionCreator());
-    dispatch(getAllStudentsActionCreator());
     dispatch({
       type: studentActions.setGroupsFetchState,
       payload: FETCH_STATES.FETHCED,

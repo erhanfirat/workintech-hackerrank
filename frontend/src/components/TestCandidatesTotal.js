@@ -22,7 +22,6 @@ const TestCandidatesTotal = ({
     // downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
     doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
       (pdfURL) => {
-        console.log(pdfURL);
         window.open(pdfURL, "_blank");
       }
     );

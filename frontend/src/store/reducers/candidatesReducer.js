@@ -74,7 +74,6 @@ export const getAllCandidatesOfTestAction =
 
     doSRRequest(srEndpoints.getAllCandidatesOfTest(testId)).then(
       (srCandidateRes) => {
-        console.log("srCandidateRes > ", srCandidateRes);
         if (srCandidateRes.candidates.length === 0) {
           fetchTestCandidates(dispatch, getState, testId);
         } else {

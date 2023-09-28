@@ -218,7 +218,6 @@ const TestPage = () => {
           (pdfURL) => {
             pdfURLs.push({ candidate: candidate.email, url: pdfURL });
             if (pdfURLs.length === candidatesToList().length) {
-              console.log(pdfURLs);
               doSRRequestResponse(
                 srEndpoints.downloadAllPDFs(testId, selectedGroup, pdfURLs)
               )

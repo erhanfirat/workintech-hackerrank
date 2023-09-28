@@ -246,7 +246,6 @@ app.get("/student", async (req, res) => {
 app.post("/set-student-hr-email", async (req, res) => {
   try {
     const hrStudent = req.body;
-    console.log("hrStudent >", hrStudent);
     if (hrStudent.email) {
       const upsertRes = await hrEmailDB.upsertHrEmail(hrStudent);
     } else {
