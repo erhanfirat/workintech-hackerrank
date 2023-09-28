@@ -55,9 +55,9 @@ export const TestCandidateResults = ({
           <Col sm="2" className="text-truncate border-right border-end">
             {getDateTimeStringFromISO(candidate.attempt_starttime)}
           </Col>
-          <Col sm="1">{parseInt(candidate.percentage_score)}</Col>
+          <Col sm="1">{parseInt(candidate.percentage_score || 0)}</Col>
           {test.questions.map((question, i) => (
-            <Col  key={`QA${i}`}>
+            <Col key={`QA${i}`}>
               {candidate.questions[question]?.toFixed(1)}
             </Col>
           ))}

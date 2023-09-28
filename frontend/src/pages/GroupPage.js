@@ -249,7 +249,7 @@ const GroupPage = () => {
               </Col>
             </Row>
             {studentsToList()?.map((student) => (
-              <Row className="border-top py-1 grid-row">
+              <Row className="border-top py-1 grid-row" key={student.id}>
                 <Col>{student.name}</Col>
                 {groupName === "all" && (
                   <Col>{getGroupNameById(student.group)}</Col>
