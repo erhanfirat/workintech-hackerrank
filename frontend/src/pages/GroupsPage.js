@@ -70,7 +70,7 @@ const GroupsPage = () => {
           <Row className="border-top p-1 grid-row">
             <Col sm="5">{group.title}</Col>
             <Col sm="2">{group.name}</Col>
-            <Col sm="2">{group.activeSprint}</Col>
+            <Col sm="2">{group.active_sprint}</Col>
             <Col sm="2">{students[group.id]?.length}</Col>
             <Col sm="1">
               <Button size="sm" onClick={() => navigateToGroup(group)}>

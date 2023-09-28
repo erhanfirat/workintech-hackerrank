@@ -23,6 +23,7 @@ import {
 } from "../store/reducers/studentsReducer";
 import { doSRRequest } from "../api/api";
 import { srEndpoints } from "../api/srEndpoints";
+import GroupTests from "../components/GroupTests";
 
 const fields = {
   name: "full_name",
@@ -224,6 +225,14 @@ const GroupPage = () => {
             Öğrenciler
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "tests" ? "active" : ""}`}
+            onClick={() => toggleTab("tests")}
+          >
+            Testler
+          </NavLink>
+        </NavItem>
       </Nav>
 
       <TabContent
@@ -297,6 +306,9 @@ const GroupPage = () => {
               </Row>
             ))}
           </Container>
+        </TabPane>
+        <TabPane tabId={"tests"}>
+          <GroupTests group={group} />
         </TabPane>
       </TabContent>
     </PageDefault>
