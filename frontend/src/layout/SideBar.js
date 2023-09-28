@@ -17,12 +17,17 @@ const SideBar = () => {
         </NavItem>
         <NavItem>
           <NavLink to={"/tests"} className={`nav-link`} exact>
-            T<span className="hide-on-mouseout">ests</span>
+            T<span className="hide-on-mouseout">estler</span>
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink to={"/groups"} className={`nav-link`} exact>
-            G<span className="hide-on-mouseout">roups</span>
+            G<span className="hide-on-mouseout">ruplar</span>
+          </NavLink>
+        </NavItem>
+        <NavItem>
+          <NavLink to={"/groups/all"} className={`nav-link`} exact>
+            K<span className="hide-on-mouseout">atılımcılar</span>
           </NavLink>
         </NavItem>
       </Nav>

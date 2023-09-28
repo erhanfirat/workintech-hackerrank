@@ -31,6 +31,7 @@ const fields = {
 
 const GroupPage = () => {
   const { groupName, sortBy, asc } = useParams();
+  const { groups } = useSelector((s) => s.students);
 
   const group = useSelector((s) =>
     s.students.groups.find(
@@ -50,6 +51,10 @@ const GroupPage = () => {
 
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
+
+  const getGroupNameById = useCallback(
+    (groupId) => groups.find((g) => g.id == groupId)?.title
+  );
 
   const getGeneralInfo = useCallback(() => {
     return {};
@@ -228,21 +233,29 @@ const GroupPage = () => {
         <TabPane tabId="students">
           <Container fluid>
             <Row className="pb-1 mb-2">
-              <Col sm="4">
+              <Col>
                 <h5>İsim</h5>
               </Col>
-              <Col sm="4">
+              {groupName === "all" && (
+                <Col>
+                  <h5>Grup</h5>
+                </Col>
+              )}
+              <Col>
                 <h5>Eposta</h5>
               </Col>
-              <Col sm="4">
+              <Col>
                 <h5>HR Eposta</h5>
               </Col>
             </Row>
             {studentsToList()?.map((student) => (
               <Row className="border-top py-1 grid-row">
-                <Col sm="4">{student.name}</Col>
-                <Col sm="4">{student.email}</Col>
-                <Col sm="4">
+                <Col>{student.name}</Col>
+                {groupName === "all" && (
+                  <Col>{getGroupNameById(student.group)}</Col>
+                )}
+                <Col>{student.email}</Col>
+                <Col>
                   <div className="d-flex justify-content-between gap-1">
                     {!hrEmails[student.id]?.editMode ? (
                       <>
