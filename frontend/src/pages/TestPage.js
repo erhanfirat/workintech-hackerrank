@@ -451,7 +451,12 @@ const TestPage = () => {
           />
         </TabPane>
         <TabPane tabId="resultsInDetail">
-          <TestCandidateResults test={test} candidates={candidatesToList()} />
+          <TestCandidateResults
+            test={test}
+            candidates={candidatesToList()}
+            selectedGroup={selectedGroup}
+            getGroupNameByEmail={getGroupNameByEmail}
+          />
         </TabPane>
         <TabPane tabId="questions">
           <TestQuestions
