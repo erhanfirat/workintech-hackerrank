@@ -68,7 +68,18 @@ const GroupPage = () => {
   });
 
   const studentsToList = useCallback(() =>
-    students?.sort((s1, s2) => (s1[sortByState] > s2[sortByState] ? 1 : -1))
+    students
+      ?.filter(
+        (s) =>
+          s.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase()) ||
+          s.email
+            .toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase()) ||
+          s.hrEmail
+            ?.toLocaleLowerCase()
+            .includes(filterText.toLocaleLowerCase())
+      )
+      .sort((s1, s2) => (s1[sortByState] > s2[sortByState] ? 1 : -1))
   );
 
   const toggleTab = (tabId) => {
