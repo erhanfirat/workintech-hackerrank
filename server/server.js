@@ -317,6 +317,19 @@ app.post("/fetch-groups-and-users", async (req, res) => {
 
     for (let i = 0; i < groups.length; i++) {
       const group = groups[i];
+      group.title = generateReadableTitleByGroupName(group.name);
+      delete group.for_dropdown;
+
+      const activeSprintRes = await axios.get(
+        `${JOURNEY}/api/usergroup/journey/${group.id}?per_page=1000`,
+        {
+          headers: {
+            authorization,
+          },
+        }
+      );
+      group.active_sprint = activeSprintRes.data.to - 1;
+
       const studentsRes = await axios.get(
         `${JOURNEY}/api/usergroup/user/datatables/${group.id}?per_page=1000`,
         {
@@ -325,10 +338,8 @@ app.post("/fetch-groups-and-users", async (req, res) => {
           },
         }
       );
-      group.title = generateReadableTitleByGroupName(group.name);
       students[group.id] = studentsRes.data.data;
 
-      delete group.for_dropdown;
       await groupDB.upsertGroup(group);
 
       for (let j = 0; j < studentsRes.data.data.length; j++) {
