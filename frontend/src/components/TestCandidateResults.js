@@ -22,9 +22,6 @@ export const TestCandidateResults = ({
             <h6>Grup</h6>
           </Col>
         )}
-        <Col sm="2" className="text-truncate border-right border-end">
-          <h6>Tarih</h6>
-        </Col>
         <Col sm="1" title="Score in percentage">
           <h6>S %</h6>
         </Col>
@@ -39,9 +36,9 @@ export const TestCandidateResults = ({
           <Col
             sm="2"
             className="text-truncate border-end"
-            title={candidate.email}
+            title={candidate.full_name}
           >
-            {candidate.email}
+            {candidate.full_name}
           </Col>
           {selectedGroup === "all" && (
             <Col
@@ -52,9 +49,6 @@ export const TestCandidateResults = ({
               {getGroupNameByEmail(candidate.email)}
             </Col>
           )}
-          <Col sm="2" className="text-truncate border-right border-end">
-            {getDateTimeStringFromISO(candidate.attempt_starttime)}
-          </Col>
           <Col sm="1">{parseInt(candidate.percentage_score || 0)}</Col>
           {test.questions.map((question, i) => (
             <Col key={`QA${i}`}>
