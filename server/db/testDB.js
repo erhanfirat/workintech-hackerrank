@@ -2,7 +2,10 @@ const knex = require("./knex");
 
 const getAllTests = () => knex("test").select("*");
 
-const getTest = (testId) => knex("test").where("id", testId);
+const getTest = async (testId) => {
+  const tests = await knex("test").where("id", testId);
+  return tests.map((t) => ({ id: t.id, ...JSON.parse(t.data) }));
+};
 
 const upsertTest = (test) => {
   return knex.transaction(
