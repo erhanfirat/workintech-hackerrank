@@ -8,9 +8,7 @@ import { questionActions } from "../reducers/questionsReducer";
 export const getAllQuestions = () => (dispatch, getState) => {
   doSRRequest(srEndpoints.getAllQuestions()).then((questions) => {
     if (questions?.length > 0) {
-      questions
-        .map((q) => JSON.parse(q.data))
-        .forEach((q) => dispatch(addQuestionToAllAction(q)));
+      questions.forEach((q) => dispatch(addQuestionToAllAction(q)));
     }
   });
 };
@@ -38,32 +36,30 @@ export const fetchAllQuestionsOfTestAction =
     });
 
     if (questionsNeedsToBeFetched.length > 0) {
-      doSRRequest(srEndpoints.getQuestionsByIdList(questionsNeedsToBeFetched))
-        .then((questionListRaw) =>
-          questionListRaw.map((qr) => JSON.parse(qr.data))
-        )
-        .then((questionList) => {
-          questionList.forEach((q) => {
-            dispatch(addQuestionToAllAction(q));
-            dispatch(addQuestionToTestAction(testId, q));
-          });
-          if (questionList.length !== questionsNeedsToBeFetched.length) {
-            questionsNeedsToBeFetched.forEach((qId) => {
-              if (!questionList.find((qlq) => qlq.id === qId)) {
-                fetchQuestionById(qId)
-                  .then((question) => {
-                    dispatch(addQuestionToAllAction(question));
-                    dispatch(addQuestionToTestAction(testId, question));
-                    saveQuestion(question);
-                  })
-                  .catch((err) => {
-                    console.error(`HATA: ${qId} id'li soru datası çekilirken bir hata karşılaşıldı.
-                ${err.message}`);
-                  });
-              }
-            });
-          }
+      doSRRequest(
+        srEndpoints.getQuestionsByIdList(questionsNeedsToBeFetched)
+      ).then((questionList) => {
+        questionList.forEach((q) => {
+          dispatch(addQuestionToAllAction(q));
+          dispatch(addQuestionToTestAction(testId, q));
         });
+        if (questionList.length !== questionsNeedsToBeFetched.length) {
+          questionsNeedsToBeFetched.forEach((qId) => {
+            if (!questionList.find((qlq) => qlq.id === qId)) {
+              fetchQuestionById(qId)
+                .then((question) => {
+                  dispatch(addQuestionToAllAction(question));
+                  dispatch(addQuestionToTestAction(testId, question));
+                  saveQuestion(question);
+                })
+                .catch((err) => {
+                  console.error(`HATA: ${qId} id'li soru datası çekilirken bir hata karşılaşıldı.
+                ${err.message}`);
+                });
+            }
+          });
+        }
+      });
     }
   };
 

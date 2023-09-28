@@ -1,9 +1,20 @@
 const knex = require("./knex");
 
-const getAllQuestions = () => knex("question").select("*");
+const getAllQuestions = async () => {
+  const questions = await knex("question").select("*");
+  return questions.map((q) => ({
+    id: q.id,
+    ...JSON.parse(q.data),
+  }));
+};
 
-const getQuestionsByIdList = (idList) =>
-  knex("question").select().whereIn("id", idList);
+const getQuestionsByIdList = async (idList) => {
+  const questions = await knex("question").select().whereIn("id", idList);
+  return questions.map((q) => ({
+    id: q.id,
+    ...JSON.parse(q.data),
+  }));
+};
 
 const upsertQuestion = (question) => {
   return knex.transaction(
