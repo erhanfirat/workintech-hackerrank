@@ -147,9 +147,17 @@ export const getAllStudentsActionCreator = () => (dispatch) => {
 };
 
 export const fetchGroupsAndStudents = () => (dispatch) => {
+  dispatch({
+    type: studentActions.setGroupsFetchState,
+    payload: FETCH_STATES.FETCHING,
+  });
   doSRRequest(srEndpoints.fetchAllGroupsAndStudents()).then((res) => {
     dispatch(getAllGroupsActionCreator());
     dispatch(getAllStudentsActionCreator());
+    dispatch({
+      type: studentActions.setGroupsFetchState,
+      payload: FETCH_STATES.FETHCED,
+    });
   });
 };
 

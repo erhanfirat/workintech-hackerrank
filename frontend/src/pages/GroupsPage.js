@@ -1,10 +1,14 @@
 import { useEffect } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Col, Container, Row } from "reactstrap";
+import { Badge, Button, Col, Container, Row } from "reactstrap";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 import { FETCH_STATES } from "../utils/constants";
-import { getAllGroupsActionCreator } from "../store/reducers/studentsReducer";
+import {
+  fetchGroupsAndStudents,
+  getAllGroupsActionCreator,
+} from "../store/reducers/studentsReducer";
+import SpinnerButton from "../components/atoms/SpinnerButton";
 
 const GroupsPage = () => {
   const dispatch = useDispatch();
@@ -17,6 +21,10 @@ const GroupsPage = () => {
     history.push(`/groups/${group.name.toLowerCase()}`);
   };
 
+  const refetchGroupsAndStudents = () => {
+    dispatch(fetchGroupsAndStudents());
+  };
+
   useEffect(() => {
     if (groupsFetchState === FETCH_STATES.NOT_STARTED) {
       dispatch(getAllGroupsActionCreator());
@@ -25,7 +33,21 @@ const GroupsPage = () => {
 
   return (
     <PageDefault pageTitle="Gruplar">
-      <div className="text-end fs-6 fw-bold pb-2">[Total: {groups.length}]</div>
+      <div className="text-end fs-6 fw-bold pb-2">
+        <Badge color="warning" className="me-2">
+          Groups: {groups.length}
+        </Badge>
+        <SpinnerButton
+          loading={groupsFetchState === FETCH_STATES.FETCHING}
+          iconClass={"fa-solid fa-rotate me-2"}
+          size="sm"
+          color="primary"
+          title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
+          onClick={refetchGroupsAndStudents}
+        >
+          Sync Tests with HR
+        </SpinnerButton>
+      </div>
       <Container fluid>
         <Row>
           <Col sm="5">
