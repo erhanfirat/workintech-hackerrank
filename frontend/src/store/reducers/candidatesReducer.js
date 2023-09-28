@@ -83,9 +83,7 @@ export const getAllCandidatesOfTestAction =
             payload: {
               testId: srCandidateRes.testId,
               candidates: addStartDateStrToCandidates(
-                srCandidateRes.candidates.map((candidateRec) =>
-                  JSON.parse(candidateRec.data)
-                )
+                srCandidateRes.candidates
               ),
             },
           });

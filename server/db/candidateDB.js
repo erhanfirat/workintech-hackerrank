@@ -1,7 +1,9 @@
 const knex = require("./knex");
 
-const getAllCandidatesOfTest = (testId) =>
-  knex("candidate").select("*").where("test", testId);
+const getAllCandidatesOfTest = async (testId) => {
+  const candidates = await knex("candidate").select("*").where("test", testId);
+  return candidates.map((c) => ({ id: c.id, ...JSON.parse(c.data) }));
+};
 
 const upsertCandidate = (testId, candidate) => {
   return knex.transaction(
