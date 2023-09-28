@@ -45,7 +45,7 @@ const GroupsPage = () => {
           title="Eğer Hackkerrank testlerinde güncelleme olmadıysa bu işlemi başlatmayın!"
           onClick={refetchGroupsAndStudents}
         >
-          Sync Tests with HR
+          Sync Groups & Students with Journey
         </SpinnerButton>
       </div>
       <Container fluid>
