@@ -120,7 +120,7 @@ const fetchTestCandidates = (dispatch, getState, testId) => {
   doHRRequest(
     hrEndpoints.candidates(testId, {
       limit: 100,
-      offset: getState().candidates.candidates[testId].length,
+      offset: getState().candidates.candidates[testId]?.length || 0,
     })
   ).then((resData) => {
     dispatch({

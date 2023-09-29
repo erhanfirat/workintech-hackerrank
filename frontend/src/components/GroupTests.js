@@ -10,8 +10,6 @@ const GroupTests = ({ group }) => {
     })
   );
 
-  console.log("tests of the group > ", tests);
-
   return (
     <Container fluid>
       <Row>

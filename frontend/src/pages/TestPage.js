@@ -99,8 +99,10 @@ const TestPage = () => {
             ? numberOrder(ascState) * 1
             : numberOrder(ascState) * -1;
         } else if (sortByState === "group") {
-          return getStudentByEmail(tc1.email)?.group >
-            getStudentByEmail(tc2.email)?.group
+          const st1 = getStudentByEmail(tc1.email);
+          const st2 = getStudentByEmail(tc2.email);
+          if (!st1 || !st2) return -1;
+          return st1.group > st2.group
             ? numberOrder(ascState) * 1
             : numberOrder(ascState) * -1;
         } else {

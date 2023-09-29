@@ -67,7 +67,7 @@ const GroupsPage = () => {
           </Col>
         </Row>
         {groups.map((group) => (
-          <Row className="border-top p-1 grid-row">
+          <Row className="border-top p-1 grid-row" key={group.id}>
             <Col sm="5">{group.title}</Col>
             <Col sm="2">{group.name}</Col>
             <Col sm="2">{group.active_sprint}</Col>
