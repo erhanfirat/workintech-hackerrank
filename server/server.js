@@ -149,8 +149,7 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
     const pdfList = req.body;
     const testId = req.params.testId;
     const group = req.params.group;
-    const testRecord = await testDB.getTest(testId);
-    const test = JSON.parse(testRecord[0].data);
+    const test = await testDB.getTest(testId);
 
     const dateISO = new Date().toISOString();
     const testName = test.name.replace(/ /g, "_");
