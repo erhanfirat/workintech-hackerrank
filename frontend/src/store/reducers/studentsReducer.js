@@ -6,6 +6,7 @@ import { FETCH_STATES } from "../../utils/constants";
 
 export const studentActions = Object.freeze({
   setGroups: "SET_ALL_GROUPS",
+  setGroupTestInfo: "SET_GROUP_TEST_INFO",
   setStudents: "SET_STUDENTS",
   updateStudent: "UPDATE_STUDENT",
   setGroupsFetchState: "SET_GROUPS_FETCH_STATE",
@@ -26,9 +27,16 @@ const initialStudents = {
     //   name: "FSWEB0323",
     //   title: "Fsweb 0323 - Mart",
     //   user_count: 30,
+    //   tests: {
+    //     [testId]: {
+    //       average_score: 69.6,
+    //       attend_count: 23,
+    //     },
+    //   },
     // },
     // ...
   ],
+
   students: {
     // [groupId]: [
     //     {
@@ -44,6 +52,7 @@ const initialStudents = {
     //     ...
     //   ],
   },
+
   groupsFetchState: FETCH_STATES.NOT_STARTED,
   studentsFetchState: FETCH_STATES.NOT_STARTED,
 };
@@ -51,11 +60,29 @@ const initialStudents = {
 // REDUCER ********************************
 
 export const studentsReducer = (state = initialStudents, action) => {
-  switch (action.type) {
+  const { type, payload } = action;
+
+  switch (type) {
     case studentActions.setGroups:
       return {
         ...state,
-        groups: [allGroup, ...action.payload],
+        groups: [allGroup, ...payload],
+      };
+
+    case studentActions.setGroupInfo:
+      return {
+        ...state,
+        groups: [
+          ...state.groups.map((g) => {
+            if (g.id === payload.group_id) {
+              return {
+                ...g,
+                tests: { ...g?.tests, [payload.test_id]: { ...payload } },
+              };
+            }
+            return g;
+          }),
+        ],
       };
 
     case studentActions.setStudents:
@@ -65,33 +92,35 @@ export const studentsReducer = (state = initialStudents, action) => {
       state.groups.forEach((g) => (newState.students[g.id] = []));
 
       // add students to their groups
-      action.payload.forEach((student) => {
+      payload.forEach((student) => {
         newState.students[student.group_id].push(student);
       });
-      newState.students.all = action.payload;
+      newState.students.all = payload;
 
       return newState;
 
     case studentActions.setGroupsFetchState:
       return {
         ...state,
-        groupsFetchState: action.payload,
+        groupsFetchState: payload,
       };
 
     case studentActions.setStudentsFetchState:
       return {
         ...state,
-        studentsFetchState: action.payload,
+        studentsFetchState: payload,
       };
 
     case studentActions.updateStudent:
-      const student = action.payload;
+      const student = payload;
       return {
         ...state,
         students: {
           ...state.students,
           [student.group_id]: [
-            ...state.students[student.group].filter((s) => s.id !== student.id),
+            ...state.students[student.group_id].filter(
+              (s) => s.id !== student.id
+            ),
             student,
           ],
         },
