@@ -343,7 +343,7 @@ app.post("/fetch-groups-and-users", async (req, res) => {
 
       for (let j = 0; j < studentsRes.data.data.length; j++) {
         const student = studentsRes.data.data[j];
-        student.group = group.id;
+        student.group_id = group.id;
         await studentDB.upsertStudent(student);
       }
     }

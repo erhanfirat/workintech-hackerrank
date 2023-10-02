@@ -66,7 +66,7 @@ export const studentsReducer = (state = initialStudents, action) => {
 
       // add students to their groups
       action.payload.forEach((student) => {
-        newState.students[student.group].push(student);
+        newState.students[student.group_id].push(student);
       });
       newState.students.all = action.payload;
 
@@ -90,7 +90,7 @@ export const studentsReducer = (state = initialStudents, action) => {
         ...state,
         students: {
           ...state.students,
-          [student.group]: [
+          [student.group_id]: [
             ...state.students[student.group].filter((s) => s.id !== student.id),
             student,
           ],

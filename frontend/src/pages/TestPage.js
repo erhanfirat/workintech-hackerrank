@@ -102,7 +102,7 @@ const TestPage = () => {
           const st1 = getStudentByEmail(tc1.email);
           const st2 = getStudentByEmail(tc2.email);
           if (!st1 || !st2) return -1;
-          return st1.group > st2.group
+          return st1.group_id > st2.group_id
             ? numberOrder(ascState) * 1
             : numberOrder(ascState) * -1;
         } else {
@@ -177,7 +177,7 @@ const TestPage = () => {
 
   const getGroupNameByEmail = useCallback((candidateEmail) => {
     const student = getStudentByEmail(candidateEmail);
-    return groups.find((g) => g.id == student?.group)?.title;
+    return groups.find((g) => g.id == student?.group_id)?.title;
   });
 
   const downloadCSV = () => {

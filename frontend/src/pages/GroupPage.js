@@ -261,7 +261,7 @@ const GroupPage = () => {
               <Row className="border-top py-1 grid-row" key={student.id}>
                 <Col>{student.name}</Col>
                 {groupName === "all" && (
-                  <Col>{getGroupNameById(student.group)}</Col>
+                  <Col>{getGroupNameById(student.group_id)}</Col>
                 )}
                 <Col>{student.email}</Col>
                 <Col>

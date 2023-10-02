@@ -2,7 +2,9 @@ const knex = require("./knex");
 const Students = require("./studentDB");
 
 const getAllCandidatesOfTest = async (testId) => {
-  const candidates = await knex("candidate").select("*").where("test", testId);
+  const candidates = await knex("candidate")
+    .select("*")
+    .where("test_id", testId);
   return candidates.map((c) => ({ id: c.id, ...JSON.parse(c.data) }));
 };
 
@@ -23,7 +25,8 @@ const upsertCandidate = async (testId, candidate) => {
   );
 };
 
-const deleteCandidate = (testId) => knex("candidate").where("id", testId).del();
+const deleteCandidate = (candidateId) =>
+  knex("candidate").where("id", candidateId).del();
 
 module.exports = {
   upsertCandidate,
