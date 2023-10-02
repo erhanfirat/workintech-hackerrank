@@ -2,14 +2,18 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const testDB = require("./db/testDB");
-const candidateDB = require("./db/candidateDB");
-const questionDB = require("./db/questionDB");
-const groupDB = require("./db/groupDB");
-const studentDB = require("./db/studentDB");
-const hrEmailDB = require("./db/hrEmailDB");
 const axios = require("axios");
 const archiver = require("archiver");
+
+// Models
+const Test = require("./db/TestModel");
+const Candidate = require("./db/CandidateModel");
+const Question = require("./db/QuestionModel");
+const Group = require("./db/GroupModel");
+const Student = require("./db/StudentModel");
+const HrEmail = require("./db/HrEmailModel");
+
+// Utils 
 const { generateReadableTitleByGroupName } = require("./utils/utils");
 const JOURNEY = "https://api.journeyapp.com";
 
@@ -37,7 +41,7 @@ app.use((req, res, next) => {
 
 app.get("/tests", async (req, res) => {
   try {
-    const testsRec = await testDB.getAllTests();
+    const testsRec = await Test.getAllTests();
     const tests = testsRec.map((tr) => JSON.parse(tr.data));
     res.status(200).json(tests);
   } catch (err) {
@@ -48,7 +52,7 @@ app.get("/tests", async (req, res) => {
 
 app.get("/tests/:id", async (req, res) => {
   try {
-    const testRec = await testDB.getTest(req.params.id);
+    const testRec = await Test.getTest(req.params.id);
     const test = JSON.parse(testRec.data);
     res.status(200).json(test);
   } catch (err) {
@@ -62,10 +66,10 @@ app.post("/tests", async (req, res) => {
     const bodyData = req.body;
     if (bodyData instanceof Array) {
       for (let i = 0; i < bodyData.length; i++) {
-        await testDB.upsertTest(bodyData[i]);
+        await Test.upsertTest(bodyData[i]);
       }
     } else {
-      await testDB.upsertTest(bodyData);
+      await Test.upsertTest(bodyData);
     }
     res.status(201).json(bodyData);
   } catch (err) {
@@ -76,7 +80,7 @@ app.post("/tests", async (req, res) => {
 
 app.put("/tests/:id", async (req, res) => {
   try {
-    const updateResult = await testDB.upsertTest(req.body);
+    const updateResult = await Test.upsertTest(req.body);
     res.status(201).json({ id: req.body.id });
   } catch (err) {
     console.error(error);
@@ -92,10 +96,10 @@ app.get("/student/:studentId/results", async (req, res) => {
     const candidateId = req.params.candidateId;
     if (bodyData instanceof Array) {
       for (let i = 0; i < bodyData.length; i++) {
-        await candidateDB.upsertCandidate(testId, bodyData[i]);
+        await Candidate.upsertCandidate(testId, bodyData[i]);
       }
     } else {
-      await candidateDB.upsertCandidate(testId, bodyData);
+      await Candidate.upsertCandidate(testId, bodyData);
     }
     res.status(201).json(bodyData);
   } catch (err) {
@@ -107,7 +111,7 @@ app.get("/student/:studentId/results", async (req, res) => {
 app.get("/tests/:testId/candidates", async (req, res) => {
   try {
     const testId = req.params.testId;
-    const candidates = await candidateDB.getAllCandidatesOfTest(testId);
+    const candidates = await Candidate.getAllCandidatesOfTest(testId);
     res.status(200).json({ testId, candidates });
   } catch (err) {
     console.error(err);
@@ -121,10 +125,10 @@ app.post("/tests/:testId/candidates", async (req, res) => {
     const testId = req.params.testId;
     if (bodyData instanceof Array) {
       for (let i = 0; i < bodyData.length; i++) {
-        await candidateDB.upsertCandidate(testId, bodyData[i]);
+        await Candidate.upsertCandidate(testId, bodyData[i]);
       }
     } else {
-      await candidateDB.upsertCandidate(testId, bodyData);
+      await Candidate.upsertCandidate(testId, bodyData);
     }
     res.status(201).json(bodyData);
   } catch (err) {
@@ -136,7 +140,7 @@ app.post("/tests/:testId/candidates", async (req, res) => {
 app.get("/tests/:testId/candidates", async (req, res) => {
   try {
     const testId = req.params.testId;
-    const candidates = await candidateDB.getAllCandidatesOfTest(testId);
+    const candidates = await Candidate.getAllCandidatesOfTest(testId);
     res.status(200).json({ testId, candidates });
   } catch (err) {
     console.error(err);
@@ -149,7 +153,7 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
     const pdfList = req.body;
     const testId = req.params.testId;
     const group = req.params.group;
-    const test = await testDB.getTest(testId);
+    const test = await Test.getTest(testId);
 
     const dateISO = new Date().toISOString();
     const testName = test.name.replace(/ /g, "_");
@@ -190,9 +194,9 @@ app.get("/questions", async (req, res) => {
     const idList = req.query.ids.split(",");
     let questions = [];
     if (idList) {
-      questions = await questionDB.getQuestionsByIdList(idList);
+      questions = await Question.getQuestionsByIdList(idList);
     } else {
-      questions = await questionDB.getAllQuestions();
+      questions = await Question.getAllQuestions();
     }
     res.status(200).json(questions);
   } catch (err) {
@@ -206,10 +210,10 @@ app.post("/questions", async (req, res) => {
     const bodyData = req.body;
     if (bodyData instanceof Array) {
       for (let i = 0; i < bodyData.length; i++) {
-        await questionDB.upsertQuestion(bodyData[i]);
+        await Question.upsertQuestion(bodyData[i]);
       }
     } else {
-      await questionDB.upsertQuestion(bodyData);
+      await Question.upsertQuestion(bodyData);
     }
     res.status(201).json(bodyData);
   } catch (err) {
@@ -222,7 +226,7 @@ app.post("/questions", async (req, res) => {
 
 app.get("/group", async (req, res) => {
   try {
-    const groups = await groupDB.getAllGroups();
+    const groups = await Group.getAllGroups();
 
     res.status(201).json(groups);
   } catch (error) {
@@ -233,7 +237,7 @@ app.get("/group", async (req, res) => {
 
 app.get("/student", async (req, res) => {
   try {
-    const students = await studentDB.getAllStudents();
+    const students = await Student.getAllStudents();
 
     res.status(200).json(students);
   } catch (error) {
@@ -246,9 +250,9 @@ app.post("/set-student-hr-email", async (req, res) => {
   try {
     const hrStudent = req.body;
     if (hrStudent.email) {
-      const upsertRes = await hrEmailDB.upsertHrEmail(hrStudent);
+      const upsertRes = await HrEmail.upsertHrEmail(hrStudent);
     } else {
-      const deleteRes = await hrEmailDB.deleteHrEmail(hrStudent.student);
+      const deleteRes = await HrEmail.deleteHrEmail(hrStudent.student);
     }
 
     res.status(201).json(true);
@@ -339,12 +343,12 @@ app.post("/fetch-groups-and-users", async (req, res) => {
       );
       students[group.id] = studentsRes.data.data;
 
-      await groupDB.upsertGroup(group);
+      await Group.upsertGroup(group);
 
       for (let j = 0; j < studentsRes.data.data.length; j++) {
         const student = studentsRes.data.data[j];
         student.group_id = group.id;
-        await studentDB.upsertStudent(student);
+        await Student.upsertStudent(student);
       }
     }
 

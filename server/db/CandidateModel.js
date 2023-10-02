@@ -1,5 +1,5 @@
 const knex = require("./knex");
-const Students = require("./studentDB");
+const Students = require("./StudentModel");
 
 const getAllCandidatesOfTest = async (testId) => {
   const candidates = await knex("candidate")
