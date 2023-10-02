@@ -32,6 +32,7 @@ import { hrEndpoints } from "../api/hrEndpoints";
 import { srEndpoints } from "../api/srEndpoints";
 import SpinnerButton from "../components/atoms/SpinnerButton";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import NonAttendees from "../components/NonAttendees";
 
 const fields = {
   name: "full_name",
@@ -345,7 +346,7 @@ const TestPage = () => {
           <Input
             type="select"
             className="me-2"
-            defaultValue={"all"}
+            defaultValue={groupCode}
             onChange={changeSelectedGroup}
           >
             {groups.map((group) => (
@@ -407,6 +408,16 @@ const TestPage = () => {
             Sorular
           </NavLink>
         </NavItem>
+        {groupCode !== "all" && (
+          <NavItem>
+            <NavLink
+              className={`${activeTab === "nonAttendees" ? "active" : ""}`}
+              onClick={() => toggleTab("nonAttendees")}
+            >
+              Sınava Katılmayanlar
+            </NavLink>
+          </NavItem>
+        )}
       </Nav>
 
       <TabContent
@@ -476,6 +487,11 @@ const TestPage = () => {
             testQuestions={test?.questions || []}
           />
         </TabPane>
+        {groupCode !== "all" && (
+          <TabPane tabId="nonAttendees">
+            <NonAttendees groupCode={groupCode} testId={testId} />
+          </TabPane>
+        )}
       </TabContent>
     </PageDefault>
   );

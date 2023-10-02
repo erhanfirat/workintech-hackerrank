@@ -13,7 +13,13 @@ export const candidateActions = Object.freeze({
 // REDUCER ********************************
 
 const initialCandidates = {
-  candidates: {},
+  candidates: {
+    // [testId]: [
+    //   { candidate1 },
+    //   { candidate2 },
+    //   ...
+    // ]
+  },
   fetchStates: {},
 };
 
