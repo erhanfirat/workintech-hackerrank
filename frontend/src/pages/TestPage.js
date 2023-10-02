@@ -318,7 +318,9 @@ const TestPage = () => {
   }, [sortBy, asc]);
 
   return (
-    <PageDefault pageTitle={`${getCleanTestName(test?.name)} | ${group.title}`}>
+    <PageDefault
+      pageTitle={`${getCleanTestName(test?.name)} | ${group?.title}`}
+    >
       <div className="d-flex justify-content-end align-items-baseline pb-3">
         <Badge color="warning" className="me-2">
           All: {testCandidates?.length || 0}
@@ -353,7 +355,7 @@ const TestPage = () => {
             onChange={changeSelectedGroup}
           >
             {groups.map((group) => (
-              <option value={group.name} key={group.name}>
+              <option value={group.name.trim().toLowerCase()} key={group.name}>
                 {group.title}
               </option>
             ))}
