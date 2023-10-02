@@ -5,7 +5,20 @@ const getAllStudents = () =>
     .select("student.*", "hr_email.email as hrEmail")
     .leftJoin("hr_email", "student.id", "hr_email.student");
 
-const getStudentsById = (id) => knex("student").select().where("id", id);
+const getStudentsById = (id) =>
+  knex("student")
+    .select("student.*", "hr_email.email as hrEmail")
+    .leftJoin("hr_email", "student.id", "hr_email.student")
+    .where("id", id);
+
+const getStudentsByEmail = async (email) => {
+  return await knex("student")
+    .select("student.*", "hr_email.email as hrEmail")
+    .leftJoin("hr_email", "student.id", "hr_email.student")
+    .where("student.email", email)
+    .orWhere("hrEmail", email)
+    .first();
+};
 
 const upsertStudent = (student) => {
   return knex.transaction(
@@ -21,4 +34,5 @@ module.exports = {
   getStudentsById,
   getAllStudents,
   deleteStudent,
+  getStudentsByEmail,
 };
