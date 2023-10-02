@@ -31,9 +31,9 @@ function sendEmail(email, subject, content) {
   // Send the email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error("Error sending activation email:", error);
+      console.error("Error sending email to:", email, error);
     } else {
-      console.log("Activation email sent:", info.response);
+      console.log("email sent to", email, info.response);
     }
   });
 }

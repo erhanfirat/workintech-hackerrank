@@ -44,6 +44,9 @@ const fields = {
 
 const TestPage = () => {
   const { testId, groupCode, sortBy, asc } = useParams();
+  const group = useSelector((s) =>
+    s.students.groups.find((g) => g.name.trim().toLowerCase() === groupCode)
+  );
 
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
@@ -315,7 +318,7 @@ const TestPage = () => {
   }, [sortBy, asc]);
 
   return (
-    <PageDefault pageTitle={getCleanTestName(test?.name)}>
+    <PageDefault pageTitle={`${getCleanTestName(test?.name)} | ${group.title}`}>
       <div className="d-flex justify-content-end align-items-baseline pb-3">
         <Badge color="warning" className="me-2">
           All: {testCandidates?.length || 0}
