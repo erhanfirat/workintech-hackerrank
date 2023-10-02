@@ -8,6 +8,37 @@ const generateReadableTitleByGroupName = (name) => {
   return `Fsweb ${name} - ${monthName}${part}`;
 };
 
+const nodemailer = require("nodemailer");
+
+function sendEmail(email, subject, content) {
+  // Configure Nodemailer transporter with your email service provider's settings
+  const transporter = nodemailer.createTransport({
+    service: "Yandex",
+    auth: {
+      user: "erhan@workintech.com.tr",
+      pass: "Workintech34728",
+    },
+  });
+
+  // Email content
+  const mailOptions = {
+    from: "erhan@workintech.com.tr",
+    to: email,
+    subject: subject,
+    text: content,
+  };
+
+  // Send the email
+  transporter.sendMail(mailOptions, (error, info) => {
+    if (error) {
+      console.error("Error sending activation email:", error);
+    } else {
+      console.log("Activation email sent:", info.response);
+    }
+  });
+}
+
 module.exports = {
   generateReadableTitleByGroupName,
+  sendEmail,
 };
