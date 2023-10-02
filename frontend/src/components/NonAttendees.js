@@ -2,6 +2,8 @@ import { useSelector } from "react-redux";
 import StudentList from "./StudentList";
 import { Badge } from "reactstrap";
 import SpinnerButton from "./atoms/SpinnerButton";
+import { doSRRequest } from "../api/api";
+import { srEndpoints } from "../api/srEndpoints";
 
 const NonAttendees = ({ groupCode, testId }) => {
   const group = useSelector((s) =>
@@ -25,11 +27,19 @@ const NonAttendees = ({ groupCode, testId }) => {
     return finalStudents;
   };
 
+  const sendReminderMail = () => {
+    doSRRequest(srEndpoints.reminderMailToGroup({ testId, groupId: group.id }));
+  };
+
   return (
     <>
       <div className="d-flex justify-content-end align-items-center py-2">
-        <Badge className="me-2">Katılmayan Toplam: {studentsNonAttendees()?.length} </Badge>
-        <SpinnerButton>Sınav Hatırlatma Maili Gönder</SpinnerButton>
+        <Badge className="me-2">
+          Katılmayan Toplam: {studentsNonAttendees()?.length}{" "}
+        </Badge>
+        <SpinnerButton onClick={sendReminderMail}>
+          Sınav Hatırlatma Maili Gönder
+        </SpinnerButton>
       </div>
       <StudentList students={studentsNonAttendees()} />
     </>

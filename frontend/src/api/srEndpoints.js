@@ -100,4 +100,10 @@ export const srEndpoints = {
     endpoint: "set-student-hr-email",
     payload: studentHr,
   }),
+
+  reminderMailToGroup: ({ testId, groupId }) => ({
+    reqType: REQ_TYPES.POST,
+    endpoint: "remind-hr-exam-to-group",
+    payload: { testId, groupId },
+  }),
 };

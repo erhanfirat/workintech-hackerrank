@@ -279,20 +279,19 @@ app.post("/remind-hr-exam-to-group", async (req, res) => {
 
     const subject = `${test.name} Hatırlatıcı!`;
 
-    nonAttendees.foreach((nonAttendee) => {
+    nonAttendees.forEach((nonAttendee) => {
       const message = `Merhaba ${nonAttendee.name}
       
       Workintech eğitimi içindeki çabanı ve gelişimi görüyor takdir ediyoruz.
       Gelişiminin sağlıklı bir şekilde ilerlemesi adına ve iş arama sürecini kolaylaştıracak Hackerrank Sınavlarımızdan
       ${test.name} sınavına girmediğini tespit ettik.
 
-      Lütfen en kısa sürede eğitmeninle iletişime geçip sınava giriş yapabilmen için gerekli izinleri al.
+      Eğitmeninle iletişime geçip sınava giriş yapabilmen için gerekli izinleri alabilirsin.
 
       Workintech Team
       `;
 
-      console.log(nonAttendee.hrEmail || nonAttendee.email, subject, message);
-      // sendEmail(nonAttendee.hrEmail || nonAttendee.email, subject, message);
+      sendEmail(nonAttendee.hrEmail || nonAttendee.email, subject, message);
     });
 
     res.status(201).json(true);
