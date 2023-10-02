@@ -16,80 +16,109 @@ const StudentList = ({ students, groupName }) => {
   );
 
   const studentHREmailChange = (student, e) => {
-    setHrEmails({
-      ...hrEmails,
-      [student.id]: {
-        ...hrEmails[student.id],
-        hrEmail: e.target.value,
-      },
+    setHrEmails((oldHrEmails) => {
+      const newHrEmails = {
+        ...oldHrEmails,
+        [student.id]: {
+          ...oldHrEmails[student.id],
+          hrEmail: e.target.value,
+        },
+      };
+      console.log(" ******* studentHREmailChange > newHrEmails: ", newHrEmails);
+      return newHrEmails;
     });
   };
 
   const saveHrEmail = (student) => {
     // save hr email
-    setHrEmails({
-      ...hrEmails,
-      [student.id]: {
-        ...hrEmails[student.id],
-        loading: true,
-      },
+    const studentHrEmail = hrEmails[student.id];
+    setHrEmails((oldHrEmails) => {
+      const newHrEmails = {
+        ...oldHrEmails,
+        [student.id]: {
+          ...studentHrEmail,
+          loading: true,
+        },
+      };
+
+      return newHrEmails;
     });
     doSRRequest(
       srEndpoints.setStudentHREmail({
         student: student.id,
-        email: hrEmails[student.id].hrEmail,
+        email: studentHrEmail.hrEmail,
       })
     )
       .then((res) => {
         setHrEmails((oldHrEmails) => ({
           ...oldHrEmails,
           [student.id]: {
-            ...oldHrEmails[student.id],
+            ...studentHrEmail,
             editMode: false,
+            loading: false,
           },
         }));
         dispatch(
           updateStudentAction({
             ...student,
-            hrEmail: hrEmails[student.id].hrEmail,
+            hrEmail: studentHrEmail.hrEmail,
           })
         );
       })
-      .finally(() => {
+      .catch((err) => {
         setHrEmails((oldHrEmails) => ({
           ...oldHrEmails,
           [student.id]: {
-            ...oldHrEmails[student.id],
+            ...studentHrEmail,
             loading: false,
           },
         }));
       });
   };
 
+  const editStudentHrEmail = (student) => {
+    setHrEmails((oldHrEmails) => {
+      const sHrEmail = { ...oldHrEmails[student.id], editMode: true };
+      const newHrEmails = {
+        ...oldHrEmails,
+      };
+      for (let sId in newHrEmails) {
+        newHrEmails[sId].editMode = false;
+      }
+      return {
+        ...newHrEmails,
+        [student.id]: {
+          ...sHrEmail,
+        },
+      };
+    });
+  };
+
   const cancelEditMode = (student) => {
-    setHrEmails((oldHrEmails) => ({
-      ...oldHrEmails,
-      [student.id]: {
-        student: student.id,
-        hrEmail: student.hrEmail,
-        editMode: false,
-        loading: false,
-      },
-    }));
+    setHrEmails((oldHrEmails) => {
+      const newState = {
+        ...oldHrEmails,
+        [student.id]: {
+          student: student.id,
+          hrEmail: student.hrEmail,
+          editMode: false,
+          loading: false,
+        },
+      };
+      return newState;
+    });
   };
 
   useEffect(() => {
     setHrEmails(() => {
       const hrStudents = {};
       students?.forEach((s) => {
-        const hrStudent = hrEmails[s.id]
-          ? hrEmails[s.id]
-          : {
-              student: s.id,
-              hrEmail: s.hrEmail,
-              editMode: false,
-              loading: false,
-            };
+        const hrStudent = {
+          student: s.id,
+          hrEmail: s.hrEmail,
+          editMode: false,
+          loading: false,
+        };
         hrStudents[s.id] = hrStudent;
       });
       return hrStudents;
@@ -128,15 +157,7 @@ const StudentList = ({ students, groupName }) => {
                   <span>{student.hrEmail}</span>
                   <SpinnerButton
                     iconClass="fa-solid fa-pen-to-square"
-                    onClick={() =>
-                      setHrEmails({
-                        ...hrEmails,
-                        [student.id]: {
-                          ...hrEmails[student.id],
-                          editMode: true,
-                        },
-                      })
-                    }
+                    onClick={() => editStudentHrEmail(student)}
                   ></SpinnerButton>
                 </>
               ) : (
