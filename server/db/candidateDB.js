@@ -1,17 +1,21 @@
 const knex = require("./knex");
+const Students = require("./studentDB");
 
 const getAllCandidatesOfTest = async (testId) => {
   const candidates = await knex("candidate").select("*").where("test", testId);
   return candidates.map((c) => ({ id: c.id, ...JSON.parse(c.data) }));
 };
 
-const upsertCandidate = (testId, candidate) => {
+const upsertCandidate = async (testId, candidate) => {
+  const student = await Students.getStudentsByEmail(candidate.email);
   return knex.transaction(
     async (trx) =>
       await trx("candidate")
         .insert({
           id: candidate.id,
-          test: testId,
+          test_id: testId,
+          student_id: student?.id || null,
+          score: candidate.percentage_score,
           data: JSON.stringify(candidate),
         })
         .onConflict("id")
