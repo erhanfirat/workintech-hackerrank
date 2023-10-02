@@ -5,7 +5,7 @@ const getAllStudents = () =>
     .select("student.*", "hr_email.email as hrEmail")
     .leftJoin("hr_email", "student.id", "hr_email.student");
 
-const getStudentsById = (id) =>
+const getStudentById = (id) =>
   knex("student")
     .select("student.*", "hr_email.email as hrEmail")
     .leftJoin("hr_email", "student.id", "hr_email.student")
@@ -20,6 +20,13 @@ const getStudentsByEmail = async (email) => {
     .first();
 };
 
+const getStudentsByGroupId = async (groupId) => {
+  return await knex("student")
+    .select("student.*", "hr_email.email as hrEmail")
+    .leftJoin("hr_email", "student.id", "hr_email.student")
+    .where("student.group_id", groupId);
+};
+
 const upsertStudent = (student) => {
   return knex.transaction(
     async (trx) => await trx("student").insert(student).onConflict("id").merge()
@@ -31,8 +38,9 @@ const deleteStudent = (studentId) =>
 
 module.exports = {
   upsertStudent,
-  getStudentsById,
+  getStudentById,
+  getStudentsByGroupId,
+  getStudentsByEmail,
   getAllStudents,
   deleteStudent,
-  getStudentsByEmail,
 };

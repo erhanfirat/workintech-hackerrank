@@ -2,7 +2,7 @@ const knex = require("./knex");
 
 const getAllGroups = () => knex("group").select("*");
 
-const getGroupsById = (id) => knex("group").select().where("id", id);
+const getGroupById = (id) => knex("group").select().where("id", id).first();
 
 const upsertGroup = (group) => {
   return knex.transaction(
@@ -14,7 +14,7 @@ const deleteGroup = (groupId) => knex("group").where("id", groupId).del();
 
 module.exports = {
   upsertGroup,
-  getGroupsById,
+  getGroupById,
   getAllGroups,
   deleteGroup,
 };

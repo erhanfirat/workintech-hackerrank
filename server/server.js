@@ -13,8 +13,11 @@ const Group = require("./db/GroupModel");
 const Student = require("./db/StudentModel");
 const HrEmail = require("./db/HrEmailModel");
 
-// Utils 
-const { generateReadableTitleByGroupName } = require("./utils/utils");
+// Utils
+const {
+  generateReadableTitleByGroupName,
+  sendEmail,
+} = require("./utils/utils");
 const JOURNEY = "https://api.journeyapp.com";
 
 app.use(cors());
@@ -254,6 +257,43 @@ app.post("/set-student-hr-email", async (req, res) => {
     } else {
       const deleteRes = await HrEmail.deleteHrEmail(hrStudent.student);
     }
+
+    res.status(201).json(true);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
+app.post("/remind-hr-exam-to-group", async (req, res) => {
+  try {
+    const { testId, groupId } = req.body;
+
+    const candidates = await Candidate.getAllCandidatesOfTest(testId);
+    const students = await Student.getStudentsByGroupId(groupId);
+    const test = await Test.getTest(testId);
+
+    const nonAttendees = students.filter(
+      (s) => !candidates.find((c) => c.student_id === s.id)
+    );
+
+    const subject = `${test.name} Hatırlatıcı!`;
+
+    nonAttendees.foreach((nonAttendee) => {
+      const message = `Merhaba ${nonAttendee.name}
+      
+      Workintech eğitimi içindeki çabanı ve gelişimi görüyor takdir ediyoruz.
+      Gelişiminin sağlıklı bir şekilde ilerlemesi adına ve iş arama sürecini kolaylaştıracak Hackerrank Sınavlarımızdan
+      ${test.name} sınavına girmediğini tespit ettik.
+
+      Lütfen en kısa sürede eğitmeninle iletişime geçip sınava giriş yapabilmen için gerekli izinleri al.
+
+      Workintech Team
+      `;
+
+      console.log(nonAttendee.hrEmail || nonAttendee.email, subject, message);
+      // sendEmail(nonAttendee.hrEmail || nonAttendee.email, subject, message);
+    });
 
     res.status(201).json(true);
   } catch (error) {

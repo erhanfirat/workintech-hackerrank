@@ -5,7 +5,10 @@ const getAllCandidatesOfTest = async (testId) => {
   const candidates = await knex("candidate")
     .select("*")
     .where("test_id", testId);
-  return candidates.map((c) => ({ id: c.id, ...JSON.parse(c.data) }));
+  return candidates.map((c) => {
+    const { data, ...candidate } = c;
+    return { ...candidate, ...JSON.parse(c.data) };
+  });
 };
 
 const upsertCandidate = async (testId, candidate) => {
