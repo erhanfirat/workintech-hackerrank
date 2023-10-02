@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Button, Col, Container, Row } from "reactstrap";
-import { downloadFile } from "../utils/utils";
 import { useSelector } from "react-redux";
 import { doHRRequest } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
@@ -12,7 +11,7 @@ const TestCandidatesTotal = ({
   sortByState,
   ascState,
   testId,
-  selectedGroup,
+  groupCode,
   getGroupNameByEmail,
 }) => {
   const test = useSelector((state) =>
@@ -34,7 +33,7 @@ const TestCandidatesTotal = ({
       <Row>
         <Col>
           <Link
-            to={`/tests/${testId}/name/${
+            to={`/tests/${testId}/${groupCode}/name/${
               sortByState === "name" ? inverseOrder(ascState) : ascState
             }`}
           >
@@ -46,7 +45,7 @@ const TestCandidatesTotal = ({
         </Col>
         <Col>
           <Link
-            to={`/tests/${testId}/email/${
+            to={`/tests/${testId}/${groupCode}/email/${
               sortByState === "email" ? inverseOrder(ascState) : ascState
             }`}
           >
@@ -56,10 +55,10 @@ const TestCandidatesTotal = ({
             </h6>
           </Link>
         </Col>
-        {selectedGroup === "all" && (
+        {groupCode === "all" && (
           <Col>
             <Link
-              to={`/tests/${testId}/group/${
+              to={`/tests/${testId}/${groupCode.toLowerCase()}/group/${
                 sortByState === "group" ? inverseOrder(ascState) : ascState
               }`}
             >
@@ -72,7 +71,7 @@ const TestCandidatesTotal = ({
         )}
         <Col>
           <Link
-            to={`/tests/${testId}/start-date/${
+            to={`/tests/${testId}/${groupCode}/start-date/${
               sortByState === "start-date" ? inverseOrder(ascState) : ascState
             }`}
           >
@@ -84,7 +83,7 @@ const TestCandidatesTotal = ({
         </Col>
         <Col>
           <Link
-            to={`/tests/${testId}/end-date/${
+            to={`/tests/${testId}/${groupCode}/end-date/${
               sortByState === "end-date" ? inverseOrder(ascState) : ascState
             }`}
           >
@@ -96,7 +95,7 @@ const TestCandidatesTotal = ({
         </Col>
         <Col sm="1">
           <Link
-            to={`/tests/${testId}/score/${
+            to={`/tests/${testId}/${groupCode}/score/${
               sortByState === "score" ? inverseOrder(ascState) : ascState
             }`}
           >
@@ -113,7 +112,7 @@ const TestCandidatesTotal = ({
           <Col className="text-truncate" title={testCandidate.email}>
             {testCandidate.email}
           </Col>
-          {selectedGroup === "all" && (
+          {groupCode === "all" && (
             <Col className="text-truncate" title={testCandidate.email}>
               {getGroupNameByEmail(testCandidate.email)}
             </Col>

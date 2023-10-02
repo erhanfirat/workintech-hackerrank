@@ -31,6 +31,7 @@ import { doHRRequest, doSRRequestResponse } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
 import { srEndpoints } from "../api/srEndpoints";
 import SpinnerButton from "../components/atoms/SpinnerButton";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 const fields = {
   name: "full_name",
@@ -41,7 +42,7 @@ const fields = {
 };
 
 const TestPage = () => {
-  const { testId, sortBy, asc } = useParams();
+  const { testId, groupCode, sortBy, asc } = useParams();
 
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
@@ -57,9 +58,10 @@ const TestPage = () => {
     (state) => state.candidates?.candidates?.[testId]
   );
 
+  const history = useHistory();
+
   const [sortByState, setSortByState] = useState("full_name");
   const [ascState, setAscState] = useState("asc");
-  const [selectedGroup, setSelectedGroup] = useState("all");
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("results");
   const [allPDFLoading, setAllPDFLoading] = useState(false);
@@ -75,8 +77,8 @@ const TestPage = () => {
     return testCandidates
       ?.filter(
         (candidate) =>
-          selectedGroup === "all" ||
-          students[getIdOfSelectedGroup(selectedGroup)]?.find(
+          groupCode === "all" ||
+          students[getIdOfSelectedGroup(groupCode)]?.find(
             (ss) =>
               ss.email === candidate.email || ss.hrEmail === candidate.email
           )
@@ -123,14 +125,14 @@ const TestPage = () => {
     return {
       test: test?.name,
       group: groups.find(
-        (g) => g.name.toLowerCase() === selectedGroup.toLowerCase()
+        (g) => g.name.toLowerCase() === groupCode.toLowerCase()
       )?.title,
       candidateCount: `${candidatesToList()?.length} / ${
-        selectedGroup && students[getIdOfSelectedGroup(selectedGroup)]?.length
+        groupCode && students[getIdOfSelectedGroup(groupCode)]?.length
       }`,
       candidateRate:
         ((candidatesToList()?.length || 0) /
-          (students[getIdOfSelectedGroup(selectedGroup)]?.length || 1)) *
+          (students[getIdOfSelectedGroup(groupCode)]?.length || 1)) *
         100,
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].startDateStr,
@@ -180,6 +182,14 @@ const TestPage = () => {
     return groups.find((g) => g.id == student?.group_id)?.title;
   });
 
+  const changeSelectedGroup = (e) => {
+    history.push(
+      `/tests/${testId}/${e.target.value.trim().toLowerCase()}${
+        sortBy ? "/" + sortBy + "/" + asc : ""
+      }`
+    );
+  };
+
   const downloadCSV = () => {
     // CREATE WORKBOOK
     const wb = utils.book_new();
@@ -226,7 +236,7 @@ const TestPage = () => {
     utils.book_append_sheet(wb, wsDetail, "Detail");
     utils.book_append_sheet(wb, wsQuestions, "Questions");
 
-    writeFile(wb, `${test.name}_${selectedGroup}.xlsx`);
+    writeFile(wb, `${test.name}_${groupCode}.xlsx`);
   };
 
   const downloadAllPDF = () => {
@@ -239,7 +249,7 @@ const TestPage = () => {
             pdfURLs.push({ candidate: candidate.email, url: pdfURL });
             if (pdfURLs.length === candidatesToList().length) {
               doSRRequestResponse(
-                srEndpoints.downloadAllPDFs(testId, selectedGroup, pdfURLs)
+                srEndpoints.downloadAllPDFs(testId, groupCode, pdfURLs)
               )
                 .then((res) => {
                   const contentDisposition = res.headers["content-disposition"];
@@ -336,7 +346,7 @@ const TestPage = () => {
             type="select"
             className="me-2"
             defaultValue={"all"}
-            onChange={(e) => setSelectedGroup(e.target.value)}
+            onChange={changeSelectedGroup}
           >
             {groups.map((group) => (
               <option value={group.name} key={group.name}>
@@ -417,11 +427,11 @@ const TestPage = () => {
               <Col sm="4">Katılımcı Sayısı:</Col>
               <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
             </Row>
-            {selectedGroup && (
+            {groupCode && (
               <Row className="border-bottom pb-1 mb-2">
                 <Col sm="4">Katılım Oranı (%):</Col>
                 <Col sm="8">
-                  {selectedGroup &&
+                  {groupCode &&
                     `${getGeneralInfo()?.candidateRate.toFixed(0)} %`}
                 </Col>
               </Row>
@@ -448,7 +458,7 @@ const TestPage = () => {
             sortByState={sortByState}
             ascState={ascState}
             testId={testId}
-            selectedGroup={selectedGroup}
+            groupCode={groupCode}
             getGroupNameByEmail={getGroupNameByEmail}
           />
         </TabPane>
@@ -456,7 +466,7 @@ const TestPage = () => {
           <TestCandidateResults
             test={test}
             candidates={candidatesToList()}
-            selectedGroup={selectedGroup}
+            groupCode={groupCode}
             getGroupNameByEmail={getGroupNameByEmail}
           />
         </TabPane>

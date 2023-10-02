@@ -4,7 +4,7 @@ import { getCleanTestName, getDateTimeStringFromISO } from "../utils/utils";
 export const TestCandidateResults = ({
   test,
   candidates,
-  selectedGroup,
+  groupCode,
   getGroupNameByEmail,
 }) => {
   return (
@@ -17,7 +17,7 @@ export const TestCandidateResults = ({
         >
           <h6>{getCleanTestName(test?.name)}</h6>
         </Col>
-        {selectedGroup === "all" && (
+        {groupCode === "all" && (
           <Col sm="1" className="text-truncate border-right border-end">
             <h6>Grup</h6>
           </Col>
@@ -40,7 +40,7 @@ export const TestCandidateResults = ({
           >
             {candidate.full_name}
           </Col>
-          {selectedGroup === "all" && (
+          {groupCode === "all" && (
             <Col
               sm="1"
               className="text-truncate border-right border-end"

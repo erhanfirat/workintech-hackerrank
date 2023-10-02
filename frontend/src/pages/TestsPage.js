@@ -21,7 +21,7 @@ const TestsPage = () => {
   const candidateFetchStates = useSelector((s) => s.candidates.fetchStates);
 
   const navigateToTest = (test) => {
-    history.push(`/tests/${test.id}`);
+    history.push(`/tests/${test.id}/all`);
   };
 
   const refetchTests = () => {

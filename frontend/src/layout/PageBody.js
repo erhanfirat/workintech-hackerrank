@@ -20,7 +20,7 @@ const PageBody = () => {
         <Route path="/tests" exact>
           <ProtectedPage PageComponent={TestsPage} />
         </Route>
-        <Route path="/tests/:testId/:sortBy?/:asc?/:groupCode?" exact>
+        <Route path="/tests/:testId/:groupCode/:sortBy?/:asc?" exact>
           <ProtectedPage PageComponent={TestPage} />
         </Route>
         <Route path="/groups" exact>
