@@ -37,6 +37,8 @@ const initialStudents = {
     // ...
   ],
 
+  groupTestsInfo: [],
+
   students: {
     // [groupId]: [
     //     {
@@ -70,6 +72,12 @@ export const studentsReducer = (state = initialStudents, action) => {
       };
 
     case studentActions.setGroupInfo:
+      return {
+        ...state,
+        groupTestsInfo: [...payload],
+      };
+
+    case studentActions.setGroupTestInfo:
       return {
         ...state,
         groups: [
@@ -147,6 +155,7 @@ export const getAllGroupsActionCreator = () => (dispatch) => {
         type: studentActions.setGroupsFetchState,
         payload: FETCH_STATES.FETHCED,
       });
+      dispatch(getAllGroupTestsInfoActionCreator());
       dispatch(getAllStudentsActionCreator());
     })
     .catch((err) => {
@@ -180,6 +189,17 @@ export const getAllStudentsActionCreator = () => (dispatch) => {
         payload: FETCH_STATES.FAILED,
       });
     });
+};
+
+export const getAllGroupTestsInfoActionCreator = () => (dispatch) => {
+  doSRRequest(srEndpoints.getAllGroupTestsInfo())
+    .then((groupTestsInfo) => {
+      dispatch({
+        type: studentActions.setGroupTestInfo,
+        payload: groupTestsInfo,
+      });
+    })
+    .catch((err) => {});
 };
 
 export const fetchGroupsAndStudents = () => (dispatch) => {

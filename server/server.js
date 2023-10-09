@@ -148,16 +148,18 @@ const updateGroupTestInfo = async (testId) => {
   const candidates = await Candidate.getAllCandidateWithGroupIdOfTest(testId);
   const groups = {};
   candidates.forEach((candidate) => {
-    if (!groups[candidate.group_id]) {
-      groups[candidate.group_id] = [];
+    if (candidate.group_id) {
+      if (!groups[candidate.group_id]) {
+        groups[candidate.group_id] = [];
+      }
+      groups[candidate.group_id].push(candidate);
     }
-    groups[candidate.group_id].push(candidate);
   });
 
   for (groupId in groups) {
     const group = await Group.getGroupById(groupId);
     console.log("groupId && group > ", groupId, group);
-    if (groupId && group) {
+    if (groupId && groupId !== "null" && group) {
       console.log("group found by id: ", groupId, group);
       const newGroupTestInfo = {
         group_id: groupId,
@@ -270,6 +272,17 @@ app.get("/group", async (req, res) => {
     const groups = await Group.getAllGroups();
 
     res.status(201).json(groups);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
+app.get("/group-test-info", async (req, res) => {
+  try {
+    const groupTestInfo = await GroupTestInfo.getAllGroupTestInfo();
+
+    res.status(201).json(groupTestInfo);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "An error occurred", error });
