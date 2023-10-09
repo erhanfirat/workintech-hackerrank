@@ -14,12 +14,14 @@ const Student = require("./db/StudentModel");
 const HrEmail = require("./db/HrEmailModel");
 const GroupTestInfo = require("./db/GroupTestInfoModel");
 
+require("dotenv").config();
+const JOURNEY = process.env.JOURNEY_ENDPOINT;
+
 // Utils
 const {
   generateReadableTitleByGroupName,
   sendEmail,
 } = require("./utils/utils");
-const JOURNEY = process.env.JOURNEY_ENDPOINT;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
@@ -393,7 +395,7 @@ app.get("/verify/me", async (req, res) => {
   try {
     const Authorization = req.headers["authorization"];
 
-    const journeyRes = await axios.get("https://api.journeyapp.com/user/me", {
+    const journeyRes = await axios.get(`${JOURNEY}/user/me`, {
       headers: {
         Authorization,
       },
