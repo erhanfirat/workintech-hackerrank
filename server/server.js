@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const axios = require("axios");
 const archiver = require("archiver");
+const pdf = require("pdf-parse");
 
 // Models
 const Test = require("./db/TestModel");
@@ -58,7 +59,7 @@ app.get("/tests", async (req, res) => {
 
 app.get("/tests/:id", async (req, res) => {
   try {
-    const testRec = await Test.getTest(req.params.id);
+    const testRec = await Test.getTestById(req.params.id);
     const test = JSON.parse(testRec.data);
     res.status(200).json(test);
   } catch (err) {
@@ -217,7 +218,7 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
     const pdfList = req.body;
     const testId = req.params.testId;
     const group = req.params.group;
-    const test = await Test.getTest(testId);
+    const test = await Test.getTestById(testId);
 
     const dateISO = new Date().toISOString();
     const testName = test.name.replace(/ /g, "_");
@@ -244,6 +245,59 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
   } catch (error) {
     console.error("Error downloading or creating zip:", error);
     res.status(500).send("Internal Server Error");
+  }
+});
+
+app.post("/candidate/send/report", async (req, res) => {
+  try {
+    const { url, studentId, testId } = req.body;
+
+    // Download the PDF from the URL
+    const response = await axios.get(url, { responseType: "arraybuffer" });
+    const pdfBuffer = Buffer.from(response.data);
+
+    const student = await Student.getStudentById(studentId);
+    const test = await Test.getTestById(testId);
+
+    console.log(student, test);
+
+    // Parse the PDF
+    const data = await pdf(pdfBuffer);
+
+    // Create an attachment
+    const attachment = {
+      filename: `${test.name} - ${student.name}.pdf`,
+      content: pdfBuffer,
+    };
+
+    const subject = `${test.name} Değerlendirme Raporun Hazır!`;
+    const content = `
+<div style="font-size: 18px;">
+  <p>Merhaba <strong>${student.name};</strong></p>
+
+  <p>
+    <strong>${test.name}</strong> sınav değerlendirme PDF dosyası maile eklenmiştir.
+    Bu rapor doğru ve hatalı cevaplarını inceleyip, hatalarını tespit edip, bilgilerini tazelemek için mükemmel bir fırsat.
+  </p>
+
+  Workintech <br />
+  Hackerrank Ekibi
+
+  <blockquote style="padding-top: 30px;">
+    <q>Hiçbir şeye ihtiyacımız yok, yalnız bir şeye ihtiyacımız vardır; çalışkan olmak.</q>
+    <br />
+    M. Kemal Atatürk
+  </blockquote>
+</div>
+`;
+
+    // Send the email
+    await sendEmail("erhanfirat@gmail.com", subject, content, [attachment]);
+
+    res.json({ message: "PDF downloaded and email sent successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error downloading PDF or sending email" });
   }
 });
 
@@ -343,7 +397,7 @@ app.post("/remind-hr-exam-to-group", async (req, res) => {
 
     const candidates = await Candidate.getAllCandidatesOfTest(testId);
     const students = await Student.getStudentsByGroupId(groupId);
-    const test = await Test.getTest(testId);
+    const test = await Test.getTestById(testId);
 
     const nonAttendees = students.filter(
       (s) => !candidates.find((c) => c.student_id === s.id)
