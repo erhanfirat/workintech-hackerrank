@@ -25,6 +25,7 @@ import { doSRRequest } from "../api/api";
 import { srEndpoints } from "../api/srEndpoints";
 import GroupTests from "../components/GroupTests";
 import StudentList from "../components/StudentList";
+import GroupTestsGraph from "../components/GroupTestsGraph";
 
 const fields = {
   name: "full_name",
@@ -39,6 +40,34 @@ const GroupPage = () => {
       (g) => g.name.toLowerCase() === groupName.toLowerCase()
     )
   );
+  const testsInfo = useSelector((store) => {
+    const groupTestsInfo = store.students.groupTestsInfo.filter(
+      (gti) => gti.group_id === group.id
+    );
+
+    const tests = store.tests.workintechTests.filter((t) => {
+      for (let i = 1; i < group.active_sprint; i++)
+        if (t.name.includes(i.toString().padStart(2, 0))) return true;
+      return false;
+    });
+
+    return tests.map((t) => {
+      const { id, name } = t;
+      const testInfo = groupTestsInfo.find((gti) => gti.test_id === t.id);
+
+      return {
+        id,
+        name,
+        shortName: name?.replace("[Workintech] - ", ""),
+        ...testInfo,
+        attendee_rate: (
+          (testInfo?.attendee_count / testInfo?.total_count) *
+          100
+        ).toFixed(0),
+      };
+    });
+  });
+
   const students = useSelector((s) => s.students.students[group?.id]);
   const { groupsFetchState } = useSelector((s) => s.students);
 
@@ -147,6 +176,14 @@ const GroupPage = () => {
             Testler
           </NavLink>
         </NavItem>
+        <NavItem>
+          <NavLink
+            className={`${activeTab === "graph" ? "active" : ""}`}
+            onClick={() => toggleTab("graph")}
+          >
+            Grafik
+          </NavLink>
+        </NavItem>
       </Nav>
 
       <TabContent
@@ -157,7 +194,10 @@ const GroupPage = () => {
           <StudentList students={studentsToList()} groupName={groupName} />
         </TabPane>
         <TabPane tabId={"tests"}>
-          <GroupTests group={group} />
+          <GroupTests group={group} testsInfo={testsInfo} />
+        </TabPane>
+        <TabPane tabId={"graph"}>
+          <GroupTestsGraph group={group} testsInfo={testsInfo} />
         </TabPane>
       </TabContent>
     </PageDefault>
