@@ -49,8 +49,8 @@ const GroupTestsGraph = ({ group, testsInfo }) => {
               margin={{
                 top: 5,
                 right: 30,
-                left: 20,
-                bottom: 5,
+                left: 0,
+                bottom: 0,
               }}
             >
               <CartesianGrid strokeDasharray="3 3" />
@@ -62,14 +62,16 @@ const GroupTestsGraph = ({ group, testsInfo }) => {
                 type="monotone"
                 dataKey="average_score"
                 name="Ortalama"
-                stroke="#8884d8"
+                stroke="#06ca03"
                 activeDot={{ r: 8 }}
+                strokeWidth={3}
               />
               <Line
                 type="monotone"
                 dataKey="attendee_rate"
-                stroke="#82ca9d"
+                stroke="#2cbdff"
                 name="Katılım"
+                strokeWidth={3}
               />
             </LineChart>
           </ResponsiveContainer>
