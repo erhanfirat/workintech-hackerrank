@@ -12,6 +12,7 @@ const Question = require("./db/QuestionModel");
 const Group = require("./db/GroupModel");
 const Student = require("./db/StudentModel");
 const HrEmail = require("./db/HrEmailModel");
+const GroupTestInfo = require("./db/GroupTestInfoModel");
 
 // Utils
 const {
@@ -133,12 +134,49 @@ app.post("/tests/:testId/candidates", async (req, res) => {
     } else {
       await Candidate.upsertCandidate(testId, bodyData);
     }
+
+    updateGroupTestInfo(testId);
+
     res.status(201).json(bodyData);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "An error occurred" });
   }
 });
+
+const updateGroupTestInfo = async (testId) => {
+  const candidates = await Candidate.getAllCandidateWithGroupIdOfTest(testId);
+  const groups = {};
+  candidates.forEach((candidate) => {
+    if (!groups[candidate.group_id]) {
+      groups[candidate.group_id] = [];
+    }
+    groups[candidate.group_id].push(candidate);
+  });
+
+  for (groupId in groups) {
+    const group = await Group.getGroupById(groupId);
+    console.log("groupId && group > ", groupId, group);
+    if (groupId && group) {
+      console.log("group found by id: ", groupId, group);
+      const newGroupTestInfo = {
+        group_id: groupId,
+        test_id: testId,
+        average_score: groups[groupId]
+          ? (
+              groups[groupId]?.reduce(
+                (sum, candidate) => sum + candidate.score,
+                0
+              ) / groups[groupId]?.length
+            ).toFixed(2)
+          : 0,
+        attendee_count: groups[groupId]?.length || 0,
+        total_count: group.user_count,
+      };
+      await GroupTestInfo.upsertGroupTestInfo(newGroupTestInfo);
+    }
+  }
+};
 
 app.get("/tests/:testId/candidates", async (req, res) => {
   try {
