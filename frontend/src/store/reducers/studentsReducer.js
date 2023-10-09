@@ -71,26 +71,10 @@ export const studentsReducer = (state = initialStudents, action) => {
         groups: [allGroup, ...payload],
       };
 
-    case studentActions.setGroupInfo:
-      return {
-        ...state,
-        groupTestsInfo: [...payload],
-      };
-
     case studentActions.setGroupTestInfo:
       return {
         ...state,
-        groups: [
-          ...state.groups.map((g) => {
-            if (g.id === payload.group_id) {
-              return {
-                ...g,
-                tests: { ...g?.tests, [payload.test_id]: { ...payload } },
-              };
-            }
-            return g;
-          }),
-        ],
+        groupTestsInfo: [...payload],
       };
 
     case studentActions.setStudents:

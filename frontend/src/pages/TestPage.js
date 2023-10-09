@@ -47,6 +47,11 @@ const TestPage = () => {
   const group = useSelector((s) =>
     s.students.groups.find((g) => g.name.trim().toLowerCase() === groupCode)
   );
+  const groupTestInfo = useSelector((s) =>
+    s.students.groupTestsInfo?.find(
+      (gti) => gti.test_id === testId && gti.group_id === group.id
+    )
+  );
 
   const { workintechTests, fetchState: testsFetchState } = useSelector(
     (state) => state.tests
@@ -128,27 +133,16 @@ const TestPage = () => {
 
     return {
       test: test?.name,
-      group: groups.find(
-        (g) => g.name.toLowerCase() === groupCode.toLowerCase()
-      )?.title,
-      candidateCount: `${candidatesToList()?.length} / ${
-        groupCode && students[getIdOfSelectedGroup(groupCode)]?.length
-      }`,
-      candidateRate:
-        ((candidatesToList()?.length || 0) /
-          (students[getIdOfSelectedGroup(groupCode)]?.length || 1)) *
-        100,
+      group: group?.title,
+      candidateCount: groupTestInfo?.attendee_count,
+      totalCount: groupTestInfo?.total_count,
+      candidateRate: groupTestInfo?.attendee_count / groupTestInfo?.total_count,
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].startDateStr,
       lastAttemptDate:
         dateOrderList?.length > 0 &&
         dateOrderList[dateOrderList.length - 1].startDateStr,
-      average:
-        candidatesToList()?.length &&
-        candidatesToList()?.reduce(
-          (total, student) => total + student.percentage_score,
-          0
-        ) / candidatesToList().length,
+      average: groupTestInfo?.average_score,
     };
   });
 
@@ -448,7 +442,10 @@ const TestPage = () => {
                 <Col sm="4">Katılım Oranı (%):</Col>
                 <Col sm="8">
                   {groupCode &&
-                    `${getGeneralInfo()?.candidateRate.toFixed(0)} %`}
+                    `${
+                      getGeneralInfo()?.candidateRate?.toFixed &&
+                      getGeneralInfo().candidateRate.toFixed(0)
+                    } %`}
                 </Col>
               </Row>
             )}
