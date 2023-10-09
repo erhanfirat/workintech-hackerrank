@@ -9,7 +9,8 @@ const getStudentById = (id) =>
   knex("student")
     .select("student.*", "hr_email.email as hrEmail")
     .leftJoin("hr_email", "student.id", "hr_email.student")
-    .where("id", id);
+    .where("id", id)
+    .first();
 
 const getStudentsByEmail = async (email) => {
   return await knex("student")
