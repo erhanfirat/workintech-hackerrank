@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom/cjs/react-router-dom.min";
 import { Button, Col, Container, Row } from "reactstrap";
 import { useSelector } from "react-redux";
-import { doHRRequest } from "../api/api";
+import { doHRRequest, doSRRequest } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
+import { srEndpoints } from "../api/srEndpoints";
 
 const TestCandidatesTotal = ({
   candidates,
@@ -24,6 +25,22 @@ const TestCandidatesTotal = ({
     doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
       (pdfURL) => {
         window.open(pdfURL, "_blank");
+      }
+    );
+  };
+
+  const emailPDFReport = (candidate) => {
+    // download PDF of candidate
+    // downloadFile(candidate.pdf_url, `${test.name}_${candidate.email}.pdf`);
+    doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
+      (pdfURL) => {
+        doSRRequest(
+          srEndpoints.candidateSendReport({
+            url: pdfURL,
+            studentId: candidate.student_id,
+            testId,
+          })
+        );
       }
     );
   };
@@ -131,6 +148,13 @@ const TestCandidatesTotal = ({
               onClick={() => downloadPDF(testCandidate)}
             >
               PDF
+            </Button>
+            <Button
+              size="sm"
+              className="py-0"
+              onClick={() => emailPDFReport(testCandidate)}
+            >
+              Email PDF Report
             </Button>
           </Col>
         </Row>
