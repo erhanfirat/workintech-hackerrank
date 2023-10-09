@@ -15,14 +15,14 @@ function sendEmail(email, subject, content) {
   const transporter = nodemailer.createTransport({
     service: "Yandex",
     auth: {
-      user: "erhan@workintech.com.tr",
-      pass: "Workintech34728",
+      user: process.env.HACKERRANK_EMAIL,
+      pass: process.env.HACKERRANK_PASSWORD,
     },
   });
 
   // Email content
   const mailOptions = {
-    from: "erhan@workintech.com.tr",
+    from: process.env.HACKERRANK_EMAIL,
     to: email,
     subject: subject,
     text: content,

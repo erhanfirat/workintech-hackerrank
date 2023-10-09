@@ -19,7 +19,7 @@ const {
   generateReadableTitleByGroupName,
   sendEmail,
 } = require("./utils/utils");
-const JOURNEY = "https://api.journeyapp.com";
+const JOURNEY = process.env.JOURNEY;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
