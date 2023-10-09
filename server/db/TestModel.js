@@ -2,7 +2,7 @@ const knex = require("./knex");
 
 const getAllTests = () => knex("test").select("*");
 
-const getTest = async (testId) => {
+const getTestById = async (testId) => {
   const test = await knex("test").where("id", testId).first();
   return { id: test.id, ...JSON.parse(test.data) };
 };
@@ -22,6 +22,6 @@ const deleteTest = (testId) => knex("test").where("id", testId).del();
 module.exports = {
   upsertTest,
   getAllTests,
-  getTest,
+  getTestById,
   deleteTest,
 };
