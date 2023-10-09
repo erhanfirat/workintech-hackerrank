@@ -15,7 +15,7 @@ const getAllCandidatesOfTest = async (testId) => {
     };
   });
 };
-const getAllCandidateWithGroupIdOfTest = async (testId) => {
+const getAllCandidateWithStudentByTestId = async (testId) => {
   const candidates = await knex("candidate")
     .select("candidate.*", "student.group_id")
     .leftJoin("student", "candidate.student_id", "student.id")
@@ -55,6 +55,6 @@ const deleteCandidate = (candidateId) =>
 module.exports = {
   upsertCandidate,
   getAllCandidatesOfTest,
-  getAllCandidateWithGroupIdOfTest,
+  getAllCandidateWithStudentByTestId,
   deleteCandidate,
 };

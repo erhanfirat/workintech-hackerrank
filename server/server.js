@@ -145,8 +145,9 @@ app.post("/tests/:testId/candidates", async (req, res) => {
 });
 
 const updateGroupTestInfo = async (testId) => {
-  const candidates = await Candidate.getAllCandidateWithGroupIdOfTest(testId);
-  const groups = {};
+  const candidates = await Candidate.getAllCandidateWithStudentByTestId(testId);
+  const groups = {}; // group tabanlı ortalamalar için
+
   candidates.forEach((candidate) => {
     if (candidate.group_id) {
       if (!groups[candidate.group_id]) {
@@ -155,10 +156,14 @@ const updateGroupTestInfo = async (testId) => {
       groups[candidate.group_id].push(candidate);
     }
   });
+  let totalStudentCount = 0;
+  let attendeeCount = 0;
 
   for (groupId in groups) {
     const group = await Group.getGroupById(groupId);
     if (groupId && groupId !== "null" && group) {
+      totalStudentCount += group.user_count;
+      attendeeCount += groups[groupId]?.length || 0;
       const newGroupTestInfo = {
         group_id: groupId,
         test_id: testId,
@@ -176,6 +181,20 @@ const updateGroupTestInfo = async (testId) => {
       await GroupTestInfo.upsertGroupTestInfo(newGroupTestInfo);
     }
   }
+
+  // test tabanlı tüm katılımcıların ortalamaları için
+  const testInfoForAllGroups = {
+    test_id: testId,
+    group_id: "all",
+    average_score: (
+      candidates.reduce((sum, candidate) => sum + candidate.score, 0) /
+      totalStudentCount
+    ).toFixed(2),
+    attendee_count: candidates.length,
+    total_count: attendeeCount,
+  };
+
+  await GroupTestInfo.upsertGroupTestInfo(testInfoForAllGroups);
 };
 
 app.get("/tests/:testId/candidates", async (req, res) => {
