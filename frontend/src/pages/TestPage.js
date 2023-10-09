@@ -136,7 +136,10 @@ const TestPage = () => {
       group: group?.title,
       candidateCount: groupTestInfo?.attendee_count,
       totalCount: groupTestInfo?.total_count,
-      candidateRate: groupTestInfo?.attendee_count / groupTestInfo?.total_count,
+      candidateRate: (
+        (groupTestInfo?.attendee_count / groupTestInfo?.total_count) *
+        100
+      ).toFixed(1),
       firstAttemptDate:
         dateOrderList?.length > 0 && dateOrderList[0].startDateStr,
       lastAttemptDate:
@@ -435,28 +438,19 @@ const TestPage = () => {
             </Row>
             <Row className="border-bottom pb-1 mb-2">
               <Col sm="4">Katılımcı Sayısı:</Col>
-              <Col sm="8">{getGeneralInfo()?.candidateCount}</Col>
+              <Col sm="8">
+                {getGeneralInfo()?.candidateCount} /{" "}
+                {getGeneralInfo()?.totalCount}
+              </Col>
             </Row>
             {groupCode && (
               <Row className="border-bottom pb-1 mb-2">
                 <Col sm="4">Katılım Oranı (%):</Col>
                 <Col sm="8">
-                  {groupCode &&
-                    `${
-                      getGeneralInfo()?.candidateRate?.toFixed &&
-                      getGeneralInfo().candidateRate.toFixed(0)
-                    } %`}
+                  {groupCode && `${getGeneralInfo().candidateRate} %`}
                 </Col>
               </Row>
             )}
-            <Row className="border-bottom pb-1 mb-2">
-              <Col sm="4">Tarih Aralığı:</Col>
-              <Col sm="8">
-                {getDateStringFromISO(getGeneralInfo()?.firstAttemptDate)}
-                {" - "}
-                {getDateStringFromISO(getGeneralInfo()?.lastAttemptDate)}
-              </Col>
-            </Row>
             <Row className="pb-1 mb-2">
               <Col sm="4">Ortalama (%):</Col>
               <Col sm="8">{getGeneralInfo()?.average?.toFixed(2)}</Col>
