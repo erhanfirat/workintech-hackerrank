@@ -19,7 +19,7 @@ const {
   generateReadableTitleByGroupName,
   sendEmail,
 } = require("./utils/utils");
-const JOURNEY = process.env.JOURNEY;
+const JOURNEY = process.env.JOURNEY_ENDPOINT;
 
 app.use(cors());
 app.use(bodyParser.json({ limit: "5mb" }));
