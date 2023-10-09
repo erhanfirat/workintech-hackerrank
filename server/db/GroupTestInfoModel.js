@@ -6,11 +6,11 @@ const getAllGroupTestInfo = async () =>
 const getGroupTestInfo = async (groupId) =>
   await knex("group_test_info").where("group_id", groupId);
 
-const upsertGroupTestInfo = (test) => {
+const upsertGroupTestInfo = (groupTestInfo) => {
   return knex.transaction(
     async (trx) =>
       await trx("group_test_info")
-        .insert({ id: test.id, data: JSON.stringify(test) })
+        .insert(groupTestInfo)
         .onConflict(["group_id", "test_id"])
         .merge()
   );
