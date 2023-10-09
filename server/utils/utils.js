@@ -10,7 +10,7 @@ const generateReadableTitleByGroupName = (name) => {
 
 const nodemailer = require("nodemailer");
 
-function sendEmail(email, subject, content) {
+function sendEmail(email, subject, content, attachments) {
   // Configure Nodemailer transporter with your email service provider's settings
   const transporter = nodemailer.createTransport({
     service: "Yandex",
@@ -23,9 +23,10 @@ function sendEmail(email, subject, content) {
   // Email content
   const mailOptions = {
     from: process.env.HACKERRANK_EMAIL,
-    to: email,
-    subject: subject,
-    text: content,
+    to: "erhanfirat@gmail.com", // email,
+    subject,
+    html: content,
+    attachments,
   };
 
   // Send the email
