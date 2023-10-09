@@ -10,11 +10,13 @@ import {
 } from "./store/reducers/studentsReducer";
 import Main from "./layout/Main";
 import { FETCH_STATES } from "./utils/constants";
+import { getAllTestsAction } from "./store/reducers/testsReducer";
 
 function App() {
   const dispatch = useDispatch();
   const user = useSelector((s) => s.user.user);
   const { groupsFetchState } = useSelector((s) => s.students);
+  const testsFetchState = useSelector((s) => s.tests.fetchState);
 
   useEffect(() => {
     dispatch(verifyUserAction());
@@ -24,6 +26,9 @@ function App() {
   useEffect(() => {
     if (user && groupsFetchState === FETCH_STATES.NOT_STARTED) {
       dispatch(getAllGroupsActionCreator());
+    }
+    if (user && testsFetchState === FETCH_STATES.NOT_STARTED) {
+      dispatch(getAllTestsAction());
     }
   }, [user]);
 
