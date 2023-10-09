@@ -15,14 +15,10 @@ const NonAttendees = ({ groupCode, testId }) => {
   const candidates = useSelector((s) => s.candidates.candidates[testId]);
 
   const studentsNonAttendees = () => {
-    console.log("students: ", students);
-    console.log("candidates: ", candidates);
     const finalStudents =
       students
         ?.filter((s) => !candidates?.find((c) => c.student_id === s.id))
         .sort((s1, s2) => (s1.name > s2.name ? 1 : -1)) || [];
-
-    console.log("finalStudents: ", finalStudents);
 
     return finalStudents;
   };

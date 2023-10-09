@@ -158,9 +158,7 @@ const updateGroupTestInfo = async (testId) => {
 
   for (groupId in groups) {
     const group = await Group.getGroupById(groupId);
-    console.log("groupId && group > ", groupId, group);
     if (groupId && groupId !== "null" && group) {
-      console.log("group found by id: ", groupId, group);
       const newGroupTestInfo = {
         group_id: groupId,
         test_id: testId,

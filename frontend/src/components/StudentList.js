@@ -24,7 +24,6 @@ const StudentList = ({ students, groupName }) => {
           hrEmail: e.target.value,
         },
       };
-      console.log(" ******* studentHREmailChange > newHrEmails: ", newHrEmails);
       return newHrEmails;
     });
   };
