@@ -157,13 +157,11 @@ const updateGroupTestInfo = async (testId) => {
     }
   });
   let totalStudentCount = 0;
-  let attendeeCount = 0;
 
   for (groupId in groups) {
     const group = await Group.getGroupById(groupId);
     if (groupId && groupId !== "null" && group) {
       totalStudentCount += group.user_count;
-      attendeeCount += groups[groupId]?.length || 0;
       const newGroupTestInfo = {
         group_id: groupId,
         test_id: testId,
@@ -182,16 +180,20 @@ const updateGroupTestInfo = async (testId) => {
     }
   }
 
+  const candidatesWithGroup = candidates.filter((c) => c.group_id);
+
   // test tabanlı tüm katılımcıların ortalamaları için
   const testInfoForAllGroups = {
     test_id: testId,
     group_id: "all",
     average_score: (
-      candidates.reduce((sum, candidate) => sum + candidate.score, 0) /
-      totalStudentCount
+      candidatesWithGroup?.reduce(
+        (sum, candidate) => sum + candidate.score,
+        0
+      ) / candidatesWithGroup.length
     ).toFixed(2),
-    attendee_count: candidates.length,
-    total_count: attendeeCount,
+    attendee_count: candidatesWithGroup.length,
+    total_count: totalStudentCount,
   };
 
   await GroupTestInfo.upsertGroupTestInfo(testInfoForAllGroups);
