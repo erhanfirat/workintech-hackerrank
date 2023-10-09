@@ -1,5 +1,6 @@
 import { Col, Container, Row } from "reactstrap";
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom/cjs/react-router-dom";
 
 const GroupTests = ({ group }) => {
   const tests = useSelector((state) =>
@@ -20,7 +21,9 @@ const GroupTests = ({ group }) => {
       {tests?.map((test) => (
         <Row key={test.id} className="border-top py-1 grid-row">
           <Col className="text-truncate" title={test.name}>
-            {test.name}
+            <Link to={`/tests/${test.id}/${group?.name.trim().toLowerCase()}`}>
+              {test.name}
+            </Link>
           </Col>
         </Row>
       ))}
