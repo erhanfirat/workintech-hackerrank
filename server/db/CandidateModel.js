@@ -7,7 +7,28 @@ const getAllCandidatesOfTest = async (testId) => {
     .where("test_id", testId);
   return candidates.map((c) => {
     const { data, ...candidate } = c;
-    return { ...candidate, ...JSON.parse(c.data) };
+    const candidateData = { ...JSON.parse(c.data) };
+    return {
+      ...candidate,
+      ...candidateData,
+      score: candidateData.percentage_score,
+    };
+  });
+};
+const getAllCandidateWithGroupIdOfTest = async (testId) => {
+  const candidates = await knex("candidate")
+    .select("candidate.*", "student.group_id")
+    .leftJoin("student", "candidate.student_id", "student.id")
+    .where("test_id", testId);
+
+  return candidates.map((c) => {
+    const { data, ...candidate } = c;
+    const candidateData = { ...JSON.parse(c.data) };
+    return {
+      ...candidate,
+      ...candidateData,
+      score: candidateData.percentage_score,
+    };
   });
 };
 
@@ -34,5 +55,6 @@ const deleteCandidate = (candidateId) =>
 module.exports = {
   upsertCandidate,
   getAllCandidatesOfTest,
+  getAllCandidateWithGroupIdOfTest,
   deleteCandidate,
 };
