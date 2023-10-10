@@ -14,6 +14,7 @@ const Group = require("./db/GroupModel");
 const Student = require("./db/StudentModel");
 const HrEmail = require("./db/HrEmailModel");
 const GroupTestInfo = require("./db/GroupTestInfoModel");
+const Motivation = require("./db/MotivationModel");
 
 require("dotenv").config();
 const JOURNEY = process.env.JOURNEY_ENDPOINT;
@@ -250,28 +251,29 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
 
 app.post("/candidate/send/report", async (req, res) => {
   try {
-    const { url, studentId, testId } = req.body;
+    const reports = req.body;
+    for (let i = 0; i < reports.length; i++) {
+      const { url, studentId, testId } = reports[i];
 
-    // Download the PDF from the URL
-    const response = await axios.get(url, { responseType: "arraybuffer" });
-    const pdfBuffer = Buffer.from(response.data);
+      // Download the PDF from the URL
+      const response = await axios.get(url, { responseType: "arraybuffer" });
+      const pdfBuffer = Buffer.from(response.data);
 
-    const student = await Student.getStudentById(studentId);
-    const test = await Test.getTestById(testId);
+      const student = await Student.getStudentById(studentId);
+      const test = await Test.getTestById(testId);
+      const motivation = await Motivation.getMotivation();
 
-    console.log(student, test);
+      // Parse the PDF
+      const data = await pdf(pdfBuffer);
 
-    // Parse the PDF
-    const data = await pdf(pdfBuffer);
+      // Create an attachment
+      const attachment = {
+        filename: `${test.name} - ${student.name}.pdf`,
+        content: pdfBuffer,
+      };
 
-    // Create an attachment
-    const attachment = {
-      filename: `${test.name} - ${student.name}.pdf`,
-      content: pdfBuffer,
-    };
-
-    const subject = `${test.name} Değerlendirme Raporun Hazır!`;
-    const content = `
+      const subject = `${test.name} Sınav Değerlendirme Raporun Hazır!`;
+      const content = `
 <div style="font-size: 18px;">
   <p>Merhaba <strong>${student.name};</strong></p>
 
@@ -284,15 +286,16 @@ app.post("/candidate/send/report", async (req, res) => {
   Hackerrank Ekibi
 
   <blockquote style="padding-top: 30px;">
-    <q>Hiçbir şeye ihtiyacımız yok, yalnız bir şeye ihtiyacımız vardır; çalışkan olmak.</q>
+    <q>${motivation.word}</q>
     <br />
-    M. Kemal Atatürk
+    ${motivation.author}
   </blockquote>
 </div>
 `;
 
-    // Send the email
-    await sendEmail("erhanfirat@gmail.com", subject, content, [attachment]);
+      // Send the email
+      await sendEmail("erhanfirat@gmail.com", subject, content, [attachment]);
+    }
 
     res.json({ message: "PDF downloaded and email sent successfully" });
   } catch (error) {

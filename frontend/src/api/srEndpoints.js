@@ -54,10 +54,14 @@ export const srEndpoints = {
     config: { responseType: "arraybuffer" },
   }),
 
-  candidateSendReport: ({ url, studentId, testId }) => ({
+  /**
+   * @param {Object Array} reports: [{ur, studentId, testId }, ...]
+   * @returns
+   */
+  candidateSendReport: (reports) => ({
     reqType: REQ_TYPES.POST,
     endpoint: `/candidate/send/report`,
-    payload: { url, studentId, testId },
+    payload: reports,
   }),
 
   // Questions **************************

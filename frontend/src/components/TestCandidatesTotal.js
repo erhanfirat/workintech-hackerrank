@@ -35,11 +35,13 @@ const TestCandidatesTotal = ({
     doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
       (pdfURL) => {
         doSRRequest(
-          srEndpoints.candidateSendReport({
-            url: pdfURL,
-            studentId: candidate.student_id,
-            testId,
-          })
+          srEndpoints.candidateSendReport([
+            {
+              url: pdfURL,
+              studentId: candidate.student_id,
+              testId,
+            },
+          ])
         );
       }
     );
