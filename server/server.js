@@ -294,7 +294,9 @@ app.post("/candidate/send/report", async (req, res) => {
 `;
 
       // Send the email
-      await sendEmail("erhanfirat@gmail.com", subject, content, [attachment]);
+      await sendEmail(student.hrEmail || student.email, subject, content, [
+        attachment,
+      ]);
     }
 
     res.json({ message: "PDF downloaded and email sent successfully" });

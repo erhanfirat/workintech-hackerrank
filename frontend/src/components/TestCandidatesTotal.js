@@ -121,7 +121,9 @@ const TestCandidatesTotal = ({
             <h6>{sortIcon("score", sortByState, ascState)}Sonuç %</h6>
           </Link>
         </Col>
-        <Col sm="1">{/* <Button size="sm">All PDFs</Button> */}</Col>
+        <Col sm="2">
+          <h6>Actions</h6>
+        </Col>
       </Row>
       {candidates?.map((testCandidate) => (
         <Row key={testCandidate.id} className="border-top py-1 grid-row">
@@ -143,20 +145,24 @@ const TestCandidatesTotal = ({
             {testCandidate.endDateStr}
           </Col>
           <Col sm="1">{testCandidate.percentage_score}</Col>
-          <Col sm="1">
+          <Col sm="2">
             <Button
               size="sm"
-              className="py-0"
+              className="py-0 me-2"
               onClick={() => downloadPDF(testCandidate)}
+              title={`Download PDF report of ${testCandidate.full_name}`}
             >
+              <i className="fa-solid fa-file-arrow-down me-2"></i>
               PDF
             </Button>
             <Button
               size="sm"
               className="py-0"
               onClick={() => emailPDFReport(testCandidate)}
+              title={`Send email with PDF Report to ${testCandidate.full_name}`}
             >
-              Email PDF Report
+              <i className="fa-solid fa-envelope me-2"></i>
+              PDF
             </Button>
           </Col>
         </Row>

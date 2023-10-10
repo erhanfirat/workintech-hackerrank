@@ -74,6 +74,7 @@ const TestPage = () => {
   const [filterText, setFilterText] = useState("");
   const [activeTab, setActiveTab] = useState("results");
   const [allPDFLoading, setAllPDFLoading] = useState(false);
+  const [emailPDFLoading, setEmailPDFLoading] = useState(false);
   const questions = useSelector(
     (state) => state.questions.testQuestions[testId]
   );
@@ -284,6 +285,34 @@ const TestPage = () => {
     }
   };
 
+  const emailAllPDF = () => {
+    const pdfURLs = [];
+    try {
+      setEmailPDFLoading(true);
+      candidatesToList().forEach((candidate) => {
+        doHRRequest(hrEndpoints.getPDFReport(testId, candidate.id)).then(
+          (pdfURL) => {
+            pdfURLs.push({
+              url: pdfURL,
+              studentId: candidate.student_id,
+              testId,
+            });
+            if (pdfURLs.length === candidatesToList().length) {
+              doSRRequestResponse(srEndpoints.candidateSendReport(pdfURLs))
+                .then((res) => {})
+                .catch((err) => {
+                  console.log("Err sendin email: ", err);
+                })
+                .finally(() => setEmailPDFLoading(false));
+            }
+          }
+        );
+      });
+    } catch (e) {
+      setEmailPDFLoading(false);
+    }
+  };
+
   const refetchTestCandidates = () => {
     dispatch(fetchAllCandidatesOfTestAction(testId));
   };
@@ -367,11 +396,20 @@ const TestPage = () => {
           </Button>
           <SpinnerButton
             color="primary"
-            className="text-nowrap"
+            className="text-nowrap me-2"
             onClick={downloadAllPDF}
             loading={allPDFLoading}
           >
             <i className="fa-solid fa-download me-2"></i>
+            All PDFs
+          </SpinnerButton>
+          <SpinnerButton
+            color="primary"
+            className="text-nowrap"
+            onClick={emailAllPDF}
+            loading={emailPDFLoading}
+          >
+            <i className="fa-solid fa-envelope me-2"></i>
             All PDFs
           </SpinnerButton>
         </div>
