@@ -411,18 +411,32 @@ app.post("/remind-hr-exam-to-group", async (req, res) => {
     const subject = `${test.name} Hatırlatıcı!`;
 
     nonAttendees.forEach((nonAttendee) => {
-      const message = `Merhaba ${nonAttendee.name}
-      
-      Workintech eğitimi içindeki çabanı ve gelişimi görüyor takdir ediyoruz.
-      Gelişiminin sağlıklı bir şekilde ilerlemesi adına ve iş arama sürecini kolaylaştıracak Hackerrank Sınavlarımızdan
-      ${test.name} sınavına girmediğini tespit ettik.
+      const content = `
+<div style="font-size: 18px;">
+  <p>Merhaba <strong>${student.name};</strong></p>
 
-      Eğitmeninle iletişime geçip sınava giriş yapabilmen için gerekli izinleri alabilirsin.
+  <p>
+    Workintech eğitimi içindeki çabanı ve gelişimi görüyor takdir ediyoruz.
+    Gelişiminin sağlıklı bir şekilde ilerlemesi adına ve iş arama sürecini kolaylaştıracak Hackerrank Sınavlarımızdan
+    ${test.name} sınavına girmediğini tespit ettik.
+  </p>
 
-      Workintech Team
-      `;
+  <p>
+    Eğitmeninle iletişime geçip sınava giriş yapabilmen için gerekli izinleri alabilirsin.
+  </p>
 
-      sendEmail(nonAttendee.hrEmail || nonAttendee.email, subject, message);
+  Workintech <br />
+  Hackerrank Ekibi
+
+  <blockquote style="padding-top: 30px;">
+    <q>${motivation.word}</q>
+    <br />
+    ${motivation.author}
+  </blockquote>
+</div>
+`;
+
+      sendEmail(nonAttendee.hrEmail || nonAttendee.email, subject, content);
     });
 
     res.status(201).json(true);
