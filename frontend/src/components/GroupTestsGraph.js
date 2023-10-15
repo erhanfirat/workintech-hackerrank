@@ -13,25 +13,28 @@ import {
 const GroupTestsGraph = ({ group, testsInfo }) => {
   const TooltipContent = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-      console.log(payload);
       return (
         <div className="bg-white border rounded-1 p-3 shadow">
           <h4>{label}</h4>
-          <Row className="border-top mt-2 pt-2">
-            <Col sm="6">{payload[0].name}:</Col>
-            <Col sm="6">{payload[0].value}%</Col>
-          </Row>
-          <Row className="border-top mt-2 pt-2">
-            <Col sm="6">{payload[1].name}:</Col>
-            <Col sm="6">{payload[1].value}%</Col>
-          </Row>
-          <Row>
-            <Col sm="6"></Col>
-            <Col sm="6">
-              {payload[1].payload.attendee_count} /
-              {payload[1].payload.total_count}
-            </Col>
-          </Row>
+          {payload[0] && payload[1] && (
+            <>
+              <Row className="border-top mt-2 pt-2">
+                <Col sm="6">{payload[0]?.name}:</Col>
+                <Col sm="6">{payload[0]?.value}%</Col>
+              </Row>
+              <Row className="border-top mt-2 pt-2">
+                <Col sm="6">{payload[1]?.name}:</Col>
+                <Col sm="6">{payload[1]?.value}%</Col>
+              </Row>
+              <Row>
+                <Col sm="6"></Col>
+                <Col sm="6">
+                  {payload[1]?.payload.attendee_count} /
+                  {payload[1]?.payload.total_count}
+                </Col>
+              </Row>
+            </>
+          )}
         </div>
       );
     }

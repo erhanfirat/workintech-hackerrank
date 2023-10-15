@@ -490,6 +490,7 @@ app.post("/fetch-groups-and-users", async (req, res) => {
 
     for (let i = 0; i < groups.length; i++) {
       const group = groups[i];
+      group.name = group.name.trim();
       group.title = generateReadableTitleByGroupName(group.name);
       delete group.for_dropdown;
 
