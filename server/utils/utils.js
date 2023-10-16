@@ -23,7 +23,7 @@ function sendEmail(email, subject, content, attachments) {
   // Email content
   const mailOptions = {
     from: process.env.HACKERRANK_EMAIL,
-    to: "erhanfirat@gmail.com", // email,
+    to: email,
     subject,
     html: content,
     attachments,

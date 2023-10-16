@@ -403,6 +403,7 @@ app.post("/remind-hr-exam-to-group", async (req, res) => {
     const candidates = await Candidate.getAllCandidatesOfTest(testId);
     const students = await Student.getStudentsByGroupId(groupId);
     const test = await Test.getTestById(testId);
+    const motivation = await Motivation.getMotivation();
 
     const nonAttendees = students.filter(
       (s) => !candidates.find((c) => c.student_id === s.id)
@@ -413,7 +414,7 @@ app.post("/remind-hr-exam-to-group", async (req, res) => {
     nonAttendees.forEach((nonAttendee) => {
       const content = `
 <div style="font-size: 18px;">
-  <p>Merhaba <strong>${student.name};</strong></p>
+  <p>Merhaba <strong>${nonAttendee.name};</strong></p>
 
   <p>
     Workintech eğitimi içindeki çabanı ve gelişimi görüyor takdir ediyoruz.
