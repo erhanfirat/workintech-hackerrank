@@ -32,9 +32,12 @@ function sendEmail(email, subject, content, attachments) {
   // Send the email
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
-      console.error("Error sending email to:", email, error);
+      console.error("<" + subject + "> email sent to <" + email + "> ", error);
     } else {
-      console.log("email sent to", email, info.response);
+      console.log(
+        "<" + subject + "> email sent to <" + email + "> ",
+        info.response
+      );
     }
   });
 }
