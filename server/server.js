@@ -547,6 +547,6 @@ app.post("/fetch-groups-and-users", async (req, res) => {
 
 // APP STARTS ON 3001
 
-app.listen(3001, () => {
-  console.log("working on 3001");
+app.listen(3380, () => {
+  console.log("working on 3380");
 });
