@@ -380,9 +380,9 @@ app.get("/student", async (req, res) => {
   }
 });
 
-
 app.get("/motivation", async (req, res) => {
   try {
+    await setTimeout(3000);
     const motivation = await Motivation.getMotivation();
 
     res.status(200).json(motivation);
