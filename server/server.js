@@ -380,6 +380,18 @@ app.get("/student", async (req, res) => {
   }
 });
 
+
+app.get("/motivation", async (req, res) => {
+  try {
+    const motivation = await Motivation.getMotivation();
+
+    res.status(200).json(motivation);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "An error occurred", error });
+  }
+});
+
 app.post("/set-student-hr-email", async (req, res) => {
   try {
     const hrStudent = req.body;
