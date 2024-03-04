@@ -252,6 +252,7 @@ app.post("/tests/:testId/candidates/:group/pdf", async (req, res) => {
 app.post("/candidate/send/report", async (req, res) => {
   try {
     const reports = req.body;
+    const results = [];
     for (let i = 0; i < reports.length; i++) {
       const { url, studentId, testId } = reports[i];
 
@@ -266,14 +267,15 @@ app.post("/candidate/send/report", async (req, res) => {
       // Parse the PDF
       const data = await pdf(pdfBuffer);
 
-      // Create an attachment
-      const attachment = {
-        filename: `${test.name} - ${student.name}.pdf`,
-        content: pdfBuffer,
-      };
+      if (student && test) {
+        // Create an attachment
+        const attachment = {
+          filename: `${test.name} - ${student.name}.pdf`,
+          content: pdfBuffer,
+        };
 
-      const subject = `${test.name} Sınav Değerlendirme Raporun Hazır!`;
-      const content = `
+        const subject = `${test.name} Sınav Değerlendirme Raporun Hazır!`;
+        const content = `
 <div style="font-size: 18px;">
   <p>Merhaba <strong>${student.name};</strong></p>
 
@@ -293,13 +295,36 @@ app.post("/candidate/send/report", async (req, res) => {
 </div>
 `;
 
-      // Send the email
-      await sendEmail(student.hrEmail || student.email, subject, content, [
-        attachment,
-      ]);
+        // Send the email
+        await sendEmail(student.hrEmail || student.email, subject, content, [
+          attachment,
+        ]);
+
+        results.push(
+          `PDF Email sent to ${student.name} | ${
+            student.hrEmail || student.email
+          }`
+        );
+      } else {
+        // no student or test
+        console.error(
+          "There is no student or test record related to this candidate: ",
+          { studentId, testId },
+          student
+        );
+        results.push(
+          `There is no student or test record related to this studentId: ${studentId} && testId: ${testId} > student: ${JSON.stringify(
+            student
+          )} && test: ${JSON.stringify(test)}`
+        );
+      }
     }
 
-    res.json({ message: "PDF downloaded and email sent successfully" });
+    res.json({
+      message:
+        "PDF downloaded and email sent process completed successfully. Please check results report for each students in the list! Some of them may have problems!",
+      results,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error downloading PDF or sending email" });
