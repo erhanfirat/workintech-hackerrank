@@ -1,11 +1,26 @@
 const generateReadableTitleByGroupName = (name) => {
+  console.log("********************", name);
   name = name.trim().replace("FSWEB", "");
   const part = name[0] == "P" ? " (Part Time) " : "";
   name = name[0] == "P" ? name.slice(1) : name;
-  const monthName = Intl.DateTimeFormat("tr", { month: "long" }).format(
-    new Date(name.substring(0, 2))
-  );
-  return `Fsweb ${name} - ${monthName}${part}`;
+  let result = "Fsweb " + name;
+  if (isNumeric(name.substring(0, 2))) {
+    const monthName = Intl.DateTimeFormat("tr", { month: "long" }).format(
+      new Date(name.substring(0, 2))
+    );
+
+    result += " " + monthName;
+  }
+
+  return result + part;
+};
+
+const isNumeric = (str) => {
+  if (typeof str != "string") return false; // we only process strings!
+  return (
+    !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+    !isNaN(parseFloat(str))
+  ); // ...and ensure strings of whitespace fail
 };
 
 const nodemailer = require("nodemailer");
