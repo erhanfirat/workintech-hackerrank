@@ -90,7 +90,10 @@ const TestPage = () => {
           groupCode === "all" ||
           students[getIdOfSelectedGroup(groupCode)]?.find(
             (ss) =>
-              ss.email === candidate.email || ss.hrEmail === candidate.email
+              ss.email.toLocaleLowerCase("en") ===
+                candidate.email.toLocaleLowerCase("en") ||
+              ss.hrEmail?.toLocaleLowerCase("en") ===
+                candidate.email.toLocaleLowerCase("en")
           )
       )
       ?.filter((candidate) => {
@@ -175,7 +178,11 @@ const TestPage = () => {
 
   const getStudentByEmail = useCallback((candidateEmail) =>
     students.all.find(
-      (s) => s.email === candidateEmail || s.hrEmail === candidateEmail
+      (s) =>
+        s.email.toLocaleLowerCase("en") ===
+          candidateEmail.toLocaleLowerCase("en") ||
+        s.hrEmail?.toLocaleLowerCase("en") ===
+          candidateEmail.toLocaleLowerCase("en")
     )
   );
 
