@@ -370,6 +370,32 @@ app.post("/questions", async (req, res) => {
   }
 });
 
+// Group Reports **************************************
+
+app.get("/rapor/group/:groupId", async (req, res) => {
+  try {
+    const groupId = req.params.groupId;
+    const groupTestInfos = await GroupTestInfo.getGroupTestInfo(groupId);
+    const testIdList = groupTestInfos.map((gt) => gt.test_id);
+    const tests = await Test.getTestsByIdList(testIdList);
+
+    let students = [];
+    let results = {};
+    for (let i = 0; i < tests.length; i++) {
+      const test = tests[i];
+      results[test.id] = await Candidate.getAllCandidateWithStudentByTestId(
+        test.id
+      );
+    }
+    console.log("results ************** ", results);
+
+    res.status(200).json({ groupId, groupTestInfos, tests, results });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "An error occurred", err });
+  }
+});
+
 // Groups ************************************************
 
 app.get("/group", async (req, res) => {

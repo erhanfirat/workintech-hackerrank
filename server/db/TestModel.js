@@ -7,6 +7,11 @@ const getTestById = async (testId) => {
   return { id: test.id, ...JSON.parse(test.data) };
 };
 
+const getTestsByIdList = async (testIdList) => {
+  const tests = await knex("test").whereIn("id", testIdList);
+  return tests;
+};
+
 const upsertTest = (test) => {
   return knex.transaction(
     async (trx) =>
@@ -23,5 +28,6 @@ module.exports = {
   upsertTest,
   getAllTests,
   getTestById,
+  getTestsByIdList,
   deleteTest,
 };
