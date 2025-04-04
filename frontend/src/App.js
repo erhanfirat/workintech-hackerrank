@@ -4,38 +4,54 @@ import { useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 
 import { verifyUserAction } from "./store/reducers/userReducer";
-import {
-  fetchGroupsAndStudents,
-  getAllGroupsActionCreator,
-} from "./store/reducers/studentsReducer";
+import { getAllGroupsActionCreator } from "./store/reducers/studentsReducer";
 import Main from "./layout/Main";
 import { FETCH_STATES } from "./utils/constants";
 import { getAllTestsAction } from "./store/reducers/testsReducer";
 
 function App() {
   const dispatch = useDispatch();
-  const user = useSelector((s) => s.user.user);
+  const { user, theme } = useSelector((s) => s.user);
   const { groupsFetchState } = useSelector((s) => s.students);
-  const testsFetchState = useSelector((s) => s.tests.fetchState);
+  const { fetchState: testsFetchState } = useSelector((s) => s.tests);
 
+  // Kullanıcı oturumunu doğrula
   useEffect(() => {
     dispatch(verifyUserAction());
-    // fetchGroupsAndStudents();
-  }, []);
+  }, [dispatch]);
 
+  // Kullanıcı giriş yaptıktan sonra gerekli verileri yükle
   useEffect(() => {
-    if (user && groupsFetchState === FETCH_STATES.NOT_STARTED) {
-      dispatch(getAllGroupsActionCreator());
+    if (user) {
+      // Gruplar henüz yüklenmediyse yükle
+      if (groupsFetchState === FETCH_STATES.NOT_STARTED) {
+        dispatch(getAllGroupsActionCreator());
+      }
+
+      // Testler henüz yüklenmediyse yükle
+      if (testsFetchState === FETCH_STATES.NOT_STARTED) {
+        dispatch(getAllTestsAction());
+      }
     }
-    if (user && testsFetchState === FETCH_STATES.NOT_STARTED) {
-      dispatch(getAllTestsAction());
-    }
-  }, [user]);
+  }, [user, groupsFetchState, testsFetchState, dispatch]);
 
   return (
     <BrowserRouter>
-      <Main />
-      <Toaster position="bottom-center" reverseOrder={false} />
+      <div className={`app-container ${theme}`}>
+        <Main />
+        <Toaster
+          position="bottom-center"
+          reverseOrder={false}
+          toastOptions={{
+            // Toast stil seçenekleri
+            duration: 3000,
+            style: {
+              background: theme === "dark" ? "#333" : "#fff",
+              color: theme === "dark" ? "#fff" : "#333",
+            },
+          }}
+        />
+      </div>
     </BrowserRouter>
   );
 }

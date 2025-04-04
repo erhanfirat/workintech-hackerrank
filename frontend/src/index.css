@@ -1,4 +1,37 @@
-html,
+/* Kök değişkenler */
+:root {
+  --primary-color: #0072bc;
+  --secondary-color: #e8f4fc;
+  --accent-color: #ff6b00;
+  --text-color: #333;
+  --bg-color: #fff;
+  --border-color: #dee2e6;
+  --card-bg: #fff;
+  --header-bg: #f8f9fa;
+  --sidebar-bg: #f0f2f5;
+  --success-color: #28a745;
+  --error-color: #dc3545;
+  --warning-color: #ffc107;
+  --info-color: #17a2b8;
+}
+
+/* Koyu tema */
+.dark {
+  --primary-color: #3498db;
+  --secondary-color: #1e3a5a;
+  --accent-color: #ff8c3f;
+  --text-color: #eee;
+  --bg-color: #121212;
+  --border-color: #444;
+  --card-bg: #1e1e1e;
+  --header-bg: #1a1a1a;
+  --sidebar-bg: #1e1e1e;
+  --success-color: #00bc8c;
+  --error-color: #e74c3c;
+  --warning-color: #f39c12;
+  --info-color: #3498db;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -7,6 +40,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 code {
@@ -15,7 +51,18 @@ code {
 }
 
 a {
+  color: var(--primary-color);
   text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.navbar {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .page-body {
@@ -34,7 +81,8 @@ a {
   padding-right: 0;
   transition: 0.4s;
   overflow: hidden;
-  background-color: #eee;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid var(--border-color);
 }
 .side-bar:hover {
   min-width: 10rem;
@@ -54,14 +102,14 @@ a {
 }
 .side-bar .nav-link {
   padding: 0.5rem;
-  color: #505050;
+  color: var(--text-color);
   font-weight: bold;
 }
 .side-bar:hover .nav-link {
   border-radius: 0.5rem;
 }
 .side-bar .nav-link.active {
-  background-color: #505050;
+  background-color: var(--primary-color);
   color: #eee;
 }
 
@@ -134,4 +182,82 @@ a {
 
 .login-form {
   max-width: 500px;
+}
+
+.app-container {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+/* .btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover {
+  background-color: darken(var(--primary-color), 10%);
+  border-color: darken(var(--primary-color), 10%);
+} 
+
+.btn-outline-primary {
+  color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+*/
+
+.header {
+  background-color: var(--header-bg);
+  border-bottom: 1px solid var(--border-color);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.form-control {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.form-control:focus {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+}
+
+.table {
+  color: var(--text-color);
+  border-color: var(--border-color);
+}
+
+.table thead th {
+  background-color: var(--header-bg);
+  border-color: var(--border-color);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Tema geçiş animasyonları */
+*,
+*::before,
+*::after {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }

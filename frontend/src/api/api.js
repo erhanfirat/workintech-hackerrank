@@ -22,8 +22,9 @@ export const doHRRequest = ({ reqType, endpoint, payload, config }) => {
       return res.data;
     })
     .catch((err) => {
+      const errorMessage = err.response?.data?.message || err.message;
       toast.error(
-        `Hackerrank/${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+        `Hackerrank/${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${errorMessage}`
       );
       throw err;
     });
@@ -39,12 +40,24 @@ export const generateSrApi = () => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      timeout: 30000,
     });
   } else {
     srAPI = axios.create({
       baseURL: process.env.REACT_APP_SERVER_URL,
+      timeout: 30000,
     });
   }
+
+  srAPI.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        window.dispatchEvent(new CustomEvent("tokenExpired"));
+      }
+      return Promise.reject(error);
+    }
+  );
 };
 
 generateSrApi();
@@ -55,8 +68,9 @@ export const doSRRequest = ({ reqType, endpoint, payload, config }) => {
       return res.data;
     })
     .catch((err) => {
+      const errorMessage = err.response?.data?.message || err.message;
       toast.error(
-        `${process.env.REACT_APP_SERVER_URL}${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${err.message}`
+        `${process.env.REACT_APP_SERVER_URL}${endpoint} adresine ${reqType} isteği gönderilirken bir hata ile karşılaşıldı: ${errorMessage}`
       );
       throw err;
     });

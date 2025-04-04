@@ -5,13 +5,13 @@ export const srEndpoints = {
 
   login: (loginData) => ({
     reqType: REQ_TYPES.POST,
-    endpoint: "login",
+    endpoint: "auth/login",
     payload: loginData,
   }),
 
   verifyMe: () => ({
     reqType: REQ_TYPES.GET,
-    endpoint: "verify/me",
+    endpoint: "auth/verify/me",
   }),
 
   // Tests **************************
