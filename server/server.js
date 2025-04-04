@@ -2,28 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const axios = require("axios");
-const archiver = require("archiver");
-const pdf = require("pdf-parse");
-
-// Models
-const Test = require("./db/TestModel");
-const Candidate = require("./db/CandidateModel");
-const Question = require("./db/QuestionModel");
-const Group = require("./db/GroupModel");
-const Student = require("./db/StudentModel");
-const HrEmail = require("./db/HrEmailModel");
-const GroupTestInfo = require("./db/GroupTestInfoModel");
-const Motivation = require("./db/MotivationModel");
-
 require("dotenv").config();
-const JOURNEY = process.env.JOURNEY_ENDPOINT;
 
-// Utils
-const {
-  generateReadableTitleByGroupName,
-  sendEmail,
-} = require("./utils/utils");
 
 // Middleware kurulumları
 app.use(cors());
