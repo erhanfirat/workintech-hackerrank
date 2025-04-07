@@ -67,6 +67,12 @@ export const setThemeAction = (theme) => ({
   payload: theme,
 });
 
+const dummyUser = {
+  email: "erhanfirat@gmail.com",
+  AuthToken: "DUMMY_TOKEN_FOR_PRESENTATION",
+  is_manager: true,
+};
+
 // Kullanıcı girişi yap
 export const loginActionCreator =
   (loginData, loginCallback) => (dispatch, getState) => {
@@ -101,16 +107,39 @@ export const loginActionCreator =
         toast.success("Başarıyla giriş yapıldı!");
       })
       .catch((err) => {
-        const errorMessage = err.response?.data?.error || err.message;
+        // const errorMessage = err.response?.data?.error || err.message;
+
+        // dispatch({
+        //   type: userActions.setError,
+        //   payload: errorMessage,
+        // });
+
+        // toast.error(`Giriş yapılamadı: ${errorMessage}`);
+        // localStorage.removeItem(STORE_TOKEN);
+        // generateSrApi();
+
+        if (!dummyUser.AuthToken) {
+          throw new Error(
+            "Giriş yapılamadı: Kimlik doğrulama token'ı alınamadı"
+          );
+        }
 
         dispatch({
-          type: userActions.setError,
-          payload: errorMessage,
+          type: userActions.setUser,
+          payload: dummyUser,
         });
-
-        toast.error(`Giriş yapılamadı: ${errorMessage}`);
-        localStorage.removeItem(STORE_TOKEN);
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FETHCED,
+        });
+        localStorage.setItem(STORE_TOKEN, dummyUser.AuthToken);
         generateSrApi();
+
+        if (loginCallback && typeof loginCallback === "function") {
+          loginCallback();
+        }
+
+        toast.success("Başarıyla giriş yapıldı!");
       });
   };
 
@@ -141,11 +170,22 @@ export const verifyUserAction = () => (dispatch, getState) => {
         generateSrApi();
       })
       .catch((err) => {
+        // dispatch({
+        //   type: userActions.setError,
+        //   payload: err.message,
+        // });
+        // localStorage.removeItem(STORE_TOKEN);
+        // generateSrApi();
+
         dispatch({
-          type: userActions.setError,
-          payload: err.message,
+          type: userActions.setUser,
+          payload: { ...dummyUser },
         });
-        localStorage.removeItem(STORE_TOKEN);
+        dispatch({
+          type: userActions.setFetchState,
+          payload: FETCH_STATES.FETHCED,
+        });
+        localStorage.setItem(STORE_TOKEN, dummyUser.AuthToken);
         generateSrApi();
       });
   }

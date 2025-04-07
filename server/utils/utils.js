@@ -1,5 +1,4 @@
 const generateReadableTitleByGroupName = (name) => {
-  console.log("********************", name);
   name = name.trim().replace("FSWEB", "");
   const part = name[0] == "P" ? " (Part Time) " : "";
   name = name[0] == "P" ? name.slice(1) : name;

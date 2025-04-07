@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import PageDefault from "./PageDefault";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
@@ -25,7 +25,7 @@ import TestCandidatesTotal from "../components/TestCandidatesTotal";
 import { fetchAllQuestionsOfTestAction } from "../store/actions/questionActions";
 import TestQuestions from "../components/TestQuestions";
 import { utils, writeFile } from "xlsx";
-import { getCleanTestName, getDateStringFromISO } from "../utils/utils";
+import { getCleanTestName } from "../utils/utils";
 import { FETCH_STATES } from "../utils/constants";
 import { doHRRequest, doSRRequestResponse } from "../api/api";
 import { hrEndpoints } from "../api/hrEndpoints";
@@ -83,7 +83,7 @@ const TestPage = () => {
   const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
   const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
 
-  const candidatesToList = useCallback(() => {
+  const candidatesToList = useMemo(() => {
     return testCandidates
       ?.filter(
         (candidate) =>
@@ -127,9 +127,9 @@ const TestPage = () => {
             : numberOrder(ascState) * -1;
         }
       });
-  });
+  }, [testCandidates, filterText, sortByState, ascState]);
 
-  const getGeneralInfo = useCallback(() => {
+  const getGeneralInfo = useMemo(() => {
     const dateOrderList = candidatesToList()?.sort(
       (c1, c2) =>
         new Date(c1.attempt_starttime) - new Date(c2.attempt_starttime)
@@ -151,7 +151,7 @@ const TestPage = () => {
         dateOrderList[dateOrderList.length - 1].startDateStr,
       average: groupTestInfo?.average_score,
     };
-  });
+  }, [candidatesToList, groupTestInfo, test]);
 
   const sortIcon = useCallback((fieldName, sortByVal, ascVal) => {
     return (
@@ -169,27 +169,33 @@ const TestPage = () => {
     (selectedGroupName) =>
       groups.find(
         (g) => g.name.toLowerCase() === selectedGroupName.toLowerCase()
-      )?.id
+      )?.id,
+    [groups]
   );
 
   const toggleTab = (tabId) => {
     setActiveTab(tabId);
   };
 
-  const getStudentByEmail = useCallback((candidateEmail) =>
-    students.all?.find(
-      (s) =>
-        s.email.toLocaleLowerCase("en") ===
-          candidateEmail.toLocaleLowerCase("en") ||
-        s.hrEmail?.toLocaleLowerCase("en") ===
-          candidateEmail.toLocaleLowerCase("en")
-    )
+  const getStudentByEmail = useCallback(
+    (candidateEmail) =>
+      students.all?.find(
+        (s) =>
+          s.email.toLocaleLowerCase("en") ===
+            candidateEmail.toLocaleLowerCase("en") ||
+          s.hrEmail?.toLocaleLowerCase("en") ===
+            candidateEmail.toLocaleLowerCase("en")
+      ),
+    [students]
   );
 
-  const getGroupNameByEmail = useCallback((candidateEmail) => {
-    const student = getStudentByEmail(candidateEmail);
-    return groups.find((g) => g.id == student?.group_id)?.title;
-  });
+  const getGroupNameByEmail = useCallback(
+    (candidateEmail) => {
+      const student = getStudentByEmail(candidateEmail);
+      return groups.find((g) => g.id == student?.group_id)?.title;
+    },
+    [students, groups]
+  );
 
   const changeSelectedGroup = (e) => {
     history.push(

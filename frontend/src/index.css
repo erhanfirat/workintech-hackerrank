@@ -56,7 +56,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .navbar {
@@ -79,7 +79,7 @@ a:hover {
   padding-bottom: 0.75rem;
   padding-left: 0;
   padding-right: 0;
-  transition: 0.4s;
+  transition: 0.3s;
   overflow: hidden;
   background-color: var(--sidebar-bg);
   border-right: 1px solid var(--border-color);
@@ -95,7 +95,7 @@ a:hover {
 }
 .side-bar .hide-on-mouseout {
   opacity: 0;
-  transition: 0.4s;
+  transition: 0.3s;
 }
 .side-bar:hover .hide-on-mouseout {
   opacity: 1;

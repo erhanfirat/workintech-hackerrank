@@ -15,6 +15,7 @@ const getAllCandidatesOfTest = async (testId) => {
     };
   });
 };
+
 const getAllCandidateWithStudentByTestId = async (testId) => {
   const candidates = await knex("candidate")
     .select("candidate.*", "student.group_id")

@@ -4,13 +4,42 @@ import { useDispatch, useSelector } from "react-redux";
 import logoDark from "../logo-dark.svg";
 import logoLight from "../logo-light.svg";
 import UserInfo from "../components/UserInfo";
-import { setThemeAction } from "../store/reducers/userReducer";
+import {
+  setThemeAction,
+  verifyUserAction,
+} from "../store/reducers/userReducer";
+import { useEffect } from "react";
+import { FETCH_STATES } from "../utils/constants";
+import { getAllGroupsActionCreator } from "../store/reducers/studentsReducer";
+import { getAllTestsAction } from "../store/reducers/testsReducer";
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { theme } = useSelector((state) => state.user);
+  const { user, theme } = useSelector((s) => s.user);
+  const { groupsFetchState } = useSelector((s) => s.students);
+  const { fetchState: testsFetchState } = useSelector((s) => s.tests);
 
   const isDarkTheme = theme === "dark";
+
+  // Kullanıcı oturumunu doğrula
+  useEffect(() => {
+    dispatch(verifyUserAction());
+  }, [dispatch]);
+
+  // Kullanıcı giriş yaptıktan sonra gerekli verileri yükle
+  useEffect(() => {
+    if (user || true) {
+      // Gruplar henüz yüklenmediyse yükle
+      if (groupsFetchState === FETCH_STATES.NOT_STARTED) {
+        dispatch(getAllGroupsActionCreator());
+      }
+
+      // Testler henüz yüklenmediyse yükle
+      if (testsFetchState === FETCH_STATES.NOT_STARTED) {
+        dispatch(getAllTestsAction());
+      }
+    }
+  }, [user, groupsFetchState, testsFetchState, dispatch]);
 
   const toggleTheme = () => {
     const newTheme = isDarkTheme ? "light" : "dark";

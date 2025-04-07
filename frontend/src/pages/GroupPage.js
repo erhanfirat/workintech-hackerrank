@@ -4,33 +4,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   Button,
-  Col,
-  Container,
   Input,
   Nav,
   NavItem,
   NavLink,
-  Row,
   TabContent,
   TabPane,
 } from "reactstrap";
-import SpinnerButton from "../components/atoms/SpinnerButton";
 import { utils, writeFile } from "xlsx";
 import { FETCH_STATES } from "../utils/constants";
-import {
-  getAllGroupsActionCreator,
-  updateStudentAction,
-} from "../store/reducers/studentsReducer";
-import { doSRRequest } from "../api/api";
-import { srEndpoints } from "../api/srEndpoints";
+import { getAllGroupsActionCreator } from "../store/reducers/studentsReducer";
 import GroupTests from "../components/GroupTests";
 import StudentList from "../components/StudentList";
 import GroupTestsGraph from "../components/GroupTestsGraph";
-
-const fields = {
-  name: "full_name",
-  email: "email",
-};
 
 const GroupPage = () => {
   const { groupName, sortBy, asc } = useParams();

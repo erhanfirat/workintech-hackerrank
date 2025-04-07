@@ -5,7 +5,7 @@ const ProtectedPage = ({ PageComponent }) => {
   let location = useLocation();
   const userAuthenticated = useSelector((s) => !!s.user.token);
 
-  return userAuthenticated || true ? (
+  return userAuthenticated ? (
     <PageComponent />
   ) : (
     <Redirect
