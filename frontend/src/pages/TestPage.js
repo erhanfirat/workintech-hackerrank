@@ -177,7 +177,7 @@ const TestPage = () => {
   };
 
   const getStudentByEmail = useCallback((candidateEmail) =>
-    students.all.find(
+    students.all?.find(
       (s) =>
         s.email.toLocaleLowerCase("en") ===
           candidateEmail.toLocaleLowerCase("en") ||
