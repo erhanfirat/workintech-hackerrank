@@ -12,7 +12,8 @@ const StudentList = ({ students, groupName }) => {
   const [hrEmails, setHrEmails] = useState([]);
 
   const getGroupNameById = useCallback(
-    (groupId) => groups.find((g) => g.id == groupId)?.title
+    (groupId) => groups.find((g) => g.id == groupId)?.title,
+    [groups]
   );
 
   const studentHREmailChange = (student, e) => {

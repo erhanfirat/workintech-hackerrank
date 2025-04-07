@@ -64,38 +64,27 @@ const GroupPage = () => {
 
   const dispatch = useDispatch();
 
-  const inverseOrder = (ord) => (ord === "asc" ? "desc" : "asc");
-  const numberOrder = (ord) => (ord === "asc" ? 1 : -1);
-
   const getGeneralInfo = useCallback(() => {
     return {};
   });
 
-  const sortIcon = useCallback((fieldName, sortByVal, ascVal) => {
-    return (
-      sortByVal === fieldName && (
-        <i
-          className={`ps-1 fa-solid fa-chevron-${
-            ascVal === "asc" ? "down" : "up"
-          }`}
-        ></i>
-      )
-    );
-  });
-
-  const studentsToList = useCallback(() =>
-    students
-      ?.filter(
-        (s) =>
-          s.name.toLocaleLowerCase().includes(filterText.toLocaleLowerCase()) ||
-          s.email
-            .toLocaleLowerCase()
-            .includes(filterText.toLocaleLowerCase()) ||
-          s.hrEmail
-            ?.toLocaleLowerCase()
-            .includes(filterText.toLocaleLowerCase())
-      )
-      .sort((s1, s2) => (s1[sortByState] > s2[sortByState] ? 1 : -1))
+  const studentsToList = useCallback(
+    () =>
+      students
+        ?.filter(
+          (s) =>
+            s.name
+              .toLocaleLowerCase()
+              .includes(filterText.toLocaleLowerCase()) ||
+            s.email
+              .toLocaleLowerCase()
+              .includes(filterText.toLocaleLowerCase()) ||
+            s.hrEmail
+              ?.toLocaleLowerCase()
+              .includes(filterText.toLocaleLowerCase())
+        )
+        .sort((s1, s2) => (s1[sortByState] > s2[sortByState] ? 1 : -1)),
+    [students, filterText, sortByState]
   );
 
   const toggleTab = (tabId) => {
@@ -121,7 +110,7 @@ const GroupPage = () => {
         dispatch(getAllGroupsActionCreator());
       }
     }
-  }, [groupName]);
+  }, [groupName, group, groupsFetchState, dispatch]);
 
   useEffect(() => {
     setSortByState(sortBy || "name");

@@ -18,7 +18,7 @@ const UserInfo = () => {
       user?.profile_image_url ||
       (user?.email && `https://www.gravatar.com/avatar/${MD5(user.email)}`)
     );
-  });
+  }, [user]);
 
   const signOut = () => {
     dispatch(signOutAction());
